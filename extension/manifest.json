@@ -29,6 +29,7 @@
 			"scripts/Selector/SelectorGroup.js",
 			"scripts/Selector/SelectorLink.js",
 			"scripts/Selector/SelectorText.js",
+			"scripts/Selector/SelectorImage.js",
 			"scripts/SelectorList.js",
 			"scripts/Sitemap.js",
 			"scripts/Queue.js",
@@ -62,6 +63,7 @@
 				"scripts/Selector/SelectorGroup.js",
 				"scripts/Selector/SelectorLink.js",
 				"scripts/Selector/SelectorText.js",
+				"scripts/Selector/SelectorImage.js",
 				"scripts/SelectorList.js",
 				"scripts/Sitemap.js"
 			],

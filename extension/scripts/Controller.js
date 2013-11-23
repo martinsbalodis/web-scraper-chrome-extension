@@ -402,6 +402,10 @@ SitemapController.prototype = {
 					title: 'Element'
 				},
 				{
+					type: 'SelectorImage',
+					title: 'Image'
+				},
+				{
 					type: 'SelectorGroup',
 					title: 'Grouped'
 				}

@@ -25,6 +25,7 @@
 	<script src="../extension/scripts/Selector/SelectorElement.js"></script>
 	<script src="../extension/scripts/Selector/SelectorLink.js"></script>
 	<script src="../extension/scripts/Selector/SelectorGroup.js"></script>
+	<script src="../extension/scripts/Selector/SelectorImage.js"></script>
 	<script type="text/javascript" src="../extension/scripts/Sitemap.js"></script>
 	<script type="text/javascript" src="../extension/scripts/ChromePopupBrowser.js"></script>
 	<!-- content script -->
@@ -60,6 +61,7 @@
 	<script type="text/javascript" src="spec/Selector/SelectorGroupSpec.js"></script>
 	<script type="text/javascript" src="spec/Selector/SelectorElementSpec.js"></script>
 	<script type="text/javascript" src="spec/Selector/SelectorLinkSpec.js"></script>
+	<script type="text/javascript" src="spec/Selector/SelectorImageSpec.js"></script>
 	<script type="text/javascript" src="spec/ChromePopupBrowserSpec.js"></script>
 
 	<script type="text/javascript">
@@ -217,6 +219,18 @@
 		<div id="selector-follow">
 			<a href="http://example.com/a">a</a>
 			<a href="http://example.com/b">b</a>
+		</div>
+
+		<div id="selector-image">
+
+			<div id="selector-image-one-image">
+				<img src="http://aa/">
+			</div>
+			<div id="selector-image-multiple-images">
+				<img src="http://aa/">
+				<img src="http://bb/">
+			</div>
+
 		</div>
 	</div>
 
