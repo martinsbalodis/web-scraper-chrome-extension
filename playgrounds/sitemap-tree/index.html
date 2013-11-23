@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="style.css" />
+	<script src="../../extension/assets/d3.v3.js"></script>
+	<script src="../../extension/scripts/Sitemap.js"></script>
+	<script src="../../extension/scripts/Selector.js"></script>
+	<script src="../../extension/scripts/Selector/SelectorElement.js"></script>
+	<script src="../../extension/scripts/SelectorList.js"></script>
+	<script src="../../extension/scripts/SelectorGraphv2.js"></script>
+</head>
+<body>
+<div id="body"></div>
+<script>
+	d3.json("sitemap.json", function(json) {
+		var sitemap = new Sitemap(json);
+		var graph = new SelectorGraphv2(sitemap);
+		graph.draw(document.getElementById("body"), 1200, 200);
+	});
+</script>
+</body>
+</html>

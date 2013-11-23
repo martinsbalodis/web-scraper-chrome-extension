@@ -1,0 +1,21 @@
+<div id="selector-tree">
+	<ol class="breadcrumb">
+		{{#parentSelectors}}
+		<li><a>{{id}}</a></li>
+		{{/parentSelectors}}
+	</ol>
+	<table class="table table-bordered table-condensed table-hover">
+		<thead>
+		<tr>
+			<th>ID</th>
+			<th>Selector</th>
+			<th style="width:60px">type</th>
+			<th style="width:60px">Multiple</th>
+			<th>Parent selectors</th>
+			<th style="width:100px">Actions</th>
+		</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+	<button action="add-selector" type="button" class="btn btn-primary btn-xs">Add new selector</button>
+</div>

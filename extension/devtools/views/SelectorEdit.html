@@ -1,0 +1,80 @@
+<form class="form-horizontal" role="form" id="edit-selector">
+
+	<div class="form-group">
+		<label for="selectorId" class="col-lg-1 control-label">Id</label>
+
+		<div class="col-lg-10">
+			<input type="text" class="form-control" name="id" id="selectorId" placeholder="Selector Id" value="{{selector.id}}">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="type" class="col-lg-1 control-label">Type</label>
+
+		<div class="input-group col-lg-10">
+			<select class="form-control" id="type" name="type">
+				{{#selectorTypes}}
+				<option value="{{type}}">{{title}}</option>
+				{{/selectorTypes}}
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="selector" class="col-lg-1 control-label">Selector</label>
+
+		<div class="input-group col-lg-10">
+              <span class="input-group-btn">
+                <button class="btn btn-default" action="select-selector" type="button">Select</button>
+                <button class="btn btn-default" action="preview-selector" type="button" data-toggle="button">Preview</button>
+              </span>
+			<input type="text" class="form-control" id="selector" name="selector" value="{{selector.selector}}">
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button" action="select-selector-parent" title="Select parent element">&#65516;</button>
+				<button class="btn btn-default" type="button" action="select-selector-child" title="Select child element">&#65514;</button>
+			</span>
+		</div>
+	</div>
+
+	<div class="form-group feature feature-multiple">
+		<div class="col-lg-offset-1 col-lg-10">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="multiple" {{#selector.multiple}}checked="checked"{{/selector.multiple}}> Multiple
+				</label>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group feature feature-regex">
+		<label for="regex" class="col-lg-1 control-label">Regex</label>
+
+		<div class="col-lg-10">
+			<input type="text" class="form-control" name="regex" id="regex" placeholder="regex" value="{{selector.regex}}">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="parentSelectors" class="col-lg-1 control-label">Parent Selectors</label>
+
+		<div class="input-group col-lg-10">
+			<select multiple class="form-control" id="parentSelectors" name="parentSelectors">
+				{{#selectorIds}}
+				<option value="{{.}}">{{.}}</option>
+				{{/selectorIds}}
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-lg-offset-1 col-lg-10">
+			<button class="btn btn-primary" action="save-selector">Save selector</button> <button action="cancel-selector-editing" class="btn btn-default">Cancel</button>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-lg-offset-1 col-lg-10">
+
+		</div>
+	</div>
+</form>

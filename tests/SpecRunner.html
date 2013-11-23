@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Jasmine Spec Runner</title>
+
+	<link rel="shortcut icon" type="image/png" href="../jasmine-standalone/lib/jasmine-1.3.1/jasmine_favicon.png">
+	<link rel="stylesheet" type="text/css" href="../jasmine-standalone/lib/jasmine-1.3.1/jasmine.css">
+	<script type="text/javascript" src="../jasmine-standalone/lib/jasmine-1.3.1/jasmine.js"></script>
+	<script type="text/javascript" src="../jasmine-standalone/lib/jasmine-1.3.1/jasmine-html.js"></script>
+
+	<script type="text/javascript" src="../extension/assets/jquery-2.0.3.js"></script>
+	<script type="text/javascript" src="../extension/assets/sugar-1.4.1.js"></script>
+	<script type="text/javascript" src="../extension/assets/pouchdb-nightly.min.js"></script>
+
+	<!-- include source files here... -->
+	<script type="text/javascript" src="../extension/scripts/Config.js"></script>
+	<script type="text/javascript" src="../extension/scripts/Store.js"></script>
+	<script type="text/javascript" src="../extension/scripts/Job.js"></script>
+	<script type="text/javascript" src="../extension/scripts/Queue.js"></script>
+	<script type="text/javascript" src="../extension/scripts/Scraper.js"></script>
+	<script type="text/javascript" src="../extension/scripts/SelectorList.js"></script>
+	<script type="text/javascript" src="../extension/scripts/Selector.js"></script>
+	<script src="../extension/scripts/Selector/SelectorText.js"></script>
+	<script src="../extension/scripts/Selector/SelectorElement.js"></script>
+	<script src="../extension/scripts/Selector/SelectorLink.js"></script>
+	<script src="../extension/scripts/Selector/SelectorGroup.js"></script>
+	<script type="text/javascript" src="../extension/scripts/Sitemap.js"></script>
+	<script type="text/javascript" src="../extension/scripts/ChromePopupBrowser.js"></script>
+	<!-- content script -->
+	<script type="text/javascript" src="../extension/assets/css-selector/css-selector/cssselector.js"></script>
+	<script type="text/javascript" src="../extension/scripts/DataExtractor.js"></script>
+	<script type="text/javascript" src="../extension/scripts/ContentSelector.js"></script>
+
+	<script type="text/javascript" src="FakeStore.js"></script>
+
+
+	<!-- global chrome api -->
+	<script type="text/javascript" src="ChromeAPI.js"></script>
+	<script type="text/javascript">
+		window.chromeAPI = new ChromeAPI();
+	</script>
+	<script src="../extension/background_page/background_script.js"></script>
+	<script src="../extension/content_script/content_script.js"></script>
+	<script type="text/javascript">
+		console.log(window.chromeAPI);
+	</script>
+
+	<script type="text/javascript" src="Matchers.js"></script>
+	<!-- include spec files here... -->
+	<script type="text/javascript" src="spec/JobSpec.js"></script>
+	<script type="text/javascript" src="spec/QueueSpec.js"></script>
+	<script type="text/javascript" src="spec/DataExtractSpec.js"></script>
+	<script type="text/javascript" src="spec/ScraperSpec.js"></script>
+	<script type="text/javascript" src="spec/ContentSelectorSpec.js"></script>
+	<script type="text/javascript" src="spec/SelectorListSpec.js"></script>
+	<script type="text/javascript" src="spec/SitemapSpec.js"></script>
+	<script type="text/javascript" src="spec/SelectorSpec.js"></script>
+	<script type="text/javascript" src="spec/Selector/SelectorTextSpec.js"></script>
+	<script type="text/javascript" src="spec/Selector/SelectorGroupSpec.js"></script>
+	<script type="text/javascript" src="spec/Selector/SelectorElementSpec.js"></script>
+	<script type="text/javascript" src="spec/Selector/SelectorLinkSpec.js"></script>
+	<script type="text/javascript" src="spec/ChromePopupBrowserSpec.js"></script>
+
+	<script type="text/javascript">
+		(function () {
+			var jasmineEnv = jasmine.getEnv();
+			jasmineEnv.updateInterval = 1000;
+
+			var htmlReporter = new jasmine.HtmlReporter();
+
+			jasmineEnv.addReporter(htmlReporter);
+
+			jasmineEnv.specFilter = function (spec) {
+				return htmlReporter.specFilter(spec);
+			};
+
+			var currentWindowOnload = window.onload;
+
+			window.onload = function () {
+				if (currentWindowOnload) {
+					currentWindowOnload();
+				}
+				execJasmine();
+			};
+
+			function execJasmine() {
+				jasmineEnv.execute();
+			}
+
+		})();
+	</script>
+
+</head>
+
+<body>
+<div style="display:none" id="webpage">
+	<!-- content script data extraction tests -->
+	<div id="dataextract-elements">
+		<a>test1</a>
+		<a>test2</a>
+	</div>
+
+	<div id="dataextract-child-selectors">
+
+		<table>
+			<tr>
+				<td>test1</td>
+				<td>test11</td>
+			</tr>
+			<tr>
+				<td>test2</td>
+				<td>test22</td>
+			</tr>
+		</table>
+	</div>
+
+	<div id="dataextract-get-data">
+		<a href="http://test.lv/a/">a</a>
+		<a href="http://test.lv/b/">b</a>
+		<span class="common">c</span>
+	</div>
+
+	<div id="dataextract-get-element-text">
+		<div>
+			<a href="http://test.lv/a/">a</a>
+		</div>
+		<div>
+			<a href="http://test.lv/b/">b</a>
+		</div>
+	</div>
+
+	<div id="dataextract-get-data-multiple-selectors">
+		<div>
+			<table>
+				<tr>
+					<td>result1</td>
+				</tr>
+				<tr>
+					<td>result2</td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td>result3</td>
+				</tr>
+				<tr>
+					<td>result4</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div id="job-data">
+		<a href="http://test.lv/a/">a</a>
+		<a href="http://test.lv/b/">b</a>
+	</div>
+
+	<div id="content-selector-tests">
+		<div>
+                 <span id="content-selector-tests-expected">
+                     <table></table>
+                 </span>
+		</div>
+		<div>
+                <span>
+                    <table></table>
+                </span>
+		</div>
+	</div>
+
+	<div id="selector tests">
+		<div id="selector-text">
+			<div id="selector-text-single-text">
+				<div>a</div>
+				<div>b</div>
+			</div>
+
+			<div id="selector-text-multiple-text">
+				<div>a</div>
+				<div>b</div>
+			</div>
+			<div id="selector-text-url-multiple-text">
+				<a href="http://aa/">a</a>
+				<a href="http://bb/">b</a>
+			</div>
+			<div id="selector-text-single-not-exist">
+			</div>
+			<div id="selector-text-single-regex">
+				<div>aaaaaaa11113123aaaaa11111</div>
+			</div>
+		</div>
+
+		<div id="selector-group">
+			<div id="selector-group-text">
+				<div>a</div>
+				<div>b</div>
+			</div>
+			<div id="selector-group-url">
+				<a href="http://aa/">a</a>
+				<a href="http://bb/">b</a>
+			</div>
+
+			<div id="selector-group-img">
+				<img src="http://aa/">
+				<img src="http://bb/">
+			</div>
+		</div>
+
+		<div id="selector-element">
+			<div id="selector-element-nodata">
+				<div>a</div>
+				<div>b</div>
+			</div>
+		</div>
+
+		<div id="selector-follow">
+			<a href="http://example.com/a">a</a>
+			<a href="http://example.com/b">b</a>
+		</div>
+	</div>
+
+	<div id="browser-tests">
+		<div id="browserTest">a</div>
+	</div>
+
+	<div id="scraper-tests">
+		<div id="scraper-test-one-page">
+			<a>a</a>
+		</div>
+		<div id="scraper-test-child-page">
+			<a href="http://test.lv/1/">test</a>
+			<b>b</b>
+		</div>
+	</div>
+
+</div>
+
+
+</body>
+</html>

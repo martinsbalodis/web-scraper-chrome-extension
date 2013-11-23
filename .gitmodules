@@ -1,0 +1,3 @@
+[submodule "extension/assets/css-selector"]
+	path = extension/assets/css-selector
+	url = https://github.com/martinsbalodis/css-selector.git

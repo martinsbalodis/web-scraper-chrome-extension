@@ -1,0 +1,24 @@
+{
+	"selectors":[
+		{
+			"id": "a",
+			"type": "SelectorElement",
+			"parentSelectors": ["_root", "d"]
+		},
+		{
+			"id": "b",
+			"type": "SelectorElement",
+			"parentSelectors": ["a"]
+		},
+		{
+			"id": "c",
+			"type": "SelectorElement",
+			"parentSelectors": ["a"]
+		},
+		{
+			"id": "d",
+			"type": "SelectorElement",
+			"parentSelectors": ["a"]
+		}
+	]
+}

@@ -1,0 +1,16 @@
+#webpage {
+	height:400px;
+	border-radius: 5px;
+	border:3px #ccc solid;
+	margin:10px;
+	overflow-y:scroll;
+}
+
+#webpage {
+	font-size: 14px;
+}
+
+#webpage .navbar-nav > li > a {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
