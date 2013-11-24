@@ -813,7 +813,7 @@ describe("DataExtractor", function () {
 			parentSelectorId: '_root',
 			sitemap: sitemap
 		});
-		
+
 		var data = extractor.getData();
 		var expected = [];
 		expect(data).toEqual(expected);

@@ -16,7 +16,7 @@
 
 #-selector-toolbar {
 	position: fixed !important;
-	bottom: 10px !important;
+	bottom: 20px !important;
 	left: 10px !important;
 	z-index: 99999 !important;
 }
