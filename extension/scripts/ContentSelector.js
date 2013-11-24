@@ -169,9 +169,8 @@ ContentSelector.prototype = {
 	attachToolbar: function () {
 
 		var $toolbar = '<div id="-selector-toolbar">' +
+			'<span class="selector">&nbsp;</span>' +
 			'<a>Done selecting!</a>' +
-			'<span class="info">Use up/down arrows to select parent elements of an element</span>' +
-			'<span class="selector"></span>' +
 			'</div>';
 		$("body").append($toolbar);
 
