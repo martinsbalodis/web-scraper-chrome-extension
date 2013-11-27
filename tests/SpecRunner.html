@@ -10,6 +10,12 @@
 	<script type="text/javascript" src="../jasmine-standalone/lib/jasmine-1.3.1/jasmine-html.js"></script>
 
 	<script type="text/javascript" src="../extension/assets/jquery-2.0.3.js"></script>
+	<script>
+		// breaks sugar.js
+		// The actual problem was that <div id="global"></div> also would be turned into a global variable "global"
+		// this broke down content scripts where the page had an element with id #global
+		var global = null;
+	</script>
 	<script type="text/javascript" src="../extension/assets/sugar-1.4.1.js"></script>
 	<script type="text/javascript" src="../extension/assets/pouchdb-nightly.min.js"></script>
 
