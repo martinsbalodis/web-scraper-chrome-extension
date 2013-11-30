@@ -25,8 +25,9 @@ var SelectorText = {
 		$(elements).each(function (k, element) {
 			var data = {};
 
+			// remove script, style tag contents from text results
 			var $element_clone = $(element).clone();
-			$element_clone.find("script").remove();
+			$element_clone.find("script, style").remove();
 
 			var text = $element_clone.text();
 			if (this.regex !== undefined && this.regex.length) {
