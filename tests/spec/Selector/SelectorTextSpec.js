@@ -106,6 +106,23 @@ describe("Text Selector", function () {
 		expect(columns).toEqual(['id']);
 	});
 
+	it("should ignore script tag content", function(){
+
+		var selector = new Selector({
+			id: 'a',
+			type: 'SelectorText',
+			multiple: false,
+			selector: "div"
+		});
+
+		var data = selector.getData($("#selector-text-ignore-script"));
+		expect(data).toEqual([
+			{
+				a: "aaa"
+			}
+		]);
+	});
+
 //    it("should extract records with url", function () {
 //
 //        var selector = new Selector({

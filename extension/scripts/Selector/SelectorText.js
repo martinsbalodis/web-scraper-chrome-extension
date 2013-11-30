@@ -24,7 +24,11 @@ var SelectorText = {
 		var result = [];
 		$(elements).each(function (k, element) {
 			var data = {};
-			var text = $(element).text();
+
+			var $element_clone = $(element).clone();
+			$element_clone.find("script").remove();
+
+			var text = $element_clone.text();
 			if (this.regex !== undefined && this.regex.length) {
 				var matches = text.match(new RegExp(this.regex));
 				if (matches !== null) {
