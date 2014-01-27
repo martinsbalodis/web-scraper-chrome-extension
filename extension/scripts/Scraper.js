@@ -96,7 +96,7 @@ Scraper.prototype = {
 					this._run();
 				}
 				else {
-					var delay = this.delay-now-this._time_previous_scraped;
+					var delay = this.delay-(now-this._time_previous_scraped);
 					setTimeout(function(){
 						this._time_previous_scraped = now;
 						this._run();
