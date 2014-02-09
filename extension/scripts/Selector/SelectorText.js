@@ -28,6 +28,8 @@ var SelectorText = {
 			// remove script, style tag contents from text results
 			var $element_clone = $(element).clone();
 			$element_clone.find("script, style").remove();
+			// <br> replace br tags with newlines
+			$element_clone.find("br").after("\n");
 
 			var text = $element_clone.text();
 			if (this.regex !== undefined && this.regex.length) {
