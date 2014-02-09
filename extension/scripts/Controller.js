@@ -149,6 +149,9 @@ SitemapController.prototype = {
 				"#selector-tree tr button[action=delete-selector]": {
 					click: this.deleteSelector
 				},
+				"#selector-tree tr button[action=preview-selector]": {
+					click: this.previewSelectorFromSelectorTree
+				},
 				"#edit-selector button[action=select-selector]": {
 					click: this.selectSelector
 				},
@@ -633,6 +636,32 @@ SitemapController.prototype = {
 			chrome.runtime.sendMessage(request);
 		}
 		else {
+			var request = {
+				cancelPreviewSelector: true
+			};
+			chrome.runtime.sendMessage(request);
+		}
+	},
+	previewSelectorFromSelectorTree: function (button) {
+
+		if (!$(button).hasClass('active')) {
+			$(button).addClass('active');
+
+			var sitemap = this.state.currentSitemap;
+			var selector = $(button).closest("tr").data('selector');
+			var parentSelectorId = selector.parentSelectors[0];
+
+			// run css selector through background page
+			var request = {
+				previewSelector: true,
+				parentSelectorId: parentSelectorId,
+				sitemap: JSON.parse(JSON.stringify(sitemap)),
+				selector: selector.selector
+			};
+			chrome.runtime.sendMessage(request);
+		}
+		else {
+			$(button).removeClass('active');
 			var request = {
 				cancelPreviewSelector: true
 			};
