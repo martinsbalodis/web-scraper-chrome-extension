@@ -401,7 +401,7 @@ SitemapController.prototype = {
 	_editSelector: function (selector) {
 
 		var sitemap = this.state.currentSitemap;
-		var selectorIds = sitemap.getSelectorIds();
+		var selectorIds = sitemap.getPossibleParentSelectorIds();
 
 		var $editSelectorForm = ich.SelectorEdit({
 			selector: selector,

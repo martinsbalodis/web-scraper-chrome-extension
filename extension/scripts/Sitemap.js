@@ -38,10 +38,23 @@ Sitemap.prototype = {
 	 */
 	getSelectorIds: function () {
 		var ids = ['_root'];
-		for (var i in this.selectors) {
-			var selector = this.selectors[i];
+		this.selectors.forEach(function(selector){
 			ids.push(selector.id);
-		}
+		});
+		return ids;
+	},
+
+	/**
+	 * Returns only selector ids which can have child selectors
+	 * @returns {Array}
+	 */
+	getPossibleParentSelectorIds: function () {
+		var ids = ['_root'];
+		this.selectors.forEach(function(selector){
+			if(selector.canHaveChildSelectors()){
+				ids.push(selector.id);
+			}
+		}.bind(this));
 		return ids;
 	},
 

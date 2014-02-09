@@ -360,4 +360,38 @@ describe("Sitemap", function () {
 		];
 		expect(sitemap.getStartUrls()).toEqual(expectedURLS);
 	});
+
+	it("Should return only selectors which can have child selectors", function () {
+		var sitemap = new Sitemap({
+			selectors: [
+				{
+					id: "a",
+					type: "SelectorElement"
+				},
+				{
+					id: "b",
+					type: "SelectorGroup"
+				},
+				{
+					id: "c",
+					type: "SelectorHTML"
+				},
+				{
+					id: "d",
+					type: "SelectorImage"
+				},
+				{
+					id: "e",
+					type: "SelectorLink"
+				},
+				{
+					id: "f",
+					type: "SelectorText"
+				}
+			]
+		});
+
+		var expectedIds = ["_root","a","e"];
+		expect(sitemap.getPossibleParentSelectorIds()).toEqual(expectedIds);
+	});
 });
