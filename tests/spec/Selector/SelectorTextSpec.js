@@ -123,6 +123,23 @@ describe("Text Selector", function () {
 		]);
 	});
 
+	it("should replace br tags with newlines", function(){
+
+		var selector = new Selector({
+			id: 'p',
+			type: 'SelectorText',
+			multiple: false,
+			selector: "p"
+		});
+
+		var data = selector.getData($("#selector-text-newlines"));
+		expect(data).toEqual([
+			{
+				p: "aaa\naaa\naaa\naaa\naaa"
+			}
+		]);
+	});
+
 //    it("should extract records with url", function () {
 //
 //        var selector = new Selector({
