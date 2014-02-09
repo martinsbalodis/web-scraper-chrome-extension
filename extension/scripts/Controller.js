@@ -204,10 +204,27 @@ SitemapController.prototype = {
 		}
 	},
 
+	/**
+	 * Simple info popup for sitemap start url input field
+	 */
+	initMultipleStartUrlHelper: function () {
+		$("#startUrl")
+			.popover({
+				title: 'Multiple start urls',
+				html: true,
+				content: "You can create ranged start urls like this:<br />http://example.com/[1-100].html",
+				placement: 'bottom'
+			})
+			.blur(function () {
+				$(this).popover('hide');
+			});
+	},
+
 	showCreateSitemap: function () {
 		this.setActiveNavigationButton('create-sitemap-create');
 		var sitemapForm = ich.SitemapCreate();
 		$("#viewport").html(sitemapForm);
+		this.initMultipleStartUrlHelper();
 		return true;
 	},
 
@@ -272,8 +289,9 @@ SitemapController.prototype = {
 		this.setActiveNavigationButton('sitemap-edit-metadata');
 
 		var sitemap = this.state.currentSitemap;
-		$sitemapMetadataForm = ich.SitemapEditMetadata(sitemap);
+		var $sitemapMetadataForm = ich.SitemapEditMetadata(sitemap);
 		$("#viewport").html($sitemapMetadataForm);
+		this.initMultipleStartUrlHelper();
 
 		return true;
 	},
