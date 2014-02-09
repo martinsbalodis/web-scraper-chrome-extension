@@ -316,4 +316,48 @@ describe("Sitemap", function () {
 		sitemap.deleteSelector(sitemap.selectors[0]);
 		expect(sitemap.selectors).toEqual(new SelectorList([expectedSelector]));
 	});
+
+	it("Should return one start url", function(){
+		var sitemap = new Sitemap({
+			startUrl:"http://example.com/"
+		});
+		var expectedURLS = ["http://example.com/"];
+		expect(sitemap.getStartUrls()).toEqual(expectedURLS);
+	});
+
+	it("Should return multiple start urls", function () {
+		var sitemap = new Sitemap({
+			startUrl: "http://example.com/[1-3].html"
+		});
+		var expectedURLS = [
+			"http://example.com/1.html",
+			"http://example.com/2.html",
+			"http://example.com/3.html"
+		];
+		expect(sitemap.getStartUrls()).toEqual(expectedURLS);
+	});
+
+	it("Should return multiple start urls with id at the end", function () {
+		var sitemap = new Sitemap({
+			startUrl: "http://example.com/?id=[1-3]"
+		});
+		var expectedURLS = [
+			"http://example.com/?id=1",
+			"http://example.com/?id=2",
+			"http://example.com/?id=3"
+		];
+		expect(sitemap.getStartUrls()).toEqual(expectedURLS);
+	});
+
+	it("Should return multiple start urls with padding", function () {
+		var sitemap = new Sitemap({
+			startUrl: "http://example.com/[001-003].html"
+		});
+		var expectedURLS = [
+			"http://example.com/001.html",
+			"http://example.com/002.html",
+			"http://example.com/003.html"
+		];
+		expect(sitemap.getStartUrls()).toEqual(expectedURLS);
+	});
 });

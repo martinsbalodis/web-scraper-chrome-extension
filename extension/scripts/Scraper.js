@@ -14,6 +14,16 @@ Scraper.prototype = {
 	delay: 2000,
 	_time_previous_scraped: 0,
 
+	initFirstJobs: function () {
+
+		var urls = this.sitemap.getStartUrls();
+
+		urls.forEach(function (url) {
+			var firstJob = new Job(url, "_root", this);
+			this.queue.add(firstJob);
+		}.bind(this));
+	},
+
 	run: function (executionCallback) {
 
 		var scraper = this;
@@ -21,9 +31,7 @@ Scraper.prototype = {
 		// callback when scraping is finished
 		this.executionCallback = executionCallback;
 
-		var firstJob = new Job(this.sitemap.startUrl, "_root", this);
-
-		this.queue.add(firstJob);
+		this.initFirstJobs();
 
 		this.store.initSitemapDataDb(this.sitemap._id, function (resultWriter) {
 			scraper.resultWriter = resultWriter;

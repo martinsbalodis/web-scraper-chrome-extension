@@ -152,4 +152,20 @@ describe("Scraper", function () {
 		expect(follow).toBe(false);
 
 	});
+
+	it("should be able to create multiple start jobs", function () {
+
+		var sitemap = new Sitemap({
+			startUrl: 'http://test.lv/[1-100].html'
+		});
+
+		var s = new Scraper({
+			queue: q,
+			sitemap: sitemap,
+			store: store
+		});
+
+		s.initFirstJobs();
+		expect(q.jobs.length).toBe(100);
+	});
 });
