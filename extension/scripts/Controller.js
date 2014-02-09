@@ -408,6 +408,10 @@ SitemapController.prototype = {
 				{
 					type: 'SelectorGroup',
 					title: 'Grouped'
+				},
+				{
+					type: 'SelectorHTML',
+					title: 'HTML'
 				}
 			]
 		});
