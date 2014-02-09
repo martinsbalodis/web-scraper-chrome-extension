@@ -29,6 +29,7 @@ Element    | 1 or *           | None            | N                    | Y
 Group      | 1                | JSON            | N                    | N
 Link       | 1 or *           | text, url       | Y                    | Y
 Image      | 1 or *           | image src       | N                    | N
+HTML       | 1 or *           | html            | N                    | N
 
 ### Text
 Used for text selection. All HTML will be stripped and only text will be returned. You can additionaly apply regex to resulting data. Regex is applied before data export so you can change the regex after data is scraped. If a link element is selected then also its href wttribute will be returned, but the scraper will not follow the link.
@@ -44,6 +45,9 @@ Use this selector to select links. The scraper will follow links and select data
 
 ### Image
 Use this selector to retrieve image src attribute. The image itself will not be stored as it cannot be exported as CSV.
+
+### HTML
+This selector will return html and text within the selected element.
 
 ## Issues
 Submit issues in issue tracker. Please attach an exported sitemap if possible.
