@@ -430,6 +430,10 @@ SitemapController.prototype = {
 				{
 					type: 'SelectorHTML',
 					title: 'HTML'
+				},
+				{
+					type: 'SelectorElementAttribute',
+					title: 'Element attribute'
 				}
 			]
 		});
@@ -461,6 +465,7 @@ SitemapController.prototype = {
 		var multiple = $("#edit-selector [name=multiple]").is(":checked");
 		var regex = $("#edit-selector [name=regex]").val();
 		var parentSelectors = $("#edit-selector [name=parentSelectors]").val();
+		var extractAttribute = $("#edit-selector [name=extractAttribute]").val();
 
 		var newSelector = new Selector({
 			id: id,
@@ -468,6 +473,7 @@ SitemapController.prototype = {
 			type: type,
 			multiple: multiple,
 			regex: regex,
+			extractAttribute:extractAttribute,
 			parentSelectors: parentSelectors
 		});
 

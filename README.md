@@ -22,14 +22,15 @@ To scrape this kind of a page you need to create a Sitemap which starts with the
 
 There are different type of selectors for different type of data. Use this table to find a suited one for you. If there is not a selector that fits your needs, then you can try to create one. The scraper is built in a way that it is very easy to implement new selectors.
 
-Selector   | Returned records | Returned data   | Can lead to new Jobs | Can have child selectors
----        | ---              | ---             | ---                  | ---
-Text       | 1 or *           | text            | N                    | N
-Element    | 1 or *           | None            | N                    | Y
-Group      | 1                | JSON            | N                    | N
-Link       | 1 or *           | text, url       | Y                    | Y
-Image      | 1 or *           | image src       | N                    | N
-HTML       | 1 or *           | html            | N                    | N
+Selector          | Returned records | Returned data   | Can lead to new Jobs | Can have child selectors
+---               | ---              | ---             | ---                  | ---
+Text              | 1 or *           | text            | N                    | N
+Element           | 1 or *           | None            | N                    | Y
+Group             | 1                | JSON            | N                    | N
+Link              | 1 or *           | text, url       | Y                    | Y
+Image             | 1 or *           | image src       | N                    | N
+HTML              | 1 or *           | html            | N                    | N
+Element Attribute | 1 or *           | text            | N                    | N
 
 ### Text
 Used for text selection. All HTML will be stripped and only text will be returned. You can additionaly apply regex to resulting data. Regex is applied before data export so you can change the regex after data is scraped. If a link element is selected then also its href wttribute will be returned, but the scraper will not follow the link.
@@ -48,6 +49,9 @@ Use this selector to retrieve image src attribute. The image itself will not be 
 
 ### HTML
 This selector will return html and text within the selected element.
+
+### Element Attribute
+This selector can extract an attribute of an html element. For example you might want to extract title attribute from this link: `<a href="#" title="my title">link<a>`.
 
 ## Issues
 Submit issues in issue tracker. Please attach an exported sitemap if possible.
