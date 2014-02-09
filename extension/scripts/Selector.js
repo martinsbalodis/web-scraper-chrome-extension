@@ -18,7 +18,7 @@ Selector.prototype = {
 	 * @param data
 	 */
 	updateData: function (data) {
-		var allowedKeys = ['id', 'type', 'selector', 'parentSelectors'];
+		var allowedKeys = ['id', 'type', 'selector', 'parentSelectors', 'extractAttribute'];
 		allowedKeys = allowedKeys.concat(window[data.type].getFeatures());
 
 		// update data
