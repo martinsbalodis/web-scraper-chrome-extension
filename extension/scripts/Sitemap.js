@@ -45,6 +45,40 @@ Sitemap.prototype = {
 		return ids;
 	},
 
+	getStartUrls: function() {
+
+		// zero padding helper
+		var lpad = function(str, length) {
+			while (str.length < length)
+				str = "0" + str;
+			return str;
+		}
+
+		var re = /^(.*?)\[(\d+)\-(\d+)\](.*)$/;
+		var matches = this.startUrl.match(re);
+		if(matches) {
+			var startStr = matches[2];
+			var endStr = matches[3];
+			var start = parseInt(startStr);
+			var end = parseInt(endStr);
+			var urls = [];
+			for (var i = start; i <= end; i++) {
+
+				// with zero padding
+				if(startStr.length === endStr.length) {
+					urls.push(matches[1]+lpad(i.toString(), startStr.length)+matches[4]);
+				}
+				else {
+					urls.push(matches[1]+i+matches[4]);
+				}
+			}
+			return urls;
+		}
+		else {
+			return [this.startUrl];
+		}
+	},
+
 	updateSelector: function (selector, selectorData) {
 
 		// update child selectors
