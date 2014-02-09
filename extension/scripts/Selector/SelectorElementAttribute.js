@@ -41,6 +41,6 @@ var SelectorElementAttribute = {
 	},
 
 	getFeatures: function () {
-		return ['multiple']
+		return ['multiple', 'extractAttribute']
 	}
 };
