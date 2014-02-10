@@ -152,6 +152,9 @@ SitemapController.prototype = {
 				"#selector-tree tr button[action=preview-selector]": {
 					click: this.previewSelectorFromSelectorTree
 				},
+				"#selector-tree tr button[action=data-preview-selector]": {
+					click: this.previewSelectorDataFromSelectorTree
+				},
 				"#edit-selector button[action=select-selector]": {
 					click: this.selectSelector
 				},
@@ -667,5 +670,17 @@ SitemapController.prototype = {
 			};
 			chrome.runtime.sendMessage(request);
 		}
+	},
+	previewSelectorDataFromSelectorTree: function (button) {
+		var sitemap = this.state.currentSitemap;
+		var selector = $(button).closest("tr").data('selector');
+		var request = {
+			previewSelectorData: true,
+			sitemap: JSON.parse(JSON.stringify(sitemap)),
+			selectorId: selector.id
+		};
+		chrome.runtime.sendMessage(request, function (response) {
+			console.log(response);
+		});
 	}
 };

@@ -112,6 +112,53 @@ SelectorList.prototype.getSelector = function(selectorId) {
 	}
 };
 
+/**
+ * Returns all selectors if this selectors including all parent selectors within this page
+ * @param selectorId
+ * @returns {*}
+ */
+SelectorList.prototype.getOnePageSelectors = function (selectorId) {
+	var resultList = new SelectorList();
+	var selector = this.getSelector(selectorId);
+	resultList.push(this.getSelector(selectorId));
+
+	// add parent selectors
+	var currentSelector = selector;
+	while (true) {
+		var parentSelectorId = currentSelector.parentSelectors[0];
+		if (parentSelectorId === "_root") break;
+		var parentSelector = this.getSelector(parentSelectorId);
+		if(parentSelector.willReturnElements()) {
+			resultList.push(parentSelector);
+			currentSelector = parentSelector;
+		}
+		else {
+			break;
+		}
+	}
+
+	// add all child selectors
+	resultList = resultList.concat(this.getSinglePageAllChildSelectors(selector.id));
+	return resultList;
+};
+
+/**
+ * Returns all child selectors of a selector which can be used within one page.
+ * @param parentSelectorId
+ */
+SelectorList.prototype.getSinglePageAllChildSelectors = function(parentSelectorId) {
+
+	var resultList = new SelectorList();
+	var childSelectors = this.getDirectChildSelectors(parentSelectorId);
+	childSelectors.forEach(function (childSelector) {
+		resultList.push(childSelector);
+		if(childSelector.willReturnElements()) {
+			resultList = resultList.concat(this.getSinglePageAllChildSelectors(childSelector.id));
+		}
+	}.bind(this));
+	return resultList;
+};
+
 SelectorList.prototype.willReturnMultipleRecords = function(selectorId) {
 	
 	// handle reuqested selector

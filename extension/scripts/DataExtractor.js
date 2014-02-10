@@ -186,5 +186,12 @@ DataExtractor.prototype = {
 			results = results.concat(treeData);
 		}.bind(this));
 		return results;
+	},
+
+	getSingleSelectorData: function(selectorId) {
+		var sitemap = this.sitemap;
+		this.parentSelectorId = this.sitemap.getSelectorById(selectorId).parentSelectors[0];
+		sitemap.selectors = sitemap.selectors.getOnePageSelectors(selectorId);
+		return this.getData();
 	}
 };
