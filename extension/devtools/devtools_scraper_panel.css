@@ -76,3 +76,15 @@ form select[multiple], select[size] {
 	stroke: #ccc;
 	stroke-width: 1px;
 }
+
+.data-preview-modal .modal-dialog {
+	width:auto;
+}
+
+.data-preview-modal .modal-body {
+	overflow-y:scroll;
+}
+
+.data-preview-modal tbody tr {
+	cursor: initial;
+}

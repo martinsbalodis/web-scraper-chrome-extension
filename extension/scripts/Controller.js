@@ -42,7 +42,8 @@ SitemapController.prototype = {
 			'SelectorList',
 			'SelectorListItem',
 			'SelectorEdit',
-			'SitemapSelectorGraph'
+			'SitemapSelectorGraph',
+			'DataPreview'
 		];
 		var templatesLoaded = 0;
 		var cbLoaded = function (templateId, template) {
@@ -680,7 +681,45 @@ SitemapController.prototype = {
 			selectorId: selector.id
 		};
 		chrome.runtime.sendMessage(request, function (response) {
-			console.log(response);
+
+			if(response.length === 0) {
+				return
+			}
+			var dataColumns = Object.keys(response[0]);
+
+			console.log(dataColumns);
+
+			var $dataPreviewPanel = ich.DataPreview({
+				columns: dataColumns
+			});
+			$("#viewport").append($dataPreviewPanel);
+			$dataPreviewPanel.modal('show');
+			// display data
+			// Doing this the long way so there aren't xss vulnerubilites
+			// while working with data or with the selector titles
+			var $tbody = $("tbody", $dataPreviewPanel);
+			response.forEach(function (row) {
+				var $tr = $("<tr></tr>");
+				dataColumns.forEach(function (column) {
+					var $td = $("<td></td>");
+					var cellData = row[column];
+					if (typeof cellData === 'object') {
+						cellData = JSON.stringify(cellData);
+					}
+					$td.text(cellData);
+					$tr.append($td);
+				});
+				$tbody.append($tr);
+			});
+
+			var windowHeight = $(window).height();
+
+			$(".data-preview-modal .modal-body").height(windowHeight-130);
+
+			// remove modal from dom after it is closed
+			$dataPreviewPanel.on("hidden.bs.modal", function(){
+				$(this).remove();
+			});
 		});
 	}
 };
