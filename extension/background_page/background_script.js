@@ -116,5 +116,20 @@ chrome.runtime.onMessage.addListener(
 				console.log("Scraper execution cancelled".e);
 			}
 		}
+		else if(request.previewSelectorData) {
+			chrome.tabs.query({
+				active: true,
+				currentWindow: true
+			}, function (tabs) {
+				if (tabs.length < 1) {
+					this.console.log("couldn't find active tab");
+				}
+				else {
+					var tab = tabs[0];
+					chrome.tabs.sendMessage(tab.id, request, sendResponse);
+				}
+			});
+			return true;
+		}
 	}
 );

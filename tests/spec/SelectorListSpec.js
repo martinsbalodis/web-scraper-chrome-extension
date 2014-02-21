@@ -250,4 +250,158 @@ describe("SelectorList", function () {
 
 		expect(selectorListNew).toEqual(selectorList);
 	});
+
+	it("should select child selectors within one page", function () {
+		var expectedSelectorList = new SelectorList([
+			{
+				id: "child1",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['parent2']
+			},
+			{
+				id: "child2",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['parent2']
+			},
+			{
+				id: "child3",
+				type: 'SelectorElement',
+				multiple: false,
+				parentSelectors: ['parent2']
+			},
+			{
+				id: "child4",
+				type: 'SelectorElement',
+				multiple: false,
+				parentSelectors: ['child3']
+			},
+			{
+				id: "child5",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['child4']
+			},
+			{
+				id: "SelectorLink",
+				type: 'SelectorLink',
+				multiple: false,
+				parentSelectors: ['parent2']
+			}
+		]);
+
+		var selectorList = expectedSelectorList.concat([
+			{
+				id: "ignoredText",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['SelectorLink']
+			},
+			{
+				id: "ignoredText2",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['SelectorLink']
+			},
+			{
+				id: "ignoredParent",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['_root']
+			},
+			{
+				id: "ignoredParent2",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['parent1']
+			}
+		]);
+
+		var pageChildSelectors = selectorList.getSinglePageAllChildSelectors("parent2");
+		expect(pageChildSelectors).matchSelectorList(expectedSelectorList);
+	});
+
+	it("should extract all child selectors and parent within one page", function () {
+		var expectedSelectorList = new SelectorList([
+			{
+				id: "parent1",
+				type: 'SelectorElement',
+				multiple: true,
+				parentSelectors: ['_root']
+			},
+			{
+				id: "parent2",
+				type: 'SelectorElement',
+				multiple: false,
+				parentSelectors: ['parent1']
+			},
+			{
+				id: "child1",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['parent2']
+			},
+			{
+				id: "child2",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['parent2']
+			},
+			{
+				id: "child3",
+				type: 'SelectorElement',
+				multiple: false,
+				parentSelectors: ['parent2']
+			},
+			{
+				id: "child4",
+				type: 'SelectorElement',
+				multiple: false,
+				parentSelectors: ['child3']
+			},
+			{
+				id: "child5",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['child4']
+			},
+			{
+				id: "SelectorLink",
+				type: 'SelectorLink',
+				multiple: false,
+				parentSelectors: ['parent2']
+			}
+		]);
+
+		var selectorList = expectedSelectorList.concat([
+			{
+				id: "ignoredText",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['SelectorLink']
+			},
+			{
+				id: "ignoredText2",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['SelectorLink']
+			},
+			{
+				id: "ignoredParent",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['_root']
+			},
+			{
+				id: "ignoredParent2",
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['parent1']
+			}
+		]);
+
+		var pageSelectors = selectorList.getOnePageSelectors("parent2");
+		expect(pageSelectors).matchSelectorList(expectedSelectorList);
+	});
 });

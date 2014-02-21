@@ -184,6 +184,15 @@ Sitemap.prototype = {
 	},
 	getSelectorById: function (selectorId) {
 		return this.selectors.getSelectorById(selectorId);
+	},
+	/**
+	 * Create full clone of sitemap
+	 * @returns {Sitemap}
+	 */
+	clone: function () {
+		var clonedJSON = JSON.parse(JSON.stringify(this));
+		var sitemap = new Sitemap(clonedJSON);
+		return sitemap;
 	}
 };
 

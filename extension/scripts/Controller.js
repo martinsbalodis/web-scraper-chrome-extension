@@ -42,7 +42,8 @@ SitemapController.prototype = {
 			'SelectorList',
 			'SelectorListItem',
 			'SelectorEdit',
-			'SitemapSelectorGraph'
+			'SitemapSelectorGraph',
+			'DataPreview'
 		];
 		var templatesLoaded = 0;
 		var cbLoaded = function (templateId, template) {
@@ -152,6 +153,9 @@ SitemapController.prototype = {
 				"#selector-tree tr button[action=preview-selector]": {
 					click: this.previewSelectorFromSelectorTree
 				},
+				"#selector-tree tr button[action=data-preview-selector]": {
+					click: this.previewSelectorDataFromSelectorTree
+				},
 				"#edit-selector button[action=select-selector]": {
 					click: this.selectSelector
 				},
@@ -163,6 +167,9 @@ SitemapController.prototype = {
 				},
 				"#edit-selector button[action=preview-selector]": {
 					click: this.previewSelector
+				},
+				"#edit-selector button[action=preview-selector-data]": {
+					click: this.previewSelectorDataFromSelectorEditing
 				}
 			});
 			this.showSitemaps();
@@ -462,6 +469,18 @@ SitemapController.prototype = {
 	saveSelector: function (button) {
 		var sitemap = this.state.currentSitemap;
 		var selector = this.state.currentSelector;
+		var newSelector = this.getCurrentlyEditedSelector();
+
+		sitemap.updateSelector(selector, newSelector);
+
+		this.store.saveSitemap(sitemap, function () {
+			this.showSitemapSelectorList();
+		}.bind(this));
+	},
+	/**
+	 * Get selector from selector editing form
+	 */
+	getCurrentlyEditedSelector: function () {
 		var id = $("#edit-selector [name=id]").val();
 		var selectorsSelector = $("#edit-selector [name=selector]").val();
 		var type = $("#edit-selector [name=type]").val();
@@ -479,14 +498,7 @@ SitemapController.prototype = {
 			extractAttribute:extractAttribute,
 			parentSelectors: parentSelectors
 		});
-
-		sitemap.updateSelector(selector, newSelector);
-
-		var controller = this;
-
-		this.store.saveSitemap(sitemap, function () {
-			this.showSitemapSelectorList();
-		}.bind(this));
+		return newSelector;
 	},
 	cancelSelectorEditing: function (button) {
 		this.showSitemapSelectorList();
@@ -667,5 +679,65 @@ SitemapController.prototype = {
 			};
 			chrome.runtime.sendMessage(request);
 		}
+	},
+	previewSelectorDataFromSelectorTree: function (button) {
+		var sitemap = this.state.currentSitemap;
+		var selector = $(button).closest("tr").data('selector');
+		this.previewSelectorData(sitemap, selector.id);
+	},
+	previewSelectorDataFromSelectorEditing: function() {
+		var sitemap = this.state.currentSitemap.clone();
+		var selector = sitemap.getSelectorById(this.state.currentSelector.id);
+		var newSelector = this.getCurrentlyEditedSelector();
+		sitemap.updateSelector(selector, newSelector);
+		this.previewSelectorData(sitemap, selector.id)
+	},
+	previewSelectorData: function (sitemap, selectorId) {
+		var request = {
+			previewSelectorData: true,
+			sitemap: JSON.parse(JSON.stringify(sitemap)),
+			selectorId: selectorId
+		};
+		chrome.runtime.sendMessage(request, function (response) {
+
+			if (response.length === 0) {
+				return
+			}
+			var dataColumns = Object.keys(response[0]);
+
+			console.log(dataColumns);
+
+			var $dataPreviewPanel = ich.DataPreview({
+				columns: dataColumns
+			});
+			$("#viewport").append($dataPreviewPanel);
+			$dataPreviewPanel.modal('show');
+			// display data
+			// Doing this the long way so there aren't xss vulnerubilites
+			// while working with data or with the selector titles
+			var $tbody = $("tbody", $dataPreviewPanel);
+			response.forEach(function (row) {
+				var $tr = $("<tr></tr>");
+				dataColumns.forEach(function (column) {
+					var $td = $("<td></td>");
+					var cellData = row[column];
+					if (typeof cellData === 'object') {
+						cellData = JSON.stringify(cellData);
+					}
+					$td.text(cellData);
+					$tr.append($td);
+				});
+				$tbody.append($tr);
+			});
+
+			var windowHeight = $(window).height();
+
+			$(".data-preview-modal .modal-body").height(windowHeight - 130);
+
+			// remove modal from dom after it is closed
+			$dataPreviewPanel.on("hidden.bs.modal", function () {
+				$(this).remove();
+			});
+		});
 	}
 };
