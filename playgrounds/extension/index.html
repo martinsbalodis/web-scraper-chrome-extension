@@ -35,6 +35,8 @@
 	<script src="../../extension/scripts/ChromePopupBrowser.js"></script>
 	<script src="../../extension/scripts/Scraper.js"></script>
 
+	<script src="../../extension/devtools/views_js/DevtoolsRouter.js"></script>
+
 	<script src="../../extension/scripts/Controller.js"></script>
 
 	<!-- Simulates chrome API -->
@@ -54,10 +56,12 @@
 			var config = new Config();
 			config.loadConfiguration(function () {
 				var store = new Store(config);
-				new SitemapController({
+				var store = new StoreDevtools();
+				var app = new DevtoolsRouter({
 					store: store,
 					templateDir: '../../extension/devtools/views/'
 				});
+				Backbone.history.start({pushState: true, root: '/scraper-chrome-scraper/playgrounds/extension/'});
 			});
 		});
 	</script>

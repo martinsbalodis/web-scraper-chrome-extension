@@ -4,8 +4,10 @@ $(function () {
 	$(".alert").alert();
 
 	var store = new StoreDevtools();
-	new SitemapController({
+	var app = new DevtoolsRouter({
 		store: store,
 		templateDir: 'views/'
 	});
+	Backbone.history.start({pushState: true, root: '/'});
+
 });
