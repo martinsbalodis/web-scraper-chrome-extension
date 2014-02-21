@@ -77,9 +77,6 @@ SitemapController.prototype = {
 				'#sitemaps-nav-button': {
 					click: this.showSitemaps
 				},
-				'#create-sitemap-create-nav-button': {
-					click: this.showCreateSitemap
-				},
 				'#create-sitemap-import-nav-button': {
 					click: this.showImportSitemapPanel
 				},
@@ -88,9 +85,6 @@ SitemapController.prototype = {
 				},
 				'#sitemap-export-data-csv-nav-button': {
 					click: this.showSitemapExportDataCsvPanel
-				},
-				'#submit-create-sitemap': {
-					click: this.createSitemap
 				},
 				'#submit-import-sitemap': {
 					click: this.importSitemap
@@ -230,14 +224,6 @@ SitemapController.prototype = {
 			});
 	},
 
-	showCreateSitemap: function () {
-		this.setActiveNavigationButton('create-sitemap-create');
-		var sitemapForm = ich.SitemapCreate();
-		$("#viewport").html(sitemapForm);
-		this.initMultipleStartUrlHelper();
-		return true;
-	},
-
 	showImportSitemapPanel: function () {
 		this.setActiveNavigationButton('create-sitemap-import');
 		var sitemapForm = ich.SitemapImport();
@@ -270,19 +256,6 @@ SitemapController.prototype = {
 			});
 			$("#viewport").html($sitemapListPanel);
 		});
-	},
-
-	createSitemap: function (form) {
-		var id = $("#create-sitemap input[name=_id]").val();
-		var startUrl = $("#create-sitemap input[name=startUrl]").val();
-		var sitemap = new Sitemap({
-			_id: id,
-			startUrl: startUrl,
-			selectors: []
-		});
-		this.store.createSitemap(sitemap, function (sitemap) {
-			this._editSitemap(sitemap, ['_root']);
-		}.bind(this, sitemap));
 	},
 
 	importSitemap: function () {

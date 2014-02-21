@@ -1,19 +1,28 @@
 var DevtoolsRouter = Backbone.Router.extend({
 
 	routes: {
-		"": "index"
+		"": "index",
+		"create-sitemap": "createSitemap"
 	},
-	initialize: function(options){
+	initialize: function (options) {
 		this.store = options.store;
 		this.templateDir = options.templateDir;
+
+		new SitemapController({
+			store: this.store,
+			templateDir: this.templateDir
+		});
 	},
 	/**
 	 * Init old controller
 	 */
 	index: function () {
-		new SitemapController({
-			store: this.store,
-			templateDir: this.templateDir
+
+	},
+	createSitemap: function () {
+		new CreateSitemapView({
+			el: $("#viewport"),
+			store:this.store
 		});
 	}
 

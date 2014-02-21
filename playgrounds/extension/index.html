@@ -36,6 +36,8 @@
 	<script src="../../extension/scripts/Scraper.js"></script>
 
 	<script src="../../extension/devtools/views_js/DevtoolsRouter.js"></script>
+	<script src="../../extension/devtools/views_js/BaseView.js"></script>
+	<script src="../../extension/devtools/views_js/CreateSitemapView.js"></script>
 
 	<script src="../../extension/scripts/Controller.js"></script>
 
@@ -61,7 +63,11 @@
 					store: store,
 					templateDir: '../../extension/devtools/views/'
 				});
-				Backbone.history.start({pushState: true, root: '/scraper-chrome-scraper/playgrounds/extension/'});
+				var hash = location.hash.replace('#', '');
+				if (hash != '') {
+					location.hash = '';
+				}
+				Backbone.history.start({root: '/scraper-chrome-scraper/playgrounds/extension/'});
 			});
 		});
 	</script>
