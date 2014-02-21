@@ -4,7 +4,7 @@ describe("HTML Selector", function () {
 
 	});
 
-	it("should extract single text record", function () {
+	it("should extract single html element", function () {
 
 		var selector = new Selector({
 			id: 'a',
@@ -21,7 +21,7 @@ describe("HTML Selector", function () {
 		]);
 	});
 
-	it("should extract multiple text records", function () {
+	it("should extract multiple html elements", function () {
 
 		var selector = new Selector({
 			id: 'a',
@@ -54,6 +54,42 @@ describe("HTML Selector", function () {
 		expect(data).toEqual([
 			{
 				a: null
+			}
+		]);
+	});
+
+	it("should extract null when there is no regex match", function () {
+
+		var selector = new Selector({
+			id: 'a',
+			type: 'SelectorHTML',
+			multiple: false,
+			selector: "div",
+			regex: "wontmatch"
+		});
+
+		var data = selector.getData($("#selector-html-single-html"));
+		expect(data).toEqual([
+			{
+				a: null
+			}
+		]);
+	});
+
+	it("should extract html+text using regex", function () {
+
+		var selector = new Selector({
+			id: 'a',
+			type: 'SelectorHTML',
+			multiple: false,
+			selector: "div",
+			regex: "<b>\\w+"
+		});
+
+		var data = selector.getData($("#selector-html-single-html"));
+		expect(data).toEqual([
+			{
+				a: '<b>bbb'
 			}
 		]);
 	});

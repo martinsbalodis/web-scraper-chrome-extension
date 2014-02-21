@@ -25,6 +25,16 @@ var SelectorHTML = {
 		$(elements).each(function (k, element) {
 			var data = {};
 			var html = $(element).html();
+
+			if (this.regex !== undefined && this.regex.length) {
+				var matches = html.match(new RegExp(this.regex));
+				if (matches !== null) {
+					html = matches[0];
+				}
+				else {
+					html = null;
+				}
+			}
 			data[this.id] = html;
 
 			result.push(data);
@@ -44,6 +54,6 @@ var SelectorHTML = {
 	},
 
 	getFeatures: function () {
-		return ['multiple']
+		return ['multiple', 'regex']
 	}
 };
