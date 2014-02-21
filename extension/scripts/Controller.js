@@ -167,6 +167,9 @@ SitemapController.prototype = {
 				},
 				"#edit-selector button[action=preview-selector]": {
 					click: this.previewSelector
+				},
+				"#edit-selector button[action=preview-selector-data]": {
+					click: this.previewSelectorData
 				}
 			});
 			this.showSitemaps();
@@ -721,5 +724,8 @@ SitemapController.prototype = {
 				$(this).remove();
 			});
 		});
+	},
+	previewSelectorData: function() {
+		
 	}
 };
