@@ -169,7 +169,7 @@ SitemapController.prototype = {
 					click: this.previewSelector
 				},
 				"#edit-selector button[action=preview-selector-data]": {
-					click: this.previewSelectorData
+					click: this.previewSelectorDataFromSelectorEditing
 				}
 			});
 			this.showSitemaps();
@@ -469,6 +469,18 @@ SitemapController.prototype = {
 	saveSelector: function (button) {
 		var sitemap = this.state.currentSitemap;
 		var selector = this.state.currentSelector;
+		var newSelector = this.getCurrentlyEditedSelector();
+
+		sitemap.updateSelector(selector, newSelector);
+
+		this.store.saveSitemap(sitemap, function () {
+			this.showSitemapSelectorList();
+		}.bind(this));
+	},
+	/**
+	 * Get selector from selector editing form
+	 */
+	getCurrentlyEditedSelector: function () {
 		var id = $("#edit-selector [name=id]").val();
 		var selectorsSelector = $("#edit-selector [name=selector]").val();
 		var type = $("#edit-selector [name=type]").val();
@@ -486,14 +498,7 @@ SitemapController.prototype = {
 			extractAttribute:extractAttribute,
 			parentSelectors: parentSelectors
 		});
-
-		sitemap.updateSelector(selector, newSelector);
-
-		var controller = this;
-
-		this.store.saveSitemap(sitemap, function () {
-			this.showSitemapSelectorList();
-		}.bind(this));
+		return newSelector;
 	},
 	cancelSelectorEditing: function (button) {
 		this.showSitemapSelectorList();
@@ -678,14 +683,24 @@ SitemapController.prototype = {
 	previewSelectorDataFromSelectorTree: function (button) {
 		var sitemap = this.state.currentSitemap;
 		var selector = $(button).closest("tr").data('selector');
+		this.previewSelectorData(sitemap, selector.id);
+	},
+	previewSelectorDataFromSelectorEditing: function() {
+		var sitemap = this.state.currentSitemap.clone();
+		var selector = sitemap.getSelectorById(this.state.currentSelector.id);
+		var newSelector = this.getCurrentlyEditedSelector();
+		sitemap.updateSelector(selector, newSelector);
+		this.previewSelectorData(sitemap, selector.id)
+	},
+	previewSelectorData: function (sitemap, selectorId) {
 		var request = {
 			previewSelectorData: true,
 			sitemap: JSON.parse(JSON.stringify(sitemap)),
-			selectorId: selector.id
+			selectorId: selectorId
 		};
 		chrome.runtime.sendMessage(request, function (response) {
 
-			if(response.length === 0) {
+			if (response.length === 0) {
 				return
 			}
 			var dataColumns = Object.keys(response[0]);
@@ -717,15 +732,12 @@ SitemapController.prototype = {
 
 			var windowHeight = $(window).height();
 
-			$(".data-preview-modal .modal-body").height(windowHeight-130);
+			$(".data-preview-modal .modal-body").height(windowHeight - 130);
 
 			// remove modal from dom after it is closed
-			$dataPreviewPanel.on("hidden.bs.modal", function(){
+			$dataPreviewPanel.on("hidden.bs.modal", function () {
 				$(this).remove();
 			});
 		});
-	},
-	previewSelectorData: function() {
-		
 	}
 };
