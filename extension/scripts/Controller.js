@@ -72,13 +72,9 @@ SitemapController.prototype = {
 				'#sitemaps button[action=csv-download-sitemap-data]': {
 					click: this.downloadSitemapData
 				},
-				// @TODO move to tr
-				'#selector-tree tbody tr': {
-					click: this.showChildSelectors
-				},
-				'#selector-tree .breadcrumb a': {
-					click: this.treeNavigationshowSitemapSelectorList
-				},
+//				'#selector-tree .breadcrumb a': {
+//					click: this.treeNavigationshowSitemapSelectorList
+//				},
 				'#selector-tree tr button[action=edit-selector]': {
 					click: this.editSelector
 				},
@@ -284,26 +280,8 @@ SitemapController.prototype = {
 		graph.draw(graphDiv, $(document).width(), 200);
 		return true;
 	},
-	showChildSelectors: function (tr) {
-		var selector = $(tr).data('selector');
-		var parentSelectors = this.state.editSitemapBreadcumbsSelectors;
-		this.state.currentParentSelectorId = selector.id;
-		parentSelectors.push(selector);
 
-		this.showSitemapSelectorList();
-	},
 
-	treeNavigationshowSitemapSelectorList: function (button) {
-		var parentSelectors = this.state.editSitemapBreadcumbsSelectors;
-		var controller = this;
-		$("#selector-tree .breadcrumb li a").each(function (i, parentSelectorButton) {
-			if (parentSelectorButton === button) {
-				parentSelectors.splice(i + 1);
-				controller.state.currentParentSelectorId = parentSelectors[i].id;
-			}
-		});
-		this.showSitemapSelectorList();
-	},
 
 	editSelector: function (button) {
 		var selector = $(button).closest("tr").data('selector');

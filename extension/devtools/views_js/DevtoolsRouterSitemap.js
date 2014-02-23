@@ -4,19 +4,26 @@
 var DevtoolsRouterSitemap = Backbone.Router.extend({
 
 	routes: {
-		"sitemap/:sitemapId/selectors": "sitemapSelectors",
+		"sitemap/:sitemapId/selectors": "selectorList",
 		"sitemap/:sitemapId/add-selector": "addSelector"
 	},
 	initialize: function (options) {
 		this.sitemap = options.sitemap;
 		this.store = options.store;
+		this.selectorListOpenSelectors = [{
+			id:'_root'
+		}];
 	},
-	sitemapSelectors: function () {
-		new SitemapSelectorsView({
-			el: $("#viewport"),
-			store: this.store,
-			sitemap: this.sitemap
-		});
+	selectorList: function () {
+		if(this.selectorListView === undefined) {
+			this.selectorListView = new SitemapSelectorsView({
+				el: $("#viewport"),
+				store: this.store,
+				sitemap: this.sitemap,
+				selectorListOpenSelectors: this.selectorListOpenSelectors
+			});
+		}
+		this.selectorListView.render();
 	},
 	addSelector: function () {
 
