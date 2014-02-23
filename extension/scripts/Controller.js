@@ -25,48 +25,10 @@ SitemapController.prototype = {
 		}
 	},
 
-	/**
-	 * Loads templates for ICanHaz
-	 */
-	loadTemplates: function (cbAllTemplatesLoaded) {
-		var templateIds = [
-			'Viewport',
-			'SitemapList',
-			'SitemapListItem',
-			'SitemapCreate',
-			'SitemapImport',
-			'SitemapExport',
-			'SitemapBrowseData',
-			'SitemapExportDataCSV',
-			'SitemapEditMetadata',
-			'SelectorList',
-			'SelectorListItem',
-			'SelectorEdit',
-			'SitemapSelectorGraph',
-			'DataPreview'
-		];
-		var templatesLoaded = 0;
-		var cbLoaded = function (templateId, template) {
-			templatesLoaded++;
-			ich.addTemplate(templateId, template);
-			if (templatesLoaded === templateIds.length) {
-				cbAllTemplatesLoaded();
-			}
-		}
-
-		templateIds.forEach(function (templateId) {
-			$.get(this.templateDir + templateId + '.html', cbLoaded.bind(this, templateId));
-		}.bind(this));
-	},
-
 	init: function () {
 
-		this.loadTemplates(function () {
 			// currently viewed objects
 			this.clearState();
-
-			// render main viewport
-			ich.Viewport().appendTo("body");
 
 			// cancel all form submits
 			$("form").bind("submit", function () {
@@ -101,18 +63,12 @@ SitemapController.prototype = {
 				'button#submit-edit-sitemap': {
 					click: this.editSitemapMetadataSave
 				},
-				'#sitemaps tr': {
-					click: this.editSitemap
-				},
-				'#sitemaps button[action=delete-sitemap]': {
-					click: this.deleteSitemap
-				},
 				'#sitemap-scrape-nav-button': {
 					click: this.scrapeSitemap
 				},
-				"#sitemaps button[action=browse-sitemap-data]": {
-					click: this.sitemapListBrowseSitemapData
-				},
+//				"#sitemaps button[action=browse-sitemap-data]": {
+//					click: this.sitemapListBrowseSitemapData
+//				},
 				'#sitemaps button[action=csv-download-sitemap-data]': {
 					click: this.downloadSitemapData
 				},
@@ -163,8 +119,6 @@ SitemapController.prototype = {
 					click: this.previewSelectorDataFromSelectorEditing
 				}
 			});
-			this.showSitemaps();
-		}.bind(this));
 	},
 
 	clearState: function () {
@@ -230,22 +184,6 @@ SitemapController.prototype = {
 		});
 		$("#viewport").html(sitemapExportForm);
 		return true;
-	},
-
-	showSitemaps: function () {
-
-		this.clearState();
-		this.setActiveNavigationButton("sitemaps");
-
-		this.store.getAllSitemaps(function (sitemaps) {
-			$sitemapListPanel = ich.SitemapList();
-			sitemaps.forEach(function (sitemap) {
-				$sitemap = ich.SitemapListItem(sitemap);
-				$sitemap.data("sitemap", sitemap);
-				$sitemapListPanel.find("tbody").append($sitemap);
-			});
-			$("#viewport").html($sitemapListPanel);
-		});
 	},
 
 	importSitemap: function () {
@@ -488,13 +426,6 @@ SitemapController.prototype = {
 		this.store.saveSitemap(sitemap, function () {
 			this.showSitemapSelectorList();
 		}.bind(this));
-	},
-	deleteSitemap: function (button) {
-		var sitemap = $(button).closest("tr").data("sitemap");
-		var controller = this;
-		this.store.deleteSitemap(sitemap, function () {
-			controller.showSitemaps();
-		});
 	},
 	scrapeSitemap: function () {
 		var sitemap = this.state.currentSitemap;
