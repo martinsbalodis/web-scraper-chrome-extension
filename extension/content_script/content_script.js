@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener(
 
 			window.cs = new ContentSelector({
 				sitemap: request.sitemap,
-				parentSelectorId: request.parentSelectorId
+				selectorId: request.selectorId
 			});
 			window.cs.selectSelector(function (resultSelector) {
 				sendResponse({
@@ -36,9 +36,9 @@ chrome.runtime.onMessage.addListener(
 
 			var cs = new ContentSelector({
 				sitemap: request.sitemap,
-				parentSelectorId: request.parentSelectorId
+				selectorId: request.selectorId
 			});
-			cs.previewSelector(request.selector);
+			cs.previewSelector();
 			return false;
 		}
 		else if (request.cancelPreviewSelector) {

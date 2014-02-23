@@ -46,5 +46,9 @@ var SelectorLink = {
 
 	getFeatures: function () {
 		return ['multiple']
+	},
+
+	getItemCSSSelector: function() {
+		return "a";
 	}
 };

@@ -500,6 +500,16 @@ SitemapController.prototype = {
 		});
 		return newSelector;
 	},
+	/**
+	 * @returns {Sitemap|*} Cloned Sitemap with currently edited selector
+	 */
+	getCurrentlyEditedSelectorSitemap: function () {
+		var sitemap = this.state.currentSitemap.clone();
+		var selector = sitemap.getSelectorById(this.state.currentSelector.id);
+		var newSelector = this.getCurrentlyEditedSelector();
+		sitemap.updateSelector(selector, newSelector);
+		return sitemap;
+	},
 	cancelSelectorEditing: function (button) {
 		this.showSitemapSelectorList();
 	},
@@ -604,14 +614,13 @@ SitemapController.prototype = {
 
 	selectSelector: function (button) {
 
-		var sitemap = this.state.currentSitemap;
-		var selector = this.state.currentSelector;
-		var parentSelectorId = selector.parentSelectors[0];
+		var sitemap = this.getCurrentlyEditedSelectorSitemap();
+		var selector = this.getCurrentlyEditedSelector();
 
 		// run css selector through background page
 		var request = {
 			selectSelector: true,
-			parentSelectorId: parentSelectorId,
+			selectorId: selector.id,
 			sitemap: JSON.parse(JSON.stringify(sitemap))
 		};
 		chrome.runtime.sendMessage(request, function (response) {
@@ -634,16 +643,14 @@ SitemapController.prototype = {
 	previewSelector: function (button) {
 
 		if ($(button).hasClass('active')) {
-			var sitemap = this.state.currentSitemap;
-			var selector = this.state.currentSelector;
-			var parentSelectorId = selector.parentSelectors[0];
+			var sitemap = this.getCurrentlyEditedSelectorSitemap();
+			var selector = this.getCurrentlyEditedSelector();
 
 			// run css selector through background page
 			var request = {
 				previewSelector: true,
-				parentSelectorId: parentSelectorId,
 				sitemap: JSON.parse(JSON.stringify(sitemap)),
-				selector: $("#edit-selector input[name=selector]").val()
+				selectorId: selector.id
 			};
 			chrome.runtime.sendMessage(request);
 		}

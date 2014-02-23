@@ -37,6 +37,14 @@ Selector.prototype = {
 	},
 
 	/**
+	 * CSS selector which will be used for element selection
+	 * @returns {string}
+	 */
+	getItemCSSSelector: function() {
+		return "*";
+	},
+
+	/**
 	 * override objects methods based on seletor type
 	 */
 	initType: function () {

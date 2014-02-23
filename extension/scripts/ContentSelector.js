@@ -1,6 +1,9 @@
 var ContentSelector = function (options) {
 	this.sitemap = new Sitemap(options.sitemap);
-	this.parentSelectorId = options.parentSelectorId;
+	this.selectorId = options.selectorId;
+	this.selector = this.sitemap.getSelectorById(this.selectorId);
+	this.parentSelectorId = this.selector.parentSelectors[0];
+	this.parentSelector = this.sitemap.getSelectorById(this.parentSelectorId);
 
 	this.selectedElements = [];
 	this.top = 0;
@@ -26,10 +29,10 @@ ContentSelector.prototype = {
 		this.initSelection();
 	},
 
-	previewSelector: function (cssSelector) {
+	previewSelector: function () {
 
 		this.highlightParent();
-		var $elements = $(this.parent).find(cssSelector);
+		var $elements = $(this.parent).find(this.selector.selector);
 		$elements.addClass('-sitemap-select-item-selected');
 	},
 
@@ -38,7 +41,8 @@ ContentSelector.prototype = {
 		this.highlightParent();
 
 		// all elements except toolbar
-		this.$allElements = $("*:not(#-selector-toolbar):not(#-selector-toolbar *)", this.parent);
+		var itemCSSSelector = this.selector.getItemCSSSelector();
+		this.$allElements = $(itemCSSSelector+":not(#-selector-toolbar):not(#-selector-toolbar *)", this.parent);
 
 		this.bindElementHighlight();
 		this.bindElementSelection();

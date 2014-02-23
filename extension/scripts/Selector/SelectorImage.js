@@ -42,5 +42,9 @@ var SelectorImage = {
 
 	getFeatures: function () {
 		return ['multiple']
+	},
+
+	getItemCSSSelector: function() {
+		return "img";
 	}
 };
