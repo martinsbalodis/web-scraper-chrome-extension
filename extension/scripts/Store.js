@@ -98,7 +98,12 @@ Store.prototype = {
             callback(sitemaps);
         });
     },
-
+	getSitemap: function(sitemapId, callback){
+		this.sitemapDb.get(sitemapId, function(err, resp){
+			var sitemap = new Sitemap(resp);
+			callback(sitemap);
+		});
+	},
     getSitemapData: function (sitemap, callback) {
 
         var db = this.getSitemapDataDb(sitemap._id);

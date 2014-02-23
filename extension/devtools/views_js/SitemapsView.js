@@ -36,7 +36,7 @@ var SitemapsView = BaseView.extend({
 	editSitemap:function(e) {
 		var $button = $(e.currentTarget);
 		var sitemapId = $button.data("sitemap-id");
-		// @TODO redirect to sitemap editing
+		window.location.hash = "sitemap/"+sitemapId+"/selectors"
 	},
 	/**
 	 * Find sitemap by its id

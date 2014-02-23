@@ -52,6 +52,10 @@ chrome.runtime.onMessage.addListener(
 			store.sitemapExists(request.sitemap, sendResponse);
 			return true;
 		}
+		else if (request.getSitemap) {
+			store.getSitemap(request.sitemapId, sendResponse);
+			return true;
+		}
 		else if (request.getSitemapData) {
 			store.getSitemapData(new Sitemap(request.sitemap), sendResponse);
 			return true;

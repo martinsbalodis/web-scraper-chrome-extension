@@ -49,6 +49,16 @@ StoreDevtools.prototype = {
 			callback(sitemaps);
 		});
 	},
+	getSitemap: function (sitemapId, callback) {
+		var request = {
+			getSitemap: true,
+			sitemapId: sitemapId
+		};
+
+		chrome.runtime.sendMessage(request, function (sitemap) {
+			callback(new Sitemap(sitemap));
+		});
+	},
 	getSitemapData: function (sitemap, callback) {
 		var request = {
 			getSitemapData: true,

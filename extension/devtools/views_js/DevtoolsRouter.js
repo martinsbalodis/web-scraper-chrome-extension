@@ -4,8 +4,10 @@ var DevtoolsRouter = Backbone.Router.extend({
 		"": "index",
 		"create-sitemap": "createSitemap",
 		"import-sitemap": "importSitemap",
-		"sitemaps": "sitemaps"
+		"sitemaps": "sitemaps",
+		"sitemap/:sitemapId/*subroute": "sitemapRouter"
 	},
+	routers: {},
 	initialize: function (options) {
 		this.store = options.store;
 		this.templateDir = options.templateDir;
@@ -16,9 +18,9 @@ var DevtoolsRouter = Backbone.Router.extend({
 		});
 
 		// Fixed: hash tags don't work in devtools
-		$("body").on("click", "a", function(e){
+		$("body").on("click", "a", function (e) {
 			var href = $(e.currentTarget).attr("href");
-			if(href) {
+			if (href) {
 				window.location.hash = href;
 			}
 		}.bind(this));
@@ -52,7 +54,7 @@ var DevtoolsRouter = Backbone.Router.extend({
 
 		templateIds.forEach(function (templateId) {
 			jQuery.ajax({
-				url:this.templateDir + templateId + '.html',
+				url: this.templateDir + templateId + '.html',
 				success: cbLoaded.bind(this, templateId),
 				async: false
 			});
@@ -67,19 +69,29 @@ var DevtoolsRouter = Backbone.Router.extend({
 	createSitemap: function () {
 		new CreateSitemapView({
 			el: $("#viewport"),
-			store:this.store
+			store: this.store
 		});
 	},
 	importSitemap: function () {
 		new ImportSitemapView({
 			el: $("#viewport"),
-			store:this.store
+			store: this.store
 		});
 	},
-	sitemaps: function() {
+	sitemaps: function () {
 		new SitemapsView({
 			el: $("#viewport"),
-			store:this.store
+			store: this.store
 		});
+	},
+	sitemapRouter: function (sitemapId, subroute) {
+
+		if(this.sitemapRouterId === undefined || this.sitemapRouterId !== sitemapId) {
+			this.sitemapRouterId = sitemapId;
+			this.store.getSitemap(sitemapId, function (sitemap) {
+				var router = new DevtoolsRouterSitemap("sitemap/" + sitemapId + "/", sitemap);
+				Backbone.history.loadUrl("sitemap/"+sitemapId+"/"+subroute);
+			}.bind(this));
+		}
 	}
 });
