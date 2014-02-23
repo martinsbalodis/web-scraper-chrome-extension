@@ -2,7 +2,8 @@ var DevtoolsRouter = Backbone.Router.extend({
 
 	routes: {
 		"": "index",
-		"create-sitemap": "createSitemap"
+		"create-sitemap": "createSitemap",
+		"import-sitemap": "importSitemap"
 	},
 	initialize: function (options) {
 		this.store = options.store;
@@ -21,6 +22,12 @@ var DevtoolsRouter = Backbone.Router.extend({
 	},
 	createSitemap: function () {
 		new CreateSitemapView({
+			el: $("#viewport"),
+			store:this.store
+		});
+	},
+	importSitemap: function () {
+		new ImportSitemapView({
 			el: $("#viewport"),
 			store:this.store
 		});

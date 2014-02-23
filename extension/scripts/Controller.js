@@ -77,9 +77,6 @@ SitemapController.prototype = {
 				'#sitemaps-nav-button': {
 					click: this.showSitemaps
 				},
-				'#create-sitemap-import-nav-button': {
-					click: this.showImportSitemapPanel
-				},
 				'#sitemap-export-nav-button': {
 					click: this.showSitemapExportPanel
 				},
@@ -222,13 +219,6 @@ SitemapController.prototype = {
 			.blur(function () {
 				$(this).popover('hide');
 			});
-	},
-
-	showImportSitemapPanel: function () {
-		this.setActiveNavigationButton('create-sitemap-import');
-		var sitemapForm = ich.SitemapImport();
-		$("#viewport").html(sitemapForm);
-		return true;
 	},
 
 	showSitemapExportPanel: function () {

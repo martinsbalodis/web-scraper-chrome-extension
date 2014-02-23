@@ -1,12 +1,12 @@
 var CreateSitemapView = BaseView.extend({
 	events: {
-		"click #submit-create-sitemap": "createSitemap",
+		"click #submit-create-sitemap": "createSitemap"
 	},
 	initialize: function(options) {
 		this.store = options.store;
 		this.setActiveNavigationButton('create-sitemap-create');
 		var sitemapForm = ich.SitemapCreate();
-		$("#viewport").html(sitemapForm);
+		this.$el.html(sitemapForm);
 		this.initMultipleStartUrlHelper();
 	},
 	/**
@@ -35,10 +35,10 @@ var CreateSitemapView = BaseView.extend({
 		return sitemap;
 	},
 	createSitemap: function (e) {
-		e.stopPropagation();
 		var sitemap = this.getFormSitemap();
 		this.store.createSitemap(sitemap, function (sitemap) {
 			// @TODO change url to sitemap editing
 		}.bind(this, sitemap));
+		return false;
 	}
 });
