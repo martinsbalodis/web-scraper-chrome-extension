@@ -18,7 +18,8 @@ var SitemapSelectorsView = BaseView.extend({
 		var parentSelectorId = this.parentSelectorId;
 
 		var $selectorListPanel = ich.SelectorList({
-			parentSelectors: parentSelectors
+			parentSelectors: parentSelectors,
+			sitemap:sitemap
 		});
 		var selectors = sitemap.getDirectChildSelectors(parentSelectorId);
 		selectors.forEach(function (selector) {

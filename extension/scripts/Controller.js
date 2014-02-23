@@ -91,9 +91,9 @@ SitemapController.prototype = {
 				'#edit-selector button[action=cancel-selector-editing]': {
 					click: this.cancelSelectorEditing
 				},
-				'#selector-tree button[action=add-selector]': {
-					click: this.addSelector
-				},
+//				'#selector-tree button[action=add-selector]': {
+//					click: this.addSelector
+//				},
 				"#selector-tree tr button[action=delete-selector]": {
 					click: this.deleteSelector
 				},
@@ -366,40 +366,6 @@ SitemapController.prototype = {
 		features.forEach(function (feature) {
 			$("#edit-selector .feature-" + feature).show();
 		})
-	},
-	saveSelector: function (button) {
-		var sitemap = this.state.currentSitemap;
-		var selector = this.state.currentSelector;
-		var newSelector = this.getCurrentlyEditedSelector();
-
-		sitemap.updateSelector(selector, newSelector);
-
-		this.store.saveSitemap(sitemap, function () {
-			this.showSitemapSelectorList();
-		}.bind(this));
-	},
-	/**
-	 * Get selector from selector editing form
-	 */
-	getCurrentlyEditedSelector: function () {
-		var id = $("#edit-selector [name=id]").val();
-		var selectorsSelector = $("#edit-selector [name=selector]").val();
-		var type = $("#edit-selector [name=type]").val();
-		var multiple = $("#edit-selector [name=multiple]").is(":checked");
-		var regex = $("#edit-selector [name=regex]").val();
-		var parentSelectors = $("#edit-selector [name=parentSelectors]").val();
-		var extractAttribute = $("#edit-selector [name=extractAttribute]").val();
-
-		var newSelector = new Selector({
-			id: id,
-			selector: selectorsSelector,
-			type: type,
-			multiple: multiple,
-			regex: regex,
-			extractAttribute:extractAttribute,
-			parentSelectors: parentSelectors
-		});
-		return newSelector;
 	},
 	cancelSelectorEditing: function (button) {
 		this.showSitemapSelectorList();

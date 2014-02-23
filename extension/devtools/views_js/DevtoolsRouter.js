@@ -89,7 +89,10 @@ var DevtoolsRouter = Backbone.Router.extend({
 		if(this.sitemapRouterId === undefined || this.sitemapRouterId !== sitemapId) {
 			this.sitemapRouterId = sitemapId;
 			this.store.getSitemap(sitemapId, function (sitemap) {
-				var router = new DevtoolsRouterSitemap("sitemap/" + sitemapId + "/", sitemap);
+				var router = new DevtoolsRouterSitemap({
+					sitemap:sitemap,
+					store:this.store
+				});
 				Backbone.history.loadUrl("sitemap/"+sitemapId+"/"+subroute);
 			}.bind(this));
 		}
