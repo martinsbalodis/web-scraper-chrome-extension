@@ -13,6 +13,14 @@ var DevtoolsRouter = Backbone.Router.extend({
 			store: this.store,
 			templateDir: this.templateDir
 		});
+
+		// Fixed: hash tags don't work in devtools
+		$("body").on("click", "a", function(e){
+			var href = $(e.currentTarget).attr("href");
+			if(href) {
+				window.location.hash = href;
+			}
+		}.bind(this));
 	},
 	/**
 	 * Init old controller

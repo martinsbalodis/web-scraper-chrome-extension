@@ -8,6 +8,6 @@ $(function () {
 		store: store,
 		templateDir: 'views/'
 	});
-	Backbone.history.start({pushState: true, root: '/'});
+	Backbone.history.start({pushState: false, root: '/'});
 
 });
