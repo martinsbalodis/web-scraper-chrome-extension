@@ -72,6 +72,6 @@ var SelectorTable = {
 	},
 
 	getItemCSSSelector: function () {
-		return "table";
+		return "table:has(thead)";
 	}
 };
