@@ -34,6 +34,13 @@ describe("ContentSelector", function () {
 				selector: "span",
 				multiple: true,
 				parentSelectors: ['div']
+			},
+			{
+				id: "el",
+				type: "SelectorElement",
+				selector: "el",
+				multiple: true,
+				parentSelectors: ['span']
 			}
 		];
 
@@ -44,7 +51,7 @@ describe("ContentSelector", function () {
 		var generatedSelector;
 		var cs = new ContentSelector({
 			sitemap: sitemap,
-			parentSelectorId: 'span'
+			selectorId: 'el'
 		});
 		cs.selectSelector(function (selector) {
 			generatedSelector = selector;
@@ -63,13 +70,19 @@ describe("ContentSelector", function () {
 	it("should be able to return body when there are no parent selectors", function () {
 
 		var sitemap = new Sitemap({
-			selectors: []
+			selectors: [{
+					id: "el",
+					type: "SelectorElement",
+					selector: "el",
+					multiple: true,
+					parentSelectors: ['_root']
+				}]
 		});
 
 		var generatedSelector;
 		var cs = new ContentSelector({
 			sitemap: sitemap,
-			parentSelectorId: '_root'
+			selectorId: 'el'
 		});
 		cs.selectSelector(function (selector) {
 		});
