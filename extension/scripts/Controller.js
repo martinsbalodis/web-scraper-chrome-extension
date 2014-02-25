@@ -42,6 +42,7 @@ SitemapController.prototype = {
 			'SelectorList',
 			'SelectorListItem',
 			'SelectorEdit',
+			'SelectorEditTableColumn',
 			'SitemapSelectorGraph',
 			'DataPreview'
 		];
@@ -444,6 +445,10 @@ SitemapController.prototype = {
 				{
 					type: 'SelectorElementAttribute',
 					title: 'Element attribute'
+				},
+				{
+					type: 'SelectorTable',
+					title: 'Table'
 				}
 			]
 		});
@@ -488,6 +493,21 @@ SitemapController.prototype = {
 		var regex = $("#edit-selector [name=regex]").val();
 		var parentSelectors = $("#edit-selector [name=parentSelectors]").val();
 		var extractAttribute = $("#edit-selector [name=extractAttribute]").val();
+		var columns = [];
+		var $columnHeaders = $("#edit-selector .column-header");
+		var $columnNames = $("#edit-selector .column-name");
+		var $columnExtracts = $("#edit-selector .column-extract");
+
+		$columnHeaders.each(function(i){
+			var header = $($columnHeaders[i]).val();
+			var name = $($columnNames[i]).val();
+			var extract = $($columnExtracts[i]).is(":checked");
+			columns.push({
+				header:header,
+				name:name,
+				extract:extract
+			});
+		});
 
 		var newSelector = new Selector({
 			id: id,
@@ -496,7 +516,8 @@ SitemapController.prototype = {
 			multiple: multiple,
 			regex: regex,
 			extractAttribute:extractAttribute,
-			parentSelectors: parentSelectors
+			parentSelectors: parentSelectors,
+			columns:columns
 		});
 		return newSelector;
 	},
@@ -625,6 +646,16 @@ SitemapController.prototype = {
 		};
 		chrome.runtime.sendMessage(request, function (response) {
 			$("#edit-selector input[name=selector]").val(response.selector);
+			// @TODO how could this be encapsulated?
+			if(selector.type === 'SelectorTable') {
+				// update columns
+				var $tbody = $(".feature-columns table tbody");
+				$tbody.html("");
+				response.columns.forEach(function(column) {
+					var $row = ich.SelectorEditTableColumn(column);
+					$tbody.append($row);
+				});
+			}
 		});
 	},
 
@@ -697,7 +728,7 @@ SitemapController.prototype = {
 		var selector = sitemap.getSelectorById(this.state.currentSelector.id);
 		var newSelector = this.getCurrentlyEditedSelector();
 		sitemap.updateSelector(selector, newSelector);
-		this.previewSelectorData(sitemap, selector.id)
+		this.previewSelectorData(sitemap, newSelector.id);
 	},
 	previewSelectorData: function (sitemap, selectorId) {
 		var request = {

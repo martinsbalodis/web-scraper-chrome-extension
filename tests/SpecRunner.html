@@ -34,6 +34,7 @@
 	<script src="../extension/scripts/Selector/SelectorImage.js"></script>
 	<script src="../extension/scripts/Selector/SelectorHTML.js"></script>
 	<script src="../extension/scripts/Selector/SelectorElementAttribute.js"></script>
+	<script src="../extension/scripts/Selector/SelectorTable.js"></script>
 	<script type="text/javascript" src="../extension/scripts/Sitemap.js"></script>
 	<script type="text/javascript" src="../extension/scripts/ChromePopupBrowser.js"></script>
 	<!-- content script -->
@@ -72,6 +73,7 @@
 	<script type="text/javascript" src="spec/Selector/SelectorImageSpec.js"></script>
 	<script type="text/javascript" src="spec/Selector/SelectorHTMLSpec.js"></script>
 	<script type="text/javascript" src="spec/Selector/SelectorElementAttributeSpec.js"></script>
+	<script type="text/javascript" src="spec/Selector/SelectorTableSpec.js"></script>
 	<script type="text/javascript" src="spec/ChromePopupBrowserSpec.js"></script>
 
 	<script type="text/javascript">
@@ -258,6 +260,43 @@
 				<img src="http://bb/">
 			</div>
 
+		</div>
+
+		<div id="selector-table">
+			<div id="selector-table-single-table-single-row">
+				<table>
+					<thead>
+						<tr>
+							<th>a</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>abc</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div id="selector-table-single-table-multiple-rows">
+				<table>
+					<thead>
+					<tr>
+						<th>b</th>
+						<th>a</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>bbb</td>
+						<td>aaa</td>
+					</tr>
+					<tr>
+						<td>ddd</td>
+						<td>ccc</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 

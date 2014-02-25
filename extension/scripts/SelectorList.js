@@ -27,7 +27,7 @@ SelectorList.prototype.hasSelector = function(selectorId) {
 		selectorId = selectorId.id;
 	}
 
-	for(var i in this) {
+	for (var i = 0; i < this.length; i++) {
 		if(this[i].id === selectorId) {
 			return true;
 		}
@@ -191,10 +191,10 @@ SelectorList.prototype.toJSON = function() {
 	return result;
 };
 
-SelectorList.prototype.getSelectorById = function(selectorId) {
-	for(var i in this) {
+SelectorList.prototype.getSelectorById = function (selectorId) {
+	for (var i = 0; i < this.length; i++) {
 		var selector = this[i];
-		if(selector.id === selectorId) {
+		if (selector.id === selectorId) {
 			return selector;
 		}
 	}

@@ -94,6 +94,11 @@ Sitemap.prototype = {
 
 	updateSelector: function (selector, selectorData) {
 
+		// selector is undefined when creating a new one
+		if(selector === undefined) {
+			selector = new Selector(selectorData);
+		}
+
 		// update child selectors
 		if (selector.id !== undefined && selector.id !== selectorData.id) {
 			this.selectors.forEach(function (currentSelector) {

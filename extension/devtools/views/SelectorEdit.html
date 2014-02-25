@@ -75,6 +75,31 @@
 		</div>
 	</div>
 
+	<div class="form-group feature feature-columns">
+		<label class="col-lg-1 control-label">Table columns</label>
+
+		<div class="col-lg-10">
+			<table class="table table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th>Column</th>
+						<th>Result key</th>
+						<th>Include into result</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#selector.columns}}
+					<tr>
+						<td><input class="column-header" type="hidden" name="column[header][]" value="{{header}}">{{header}}</td>
+						<td><input class="column-name form-control" type="text" name="column[name][]" value="{{name}}"></td>
+						<td><input class="column-extract" type="checkbox" name="column[extract][]" {{#extract}}checked="checked"{{/extract}}></td>
+					</tr>
+					{{/selector.columns}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
 	<div class="form-group">
 		<div class="col-lg-offset-1 col-lg-10">
 			<button class="btn btn-primary" action="save-selector">Save selector</button> <button action="cancel-selector-editing" class="btn btn-default">Cancel</button>

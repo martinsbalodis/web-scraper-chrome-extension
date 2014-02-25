@@ -9,10 +9,31 @@ chrome.runtime.onMessage.addListener(
 				sitemap: request.sitemap,
 				selectorId: request.selectorId
 			});
-			window.cs.selectSelector(function (resultSelector) {
-				sendResponse({
-					selector: resultSelector
-				});
+			window.cs.selectSelector(function (resultCSSSelector) {
+				var response = {
+					selector: resultCSSSelector
+				};
+				// @TODO implement additional data response somehow better
+				// @TODO add test to table selector
+				if(window.cs.selector.type === "SelectorTable") {
+					var $tables = $(resultCSSSelector);
+					if($tables.length > 0) {
+						var columns = [];
+						var $headerRow = $($tables[0]).find("thead tr");
+						if ($headerRow.length > 0) {
+							$headerRow.find("td,th").each(function (i) {
+								var header = $(this).text().trim();
+								columns.push({
+									header:header,
+									name:header,
+									extract:true
+								});
+							});
+						}
+						response.columns = columns;
+					}
+				}
+				sendResponse(response);
 			});
 
 			// response will be returned later
