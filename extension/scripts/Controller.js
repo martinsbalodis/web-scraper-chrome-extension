@@ -704,9 +704,8 @@ SitemapController.prototype = {
 			// run css selector through background page
 			var request = {
 				previewSelector: true,
-				parentSelectorId: parentSelectorId,
 				sitemap: JSON.parse(JSON.stringify(sitemap)),
-				selector: selector.selector
+				selectorId: selector.id
 			};
 			chrome.runtime.sendMessage(request);
 		}
