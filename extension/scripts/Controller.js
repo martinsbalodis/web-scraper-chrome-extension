@@ -728,7 +728,7 @@ SitemapController.prototype = {
 		var selector = sitemap.getSelectorById(this.state.currentSelector.id);
 		var newSelector = this.getCurrentlyEditedSelector();
 		sitemap.updateSelector(selector, newSelector);
-		this.previewSelectorData(sitemap, selector.id)
+		this.previewSelectorData(sitemap, newSelector.id);
 	},
 	previewSelectorData: function (sitemap, selectorId) {
 		var request = {
