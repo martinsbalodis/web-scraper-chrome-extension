@@ -65,6 +65,15 @@ Submit issues in issue tracker. Please attach an exported sitemap if possible.
 LGPLv3
 
 
+## Changelog
+### v0.1.3
+ * Added Table selector
+ * Added HTML selector
+ * Added HTML attribute selector
+ * Added data preview
+ * Added ranged start urls
+ * Fixed bug which made selector tree not to show on some operating systems
+
 
   [1]: http://www.youtube.com/
   [2]: docs/images/sitemap-tree.png "sitemap-scraper.png"
