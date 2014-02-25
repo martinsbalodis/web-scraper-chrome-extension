@@ -42,12 +42,14 @@ var SelectorTable = {
 			$(element).find("tbody tr").each(function (i, row) {
 				var data = {};
 				this.columns.forEach(function (column) {
-					if (columns[column.header] === undefined) {
-						data[column.name] = null;
-					}
-					else {
-						var rowText = $(row).find("td:nth-child(" + columns[column.header].index + ")").text().trim();
-						data[column.name] = rowText;
+					if(column.extract === true) {
+						if (columns[column.header] === undefined) {
+							data[column.name] = null;
+						}
+						else {
+							var rowText = $(row).find("td:nth-child(" + columns[column.header].index + ")").text().trim();
+							data[column.name] = rowText;
+						}
 					}
 				});
 				result.push(data);

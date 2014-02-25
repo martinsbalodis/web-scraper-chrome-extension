@@ -86,6 +86,38 @@ describe("Table Selector", function () {
 		]);
 	});
 
+	it("should only extract records from columns which are marked as extract", function () {
+
+		var selector = new Selector({
+			id: 'a',
+			type: 'SelectorTable',
+			multiple: false,
+			selector: "table",
+			columns: [
+				{
+					header: "a",
+					name: "a_renamed",
+					extract: true
+				},
+				{
+					header: "b",
+					name: "b_renamed",
+					extract: false
+				}
+			]
+		});
+
+		var data = selector.getData($("#selector-table-single-table-multiple-rows"));
+		expect(data).toEqual([
+			{
+				a_renamed: "aaa"
+			},
+			{
+				a_renamed: "ccc"
+			}
+		]);
+	});
+
 	it("should return data columns based on its configuration", function () {
 		var selector = new Selector({
 			id: 'a',
