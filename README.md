@@ -31,6 +31,7 @@ Link              | 1 or *           | text, url       | Y                    | 
 Image             | 1 or *           | image src       | N                    | N
 HTML              | 1 or *           | html            | N                    | N
 Element Attribute | 1 or *           | text            | N                    | N
+Table             | 1 or *           | text            | N                    | N
 
 ### Text
 Used for text selection. All HTML will be stripped and only text will be returned. You can additionaly apply regex to resulting data. Regex is applied before data export so you can change the regex after data is scraped. If a link element is selected then also its href wttribute will be returned, but the scraper will not follow the link.
@@ -52,6 +53,10 @@ This selector will return html and text within the selected element.
 
 ### Element Attribute
 This selector can extract an attribute of an html element. For example you might want to extract title attribute from this link: `<a href="#" title="my title">link<a>`.
+
+### Table
+This selector can extract data from tables. Table columns are used to split table rows into multiple values. Currently
+table selector only works with tables which have a <thead> HTML tag. Please submit issues for other table types.
 
 ## Issues
 Submit issues in issue tracker. Please attach an exported sitemap if possible.
