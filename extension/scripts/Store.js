@@ -111,6 +111,7 @@ Store.prototype = {
             callback(responseData);
         });
     },
+	// @TODO make this call lighter
     sitemapExists: function (sitemapId, callback) {
         this.getAllSitemaps(function (sitemaps) {
             var sitemapFound = false;

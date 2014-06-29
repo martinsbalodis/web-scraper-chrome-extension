@@ -253,6 +253,13 @@ SitemapController.prototype = {
 						regexp: {
 							regexp: /^[a-z][a-z0-9_\$\(\)\+\-/]+$/,
 							message: 'Only lowercase characters (a-z), digits (0-9), or any of the characters _, $, (, ), +, -, and / are allowed. Must begin with a letter.'
+						},
+						// placeholder for sitemap id existance validation
+						callback: {
+							message: 'Sitemap with this id already exists',
+							callback: function(value, validator) {
+								return true;
+							}.bind(this)
 						}
 					}
 				},
@@ -317,14 +324,23 @@ SitemapController.prototype = {
 			return false;
 		}
 
-		var sitemap = new Sitemap({
-			_id: id,
-			startUrl: startUrl,
-			selectors: []
-		});
-		this.store.createSitemap(sitemap, function (sitemap) {
-			this._editSitemap(sitemap, ['_root']);
-		}.bind(this, sitemap));
+		// check whether sitemap with this id already exist
+		this.store.sitemapExists(id, function (sitemapExists) {
+			if(sitemapExists) {
+				validator.updateStatus('_id', 'INVALID', 'callback');
+			}
+			else {
+				var sitemap = new Sitemap({
+					_id: id,
+					startUrl: startUrl,
+					selectors: []
+				});
+				this.store.createSitemap(sitemap, function (sitemap) {
+					this._editSitemap(sitemap, ['_root']);
+				}.bind(this, sitemap));
+			}
+
+		}.bind(this));
 	},
 
 	importSitemap: function () {
