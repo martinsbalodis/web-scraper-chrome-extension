@@ -236,6 +236,39 @@ SitemapController.prototype = {
 		var sitemapForm = ich.SitemapCreate();
 		$("#viewport").html(sitemapForm);
 		this.initMultipleStartUrlHelper();
+
+		$('#create-sitemap').bootstrapValidator({
+			submitHandler: function(){}, // workaround to prevent form submit
+			fields: {
+				"_id": {
+					message: 'The username is not valid',
+					validators: {
+						notEmpty: {
+							message: 'The username is required and cannot be empty'
+						},
+						stringLength: {
+							min: 3,
+							message: 'The sitemap id should be atleast 3 characters long'
+						},
+						regexp: {
+							regexp: /^[a-z][a-z0-9_\$\(\)\+\-/]+$/,
+							message: 'Only lowercase characters (a-z), digits (0-9), or any of the characters _, $, (, ), +, -, and / are allowed. Must begin with a letter.'
+						}
+					}
+				},
+				startUrl: {
+					validators: {
+						notEmpty: {
+							message: 'The start URL is required and cannot be empty'
+						},
+						uri: {
+							message: 'The start URL is not a valid URL'
+						}
+					}
+				}
+			}
+		});
+
 		return true;
 	},
 
@@ -276,6 +309,14 @@ SitemapController.prototype = {
 	createSitemap: function (form) {
 		var id = $("#create-sitemap input[name=_id]").val();
 		var startUrl = $("#create-sitemap input[name=startUrl]").val();
+
+		// cancel submit if invalid form
+		var validator = $('#create-sitemap').data('bootstrapValidator');
+		validator.validate();
+		if(!validator.isValid()) {
+			return false;
+		}
+
 		var sitemap = new Sitemap({
 			_id: id,
 			startUrl: startUrl,
