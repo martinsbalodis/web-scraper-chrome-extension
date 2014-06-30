@@ -231,13 +231,12 @@ SitemapController.prototype = {
 			});
 	},
 
-	showCreateSitemap: function () {
-		this.setActiveNavigationButton('create-sitemap-create');
-		var sitemapForm = ich.SitemapCreate();
-		$("#viewport").html(sitemapForm);
-		this.initMultipleStartUrlHelper();
+	/**
+	 * Add validation to sitemap creation or editing form
+	 */
+	initSitemapValidation: function() {
 
-		$('#create-sitemap').bootstrapValidator({
+		$('#viewport form').bootstrapValidator({
 			submitHandler: function(){}, // workaround to prevent form submit
 			fields: {
 				"_id": {
@@ -275,6 +274,14 @@ SitemapController.prototype = {
 				}
 			}
 		});
+	},
+
+	showCreateSitemap: function () {
+		this.setActiveNavigationButton('create-sitemap-create');
+		var sitemapForm = ich.SitemapCreate();
+		$("#viewport").html(sitemapForm);
+		this.initMultipleStartUrlHelper();
+		this.initSitemapValidation();
 
 		return true;
 	},
@@ -360,6 +367,7 @@ SitemapController.prototype = {
 		var $sitemapMetadataForm = ich.SitemapEditMetadata(sitemap);
 		$("#viewport").html($sitemapMetadataForm);
 		this.initMultipleStartUrlHelper();
+		this.initSitemapValidation();
 
 		return true;
 	},
@@ -371,29 +379,43 @@ SitemapController.prototype = {
 			startUrl: $("#edit-sitemap input[name=startUrl]").val()
 		};
 
-		var controller = this;
-
-		// change data
-		sitemap.startUrl = data.startUrl;
-
-		// just change sitemaps url
-		if (data.id === sitemap._id) {
-			controller.store.saveSitemap(sitemap, function (sitemap) {
-				controller.showSitemapSelectorList();
-			});
+		// cancel submit if invalid form
+		var validator = $('#edit-sitemap form').data('bootstrapValidator');
+		validator.validate();
+		if(!validator.isValid()) {
+			return false;
 		}
-		// id changed. we need to delete the old one and create a new one
-		else {
-			var newSitemap = new Sitemap(sitemap);
-			var oldSitemap = sitemap;
-			newSitemap._id = data.id;
-			controller.store.createSitemap(newSitemap, function (newSitemap) {
-				controller.store.deleteSitemap(oldSitemap, function () {
-					this.state.currentSitemap = newSitemap;
-					controller.showSitemapSelectorList();
+
+		// check whether sitemap with this id already exist
+		this.store.sitemapExists(data.id, function (sitemapExists) {
+			if(sitemap._id !== data.id && sitemapExists) {
+				validator.updateStatus('_id', 'INVALID', 'callback');
+				return;
+			}
+
+			// change data
+			sitemap.startUrl = data.startUrl;
+
+			// just change sitemaps url
+			if (data.id === sitemap._id) {
+				this.store.saveSitemap(sitemap, function (sitemap) {
+					this.showSitemapSelectorList();
 				}.bind(this));
-			}.bind(this));
-		}
+			}
+			// id changed. we need to delete the old one and create a new one
+			else {
+				var newSitemap = new Sitemap(sitemap);
+				var oldSitemap = sitemap;
+				newSitemap._id = data.id;
+				this.store.createSitemap(newSitemap, function (newSitemap) {
+					this.store.deleteSitemap(oldSitemap, function () {
+						this.state.currentSitemap = newSitemap;
+						this.showSitemapSelectorList();
+					}.bind(this));
+				}.bind(this));
+			}
+
+		}.bind(this));
 	},
 
 	/**
