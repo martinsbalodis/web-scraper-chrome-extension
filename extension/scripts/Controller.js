@@ -286,10 +286,57 @@ SitemapController.prototype = {
 		return true;
 	},
 
+	initImportStiemapValidation: function(){
+		$('#viewport form').bootstrapValidator({
+			submitHandler: function(){}, // workaround to prevent form submit
+			fields: {
+				"_id": {
+					message: 'The username is not valid',
+					validators: {
+						stringLength: {
+							min: 3,
+							message: 'The sitemap id should be atleast 3 characters long'
+						},
+						regexp: {
+							regexp: /^[a-z][a-z0-9_\$\(\)\+\-/]+$/,
+							message: 'Only lowercase characters (a-z), digits (0-9), or any of the characters _, $, (, ), +, -, and / are allowed. Must begin with a letter.'
+						},
+						// placeholder for sitemap id existance validation
+						callback: {
+							message: 'Sitemap with this id already exists',
+							callback: function(value, validator) {
+								return true;
+							}.bind(this)
+						}
+					}
+				},
+				sitemapJSON: {
+					validators: {
+						notEmpty: {
+							message: 'Sitemap JSON is required and cannot be empty'
+						},
+						callback: {
+							message: 'JSON is not valid',
+							callback: function(value, validator) {
+								try {
+									JSON.parse(value);
+								} catch (e) {
+									return false;
+								}
+								return true;
+							}.bind(this)
+						}
+					}
+				}
+			}
+		});
+	},
+
 	showImportSitemapPanel: function () {
 		this.setActiveNavigationButton('create-sitemap-import');
 		var sitemapForm = ich.SitemapImport();
 		$("#viewport").html(sitemapForm);
+		this.initImportStiemapValidation();
 		return true;
 	},
 
@@ -351,12 +398,33 @@ SitemapController.prototype = {
 	},
 
 	importSitemap: function () {
+
+		// cancel submit if invalid form
+		var validator = $('#viewport form').data('bootstrapValidator');
+		validator.validate();
+		if(!validator.isValid()) {
+			return false;
+		}
+
+		// load data from form
 		var sitemapJSON = $("[name=sitemapJSON]").val();
+		var id = $("input[name=_id]").val();
 		var sitemap = new Sitemap();
 		sitemap.importSitemap(sitemapJSON);
-		this.store.createSitemap(sitemap, function (sitemap) {
-			this._editSitemap(sitemap, ['_root']);
-		}.bind(this, sitemap));
+		if(id.length) {
+			sitemap._id = id;
+		}
+		// check whether sitemap with this id already exist
+		this.store.sitemapExists(sitemap._id, function (sitemapExists) {
+			if(sitemapExists) {
+				validator.updateStatus('_id', 'INVALID', 'callback');
+			}
+			else {
+				this.store.createSitemap(sitemap, function (sitemap) {
+					this._editSitemap(sitemap, ['_root']);
+				}.bind(this, sitemap));
+			}
+		}.bind(this));
 	},
 
 	editSitemapMetadata: function (button) {
