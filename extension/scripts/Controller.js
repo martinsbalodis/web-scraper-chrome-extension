@@ -171,6 +171,12 @@ SitemapController.prototype = {
 				},
 				"#edit-selector button[action=preview-selector-data]": {
 					click: this.previewSelectorDataFromSelectorEditing
+				},
+				"button.add-extra-start-url": {
+					click: this.addStartUrl
+				},
+				"button.remove-start-url": {
+					click: this.removeStartUrl
 				}
 			});
 			this.showSitemaps();
@@ -281,7 +287,7 @@ SitemapController.prototype = {
 						}
 					}
 				},
-				startUrl: {
+				"startUrl[]": {
 					validators: {
 						notEmpty: {
 							message: 'The start URL is required and cannot be empty'
@@ -981,5 +987,26 @@ SitemapController.prototype = {
 				$(this).remove();
 			});
 		});
+	},
+	/**
+	 * Add start url to sitemap creation or editing form
+	 * @param button
+	 */
+	addStartUrl: function(button) {
+
+		var $newInputBlock = $("#viewport .start-url-block:first").clone();
+		$newInputBlock.find("input").val("");
+		$("#viewport .start-url-block:last").after($newInputBlock);
+	},
+	/**
+	 * Remove start url from sitemap creation or editing form.
+	 * @param button
+	 */
+	removeStartUrl: function(button) {
+
+		var $block = $(button).closest(".start-url-block");
+		if($("#viewport .start-url-block").length > 1) {
+			$block.remove();
+		}
 	}
 };
