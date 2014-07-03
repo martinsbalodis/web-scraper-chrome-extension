@@ -232,6 +232,26 @@ SitemapController.prototype = {
 	},
 
 	/**
+	 * Returns bootstrapValidator object for current form in viewport
+	 */
+	getFormValidator: function() {
+
+		var validator = $('#viewport form').data('bootstrapValidator');
+		return validator;
+	},
+
+	/**
+	 * Returns whether current form in the viewport is valid
+	 * @returns {Boolean}
+	 */
+	isValidForm: function() {
+		var validator = this.getFormValidator();
+		validator.validate();
+		var valid = validator.isValid();
+		return valid;
+	},
+
+	/**
 	 * Add validation to sitemap creation or editing form
 	 */
 	initSitemapValidation: function() {
@@ -370,15 +390,14 @@ SitemapController.prototype = {
 		var startUrl = $("#create-sitemap input[name=startUrl]").val();
 
 		// cancel submit if invalid form
-		var validator = $('#create-sitemap').data('bootstrapValidator');
-		validator.validate();
-		if(!validator.isValid()) {
+		if(!this.isValidForm()) {
 			return false;
 		}
 
 		// check whether sitemap with this id already exist
 		this.store.sitemapExists(id, function (sitemapExists) {
 			if(sitemapExists) {
+				var validator = this.getFormValidator();
 				validator.updateStatus('_id', 'INVALID', 'callback');
 			}
 			else {
@@ -398,9 +417,7 @@ SitemapController.prototype = {
 	importSitemap: function () {
 
 		// cancel submit if invalid form
-		var validator = $('#viewport form').data('bootstrapValidator');
-		validator.validate();
-		if(!validator.isValid()) {
+		if(!this.isValidForm()) {
 			return false;
 		}
 
@@ -415,6 +432,7 @@ SitemapController.prototype = {
 		// check whether sitemap with this id already exist
 		this.store.sitemapExists(sitemap._id, function (sitemapExists) {
 			if(sitemapExists) {
+				var validator = this.getFormValidator();
 				validator.updateStatus('_id', 'INVALID', 'callback');
 			}
 			else {
@@ -446,15 +464,14 @@ SitemapController.prototype = {
 		};
 
 		// cancel submit if invalid form
-		var validator = $('#edit-sitemap form').data('bootstrapValidator');
-		validator.validate();
-		if(!validator.isValid()) {
+		if(!this.isValidForm()) {
 			return false;
 		}
 
 		// check whether sitemap with this id already exist
 		this.store.sitemapExists(data.id, function (sitemapExists) {
 			if(sitemap._id !== data.id && sitemapExists) {
+				var validator = this.getFormValidator();
 				validator.updateStatus('_id', 'INVALID', 'callback');
 				return;
 			}
@@ -660,9 +677,7 @@ SitemapController.prototype = {
 		var newSelector = this.getCurrentlyEditedSelector();
 
 		// cancel submit if invalid form
-		var validator = $('#viewport form').data('bootstrapValidator');
-		validator.validate();
-		if(!validator.isValid()) {
+		if(!this.isValidForm()) {
 			return false;
 		}
 
