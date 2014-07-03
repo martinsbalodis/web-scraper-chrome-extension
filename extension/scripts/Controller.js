@@ -240,10 +240,9 @@ SitemapController.prototype = {
 			submitHandler: function(){}, // workaround to prevent form submit
 			fields: {
 				"_id": {
-					message: 'The username is not valid',
 					validators: {
 						notEmpty: {
-							message: 'The username is required and cannot be empty'
+							message: 'The sitemap id is required and cannot be empty'
 						},
 						stringLength: {
 							min: 3,
@@ -291,7 +290,6 @@ SitemapController.prototype = {
 			submitHandler: function(){}, // workaround to prevent form submit
 			fields: {
 				"_id": {
-					message: 'The username is not valid',
 					validators: {
 						stringLength: {
 							min: 3,
@@ -552,6 +550,43 @@ SitemapController.prototype = {
 		this.showSitemapSelectorList();
 	},
 
+	initSelectorValidation: function() {
+
+		$('#viewport form').bootstrapValidator({
+			submitHandler: function(){}, // workaround to prevent form submit
+			fields: {
+				"id": {
+					validators: {
+						notEmpty: {
+							message: 'Sitemap id required and cannot be empty'
+						},
+						stringLength: {
+							min: 3,
+							message: 'The sitemap id should be atleast 3 characters long'
+						},
+						regexp: {
+							regexp: /^[^_].*$/,
+							message: 'Selector id cannot start with an underscore _'
+						}
+					}
+				},
+				selector: {
+					validators: {
+						notEmpty: {
+							message: 'Selector is required and cannot be empty'
+						}
+					}
+				},
+				parentSelectors: {
+					validators: {
+						notEmpty: {
+							message: 'You must choose at least one parent selector'
+						}
+					}
+				}
+			}
+		});
+	},
 	editSelector: function (button) {
 		var selector = $(button).closest("tr").data('selector');
 		this._editSelector(selector);
@@ -609,6 +644,7 @@ SitemapController.prototype = {
 
 		this.state.currentSelector = selector;
 		this.selectorTypeChanged();
+		this.initSelectorValidation();
 	},
 	selectorTypeChanged: function () {
 		var type = $("#edit-selector select[name=type]").val();
@@ -622,6 +658,13 @@ SitemapController.prototype = {
 		var sitemap = this.state.currentSitemap;
 		var selector = this.state.currentSelector;
 		var newSelector = this.getCurrentlyEditedSelector();
+
+		// cancel submit if invalid form
+		var validator = $('#viewport form').data('bootstrapValidator');
+		validator.validate();
+		if(!validator.isValid()) {
+			return false;
+		}
 
 		sitemap.updateSelector(selector, newSelector);
 
