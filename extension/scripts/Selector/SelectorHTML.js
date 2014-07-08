@@ -54,6 +54,6 @@ var SelectorHTML = {
 	},
 
 	getFeatures: function () {
-		return ['multiple', 'regex']
+		return ['multiple', 'regex', 'delay']
 	}
 };

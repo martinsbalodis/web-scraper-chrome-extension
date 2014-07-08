@@ -41,7 +41,7 @@ var SelectorImage = {
 	},
 
 	getFeatures: function () {
-		return ['multiple']
+		return ['multiple', 'delay']
 	},
 
 	getItemCSSSelector: function() {

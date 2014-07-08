@@ -45,7 +45,7 @@ var SelectorLink = {
 	},
 
 	getFeatures: function () {
-		return ['multiple']
+		return ['multiple', 'delay']
 	},
 
 	getItemCSSSelector: function() {

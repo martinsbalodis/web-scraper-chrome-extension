@@ -70,7 +70,7 @@ var SelectorTable = {
 	},
 
 	getFeatures: function () {
-		return ['multiple', 'columns']
+		return ['multiple', 'columns', 'delay']
 	},
 
 	getItemCSSSelector: function () {

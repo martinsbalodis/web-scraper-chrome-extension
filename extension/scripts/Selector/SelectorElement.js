@@ -29,6 +29,6 @@ var SelectorElement = {
 	},
 
 	getFeatures: function () {
-		return ['multiple']
+		return ['multiple', 'delay']
 	}
 };

@@ -49,6 +49,6 @@ var SelectorGroup = {
 	},
 
 	getFeatures: function () {
-		return []
+		return ['delay']
 	}
 };
