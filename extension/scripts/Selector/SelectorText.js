@@ -18,7 +18,7 @@ var SelectorText = {
 	willReturnElements: function () {
 		return false;
 	},
-	getData: function (parentElement) {
+	_getData: function (parentElement) {
 		var elements = this.getDataElements(parentElement);
 
 		var result = [];

@@ -101,5 +101,9 @@ Selector.prototype = {
 		else {
 			return [];
 		}
+	},
+
+	getData: function(parentElement) {
+		return this._getData(parentElement);
 	}
 };
