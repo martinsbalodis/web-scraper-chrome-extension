@@ -114,6 +114,7 @@ SelectorList.prototype.getSelector = function(selectorId) {
 
 /**
  * Returns all selectors if this selectors including all parent selectors within this page
+ * @TODO not used any more.
  * @param selectorId
  * @returns {*}
  */
@@ -122,20 +123,22 @@ SelectorList.prototype.getOnePageSelectors = function (selectorId) {
 	var selector = this.getSelector(selectorId);
 	resultList.push(this.getSelector(selectorId));
 
-	// add parent selectors
-	var currentSelector = selector;
-	while (true) {
-		var parentSelectorId = currentSelector.parentSelectors[0];
-		if (parentSelectorId === "_root") break;
-		var parentSelector = this.getSelector(parentSelectorId);
-		if(parentSelector.willReturnElements()) {
-			resultList.push(parentSelector);
-			currentSelector = parentSelector;
-		}
-		else {
-			break;
-		}
-	}
+	// recursively find all parent selectors that could lead to the page where selectorId is used.
+	var findParentSelectors = function(selector) {
+
+		selector.parentSelectors.forEach(function(parentSelectorId) {
+
+			if(parentSelectorId === "_root") return;
+			var parentSelector = this.getSelector(parentSelectorId);
+			if(resultList.indexOf(parentSelector) !== -1) return;
+			if(parentSelector.willReturnElements()) {
+				resultList.push(parentSelector);
+				findParentSelectors(parentSelector);
+			}
+		}.bind(this));
+	}.bind(this);
+
+	findParentSelectors(selector);
 
 	// add all child selectors
 	resultList = resultList.concat(this.getSinglePageAllChildSelectors(selector.id));
@@ -149,13 +152,20 @@ SelectorList.prototype.getOnePageSelectors = function (selectorId) {
 SelectorList.prototype.getSinglePageAllChildSelectors = function(parentSelectorId) {
 
 	var resultList = new SelectorList();
-	var childSelectors = this.getDirectChildSelectors(parentSelectorId);
-	childSelectors.forEach(function (childSelector) {
-		resultList.push(childSelector);
-		if(childSelector.willReturnElements()) {
-			resultList = resultList.concat(this.getSinglePageAllChildSelectors(childSelector.id));
+	var addChildSelectors = function(parentSelector) {
+		if(parentSelector.willReturnElements()) {
+			var childSelectors = this.getDirectChildSelectors(parentSelector.id);
+			childSelectors.forEach(function (childSelector) {
+				if(resultList.indexOf(childSelector) === -1) {
+					resultList.push(childSelector);
+					addChildSelectors(childSelector);
+				}
+			}.bind(this));
 		}
-	}.bind(this));
+	}.bind(this);
+
+	var parentSelector = this.getSelector(parentSelectorId);
+	addChildSelectors(parentSelector);
 	return resultList;
 };
 

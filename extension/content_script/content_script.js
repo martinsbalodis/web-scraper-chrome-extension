@@ -75,7 +75,7 @@ chrome.runtime.onMessage.addListener(
 		else if(request.previewSelectorData) {
 			console.log("received data-preview extraction request", request);
 			var extractor = new DataExtractor(request);
-			var data = extractor.getSingleSelectorData(request.selectorId);
+			var data = extractor.getSingleSelectorData(request.parentSelectorIds, request.selectorId);
 			console.log("dataextractor data", data);
 			sendResponse(data);
 		}
