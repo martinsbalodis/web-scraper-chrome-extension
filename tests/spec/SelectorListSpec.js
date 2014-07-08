@@ -293,6 +293,12 @@ describe("SelectorList", function () {
 
 		var selectorList = expectedSelectorList.concat([
 			{
+				id: "parent2",
+				type: 'SelectorElement',
+				multiple: true,
+				parentSelectors: ['_root']
+			},
+			{
 				id: "ignoredText",
 				type: 'SelectorText',
 				multiple: false,

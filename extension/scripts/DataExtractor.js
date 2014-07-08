@@ -8,7 +8,7 @@ DataExtractor = function (options) {
 	}
 
 	this.parentSelectorId = options.parentSelectorId;
-	this.parentElement = options.parentElement;
+	this.parentElement = options.parentElement || $("body")[0];
 };
 
 DataExtractor.prototype = {
@@ -188,10 +188,42 @@ DataExtractor.prototype = {
 		return results;
 	},
 
-	getSingleSelectorData: function(selectorId) {
+	getSingleSelectorData: function(parentSelectorIds, selectorId) {
+
+		// to fetch only single selectors data we will create a sitemap that only contains this selector, his
+		// parents and all child selectors
 		var sitemap = this.sitemap;
-		this.parentSelectorId = this.sitemap.getSelectorById(selectorId).parentSelectors[0];
-		sitemap.selectors = sitemap.selectors.getOnePageSelectors(selectorId);
+		var selector = this.sitemap.selectors.getSelector(selectorId);
+		var childSelectors = sitemap.selectors.getAllSelectors(selectorId);
+		var parentSelectors = [];
+		for(var i = parentSelectorIds.length-1;i>=0;i--) {
+			var id = parentSelectorIds[i];
+			if(id === '_root') break;
+			var parentSelector = this.sitemap.selectors.getSelector(id);
+			parentSelectors.push(parentSelector);
+		}
+
+		// merge all needed selectors together
+		var selectors = parentSelectors.concat(childSelectors);
+		selectors.push(selector);
+		sitemap.selectors = new SelectorList(selectors);
+
+		var parentSelectorId;
+		// find the parent that leaded to the page where required selector is being used
+		for(var i = parentSelectorIds.length-1;i>=0;i--) {
+			var id = parentSelectorIds[i];
+			if(id === '_root') {
+				parentSelectorId = id;
+				break;
+			}
+			var parentSelector = this.sitemap.selectors.getSelector(parentSelectorIds[i]);
+			if(!parentSelector.willReturnElements()) {
+				parentSelectorId = id;
+				break;
+			}
+		}
+		this.parentSelectorId = parentSelectorId;
+
 		return this.getData();
 	}
 };

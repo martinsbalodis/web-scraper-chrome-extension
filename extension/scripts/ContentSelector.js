@@ -32,7 +32,7 @@ ContentSelector.prototype = {
 	previewSelector: function () {
 
 		this.highlightParent();
-		var $elements = $(this.parent).find(this.selector.selector);
+		var $elements = this.selector.getDataElements(this.parent);
 		$elements.addClass('-sitemap-select-item-selected');
 	},
 
