@@ -594,6 +594,13 @@ SitemapController.prototype = {
 						}
 					}
 				},
+				delay: {
+					validators: {
+						numeric: {
+							message: 'Delay must be numeric'
+						}
+					}
+				},
 				parentSelectors: {
 					validators: {
 						notEmpty: {
