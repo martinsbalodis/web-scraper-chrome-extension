@@ -104,6 +104,14 @@ Selector.prototype = {
 	},
 
 	getData: function(parentElement) {
-		return this._getData(parentElement);
+
+		var d = $.Deferred();
+		var timeout = this.delay || 0;
+		setTimeout(function() {
+			var data = this._getData(parentElement);
+			d.resolve(data);
+		}.bind(this), timeout);
+
+		return d.promise();
 	}
 };

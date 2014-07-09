@@ -112,31 +112,97 @@ DataExtractor.prototype = {
 
 	getSelectorTreeCommonData: function (selectors, parentSelectorId, parentElement) {
 
-		var commonData = {};
 		var childSelectors = selectors.getDirectChildSelectors(parentSelectorId);
+		var chainDeferred = $.Deferred().resolve({});
+
+		// executes data featching one by one
 		childSelectors.forEach(function (selector) {
+			// ???
 			if (!selectors.willReturnMultipleRecords(selector.id)) {
 
-				var data = selector.getData(parentElement);
+				chainDeferred.done(function(parentDeferred, prevData) {
 
-				if (selector.willReturnElements()) {
-					var newParentElement = data[0];
-					var childCommonData = this.getSelectorTreeCommonData(selectors, selector.id, newParentElement);
-					commonData = Object.merge(commonData, childCommonData);
-				}
-				else {
-					commonData = Object.merge(commonData, data[0]);
-				}
+					var nextDeferred = $.Deferred();
+					var deferredData = this.getSelectorCommonData(selectors, selector, parentElement);
+					deferredData.done(function(data) {
+						data = Object.merge(data, prevData);
+						debugger;
+						nextDeferred.resolve(data);
+					}.bind(this))
+
+					chainDeferred = nextDeferred;
+				}.bind(this, chainDeferred));
 			}
 		}.bind(this));
-		return commonData;
+		debugger;
+
+		var responseDeferred = $.Deferred();
+		chainDeferred.done(function(data) {
+			responseDeferred.resolve(data);
+		});
+
+		return responseDeferred;
+	},
+
+	getSelectorCommonData: function(selectors, selector, parentElement) {
+
+		var d = $.Deferred();
+		var deferredData = selector.getData(parentElement);
+		deferredData.done(function(data) {
+
+			if (selector.willReturnElements()) {
+				var newParentElement = data[0];
+				var deferredChildCommonData = this.getSelectorTreeCommonData(selectors, selector.id, newParentElement);
+				deferredChildCommonData.done(function(data){
+					d.resolve(data);
+				});
+			}
+			else {
+				d.resolve(data[0]);
+			}
+		}.bind(this));
+
+		return d;
 	},
 
 	getSelectorTreeData: function (selectors, parentSelectorId, parentElement, commonData) {
 
 		var childSelectors = selectors.getDirectChildSelectors(parentSelectorId);
-		var childCommonData = this.getSelectorTreeCommonData(selectors, parentSelectorId, parentElement);
-		commonData = Object.merge(commonData, childCommonData);
+		var childCommonDataDeferred = this.getSelectorTreeCommonData(selectors, parentSelectorId, parentElement);
+
+		childCommonDataDeferred.done(function(childCommonData) {
+			commonData = Object.merge(commonData, childCommonData);
+
+			// get selector data one by one
+			var chainDeferred = $.Deferred().resolve([]);
+
+			childSelectors.forEach(function (selector) {
+				if (selectors.willReturnMultipleRecords(selector.id)) {
+					var data = selector.getData(parentElement);
+
+					data.forEach(function (record) {
+						if (selector.willReturnElements()) {
+							var newCommonData = Object.clone(commonData, true);
+							var childRecords = this.getSelectorTreeData(selectors, selector.id, record, newCommonData);
+							childRecords.forEach(function (childRecord) {
+								var rec = new Object();
+								Object.merge(rec, childRecord, true);
+								resultData.push(rec);
+							}.bind(this));
+						}
+						else {
+							Object.merge(record, commonData, true);
+							resultData.push(record);
+						}
+					}.bind(this));
+				}
+			}.bind(this));
+
+
+
+		}.bind(this));
+
+
 
 		var resultData = [];
 		// handle multiple result selectors
@@ -179,13 +245,38 @@ DataExtractor.prototype = {
 
 	getData: function () {
 
+		// fetch data from selector trees one by one.
+		var chainDeferred = $.Deferred().resolve([]);
+
 		var results = [];
 		var selectorTrees = this.findSelectorTrees();
 		selectorTrees.forEach(function (selectorTree) {
-			var treeData = this.getSelectorTreeData(selectorTree, this.parentSelectorId, this.parentElement, {});
-			results = results.concat(treeData);
+
+			chainDeferred.done(function(parentDeferred, prevResults) {
+
+				var nextDeferred = $.Deferred();
+				var deferredResults = this.getSelectorTreeData(selectorTree, this.parentSelectorId, this.parentElement, {});
+				deferredResults.done(function(results) {
+					results = Object.merge(results, prevResults);
+					nextDeferred.resolve(results);
+				}.bind(this))
+
+				chainDeferred = nextDeferred;
+			}.bind(this, chainDeferred));
+
+
+
+
+//			var treeData = this.getSelectorTreeData(selectorTree, this.parentSelectorId, this.parentElement, {});
+//			results = results.concat(treeData);
 		}.bind(this));
-		return results;
+
+		var responseDeferred = $.Deferred();
+		chainDeferred.done(function(results){
+			responseDeferred.resolve(results);
+		});
+
+		return responseDeferred;
 	},
 
 	getSingleSelectorData: function(parentSelectorIds, selectorId) {

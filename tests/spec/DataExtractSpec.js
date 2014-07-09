@@ -500,13 +500,22 @@ describe("DataExtractor", function () {
 			sitemap: sitemap
 		});
 
-		var data = extractor.getData();
-		var expected = [
-			{
-				'a': 'a'
-			}
-		];
-		expect(data).toEqual(expected);
+		var deferred = extractor.getData();
+
+		waitsFor(function() {
+			return deferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			deferred.done(function(data) {
+				var expected = [
+					{
+						'a': 'a'
+					}
+				];
+				expect(data).toEqual(expected);
+			});
+		});
 	});
 
 	it("should be able to extract text data within an element", function () {
@@ -936,5 +945,134 @@ describe("DataExtractor", function () {
 		var result = extractor.findSelectorTrees();
 		expect(result.length).toBe(1);
 	});
+
+	it("should test getSelectorCommonData with one selector", function(){
+
+		var parentElement = $("#dataextract-get-data");
+
+		var sitemap = new Sitemap({
+			selectors: [
+				{
+					id: "a",
+					selector: "a",
+					type: 'SelectorText',
+					multiple: false,
+					parentSelectors: ['_root']
+				}
+			]
+		});
+
+		var extractor = new DataExtractor({
+			parentElement: parentElement,
+			parentSelectorId: '_root',
+			sitemap: sitemap
+		});
+
+		var deferred = extractor.getSelectorCommonData(sitemap.selectors, sitemap.selectors[0], parentElement);
+
+		waitsFor(function() {
+			return deferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			deferred.done(function(data) {
+				var expected = {
+					'a': 'a'
+				};
+				expect(data).toEqual(expected);
+			});
+		});
+	});
+
+	it("should test getSelectorTreeCommonData with one selector", function() {
+
+		var parentElement = $("#dataextract-get-data");
+
+		var sitemap = new Sitemap({
+			selectors: [
+				{
+					id: "a",
+					selector: "a",
+					type: 'SelectorText',
+					multiple: false,
+					parentSelectors: ['_root']
+				}
+			]
+		});
+
+		var extractor = new DataExtractor({
+			parentElement: parentElement,
+			parentSelectorId: '_root',
+			sitemap: sitemap
+		});
+
+		var deferred = extractor.getSelectorTreeCommonData(sitemap.selectors, '_root', parentElement);
+
+		waitsFor(function() {
+			return deferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			deferred.done(function(data) {
+				var expected = {
+					'a': 'a'
+				};
+				expect(data).toEqual(expected);
+			});
+		});
+	});
+
+	it("should test getSelectorTreeCommonData with multiple selectors", function() {
+
+		var parentElement = $("#dataextract-multiple-elements");
+
+		var sitemap = new Sitemap({
+			selectors: [
+				{
+					id: "parent1",
+					selector: "div",
+					type: 'SelectorElement',
+					multiple: false,
+					parentSelectors: ['_root']
+				},
+				{
+					id: "parent2",
+					selector: "div",
+					type: 'SelectorElement',
+					multiple: false,
+					parentSelectors: ['parent1']
+				},
+				{
+					id: "a",
+					selector: "a",
+					type: 'SelectorText',
+					multiple: false,
+					parentSelectors: ['parent2']
+				}
+			]
+		});
+
+		var extractor = new DataExtractor({
+			parentElement: parentElement,
+			parentSelectorId: '_root',
+			sitemap: sitemap
+		});
+
+		var deferred = extractor.getSelectorTreeCommonData(sitemap.selectors, '_root', parentElement);
+
+		waitsFor(function() {
+			return deferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			deferred.done(function(data) {
+				var expected = {
+					'a': 'a'
+				};
+				expect(data).toEqual(expected);
+			});
+		});
+	});
+
 
 });
