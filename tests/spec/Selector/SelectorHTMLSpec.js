@@ -13,12 +13,21 @@ describe("HTML Selector", function () {
 			selector: "div"
 		});
 
-		var data = selector.getData($("#selector-html-single-html"));
-		expect(data).toEqual([
-			{
-				a: "aaa<b>bbb</b>ccc"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-html-single-html"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a: "aaa<b>bbb</b>ccc"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should extract multiple html elements", function () {
@@ -30,15 +39,24 @@ describe("HTML Selector", function () {
 			selector: "div"
 		});
 
-		var data = selector.getData($("#selector-html-multiple-html"));
-		expect(data).toEqual([
-			{
-				a: "aaa<b>bbb</b>ccc"
-			},
-			{
-				a: "ddd<b>eee</b>fff"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-html-multiple-html"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a: "aaa<b>bbb</b>ccc"
+					},
+					{
+						a: "ddd<b>eee</b>fff"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should extract null when there are no elements", function () {
@@ -50,12 +68,21 @@ describe("HTML Selector", function () {
 			selector: "div"
 		});
 
-		var data = selector.getData($("#selector-html-single-not-exist"));
-		expect(data).toEqual([
-			{
-				a: null
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-html-single-not-exist"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a: null
+					}
+				]);
+			});
+		});
 	});
 
 	it("should extract null when there is no regex match", function () {
@@ -68,12 +95,21 @@ describe("HTML Selector", function () {
 			regex: "wontmatch"
 		});
 
-		var data = selector.getData($("#selector-html-single-html"));
-		expect(data).toEqual([
-			{
-				a: null
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-html-single-html"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a: null
+					}
+				]);
+			});
+		});
 	});
 
 	it("should extract html+text using regex", function () {
@@ -86,12 +122,21 @@ describe("HTML Selector", function () {
 			regex: "<b>\\w+"
 		});
 
-		var data = selector.getData($("#selector-html-single-html"));
-		expect(data).toEqual([
-			{
-				a: '<b>bbb'
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-html-single-html"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a: '<b>bbb'
+					}
+				]);
+			});
+		});
 	});
 
 	it("should return only one data column", function () {

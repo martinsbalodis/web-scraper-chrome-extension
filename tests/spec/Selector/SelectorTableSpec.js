@@ -44,12 +44,21 @@ describe("Table Selector", function () {
 			]
 		});
 
-		var data = selector.getData($("#selector-table-single-table-single-row"));
-		expect(data).toEqual([
-			{
-				a_renamed: "abc"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-table-single-table-single-row"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a_renamed: "abc"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should extract multiple text records from one table", function () {
@@ -73,17 +82,26 @@ describe("Table Selector", function () {
 			]
 		});
 
-		var data = selector.getData($("#selector-table-single-table-multiple-rows"));
-		expect(data).toEqual([
-			{
-				a_renamed: "aaa",
-				b_renamed: "bbb"
-			},
-			{
-				a_renamed: "ccc",
-				b_renamed: "ddd"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-table-single-table-multiple-rows"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a_renamed: "aaa",
+						b_renamed: "bbb"
+					},
+					{
+						a_renamed: "ccc",
+						b_renamed: "ddd"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should only extract records from columns which are marked as extract", function () {
@@ -107,15 +125,24 @@ describe("Table Selector", function () {
 			]
 		});
 
-		var data = selector.getData($("#selector-table-single-table-multiple-rows"));
-		expect(data).toEqual([
-			{
-				a_renamed: "aaa"
-			},
-			{
-				a_renamed: "ccc"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-table-single-table-multiple-rows"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a_renamed: "aaa"
+					},
+					{
+						a_renamed: "ccc"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should return data columns based on its configuration", function () {

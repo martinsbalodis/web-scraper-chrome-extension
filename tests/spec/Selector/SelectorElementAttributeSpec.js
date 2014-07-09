@@ -14,12 +14,21 @@ describe("Element Attribute Selector", function () {
 			selector: "img"
 		});
 
-		var data = selector.getData($("#selector-image-one-image"));
-		expect(data).toEqual([
-			{
-				'img': "http://aa/"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-image-one-image"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						'img': "http://aa/"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should extract multiple src tags", function () {
@@ -32,15 +41,24 @@ describe("Element Attribute Selector", function () {
 			selector: "img"
 		});
 
-		var data = selector.getData($("#selector-image-multiple-images"));
-		expect(data).toEqual([
-			{
-				'img': "http://aa/"
-			},
-			{
-				'img': "http://bb/"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-image-multiple-images"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						'img': "http://aa/"
+					},
+					{
+						'img': "http://bb/"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should return only one data column", function () {
@@ -64,7 +82,16 @@ describe("Element Attribute Selector", function () {
 			extractAttribute: "src"
 		});
 
-		var data = selector.getData($("#not-exist"));
-		expect(data).toEqual([]);
+		var dataDeferred = selector.getData($("#not-exist"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([]);
+			});
+		});
 	});
 });

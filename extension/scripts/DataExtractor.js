@@ -112,80 +112,174 @@ DataExtractor.prototype = {
 
 	getSelectorTreeCommonData: function (selectors, parentSelectorId, parentElement) {
 
-		var commonData = {};
 		var childSelectors = selectors.getDirectChildSelectors(parentSelectorId);
+		var deferredDataCalls = [];
 		childSelectors.forEach(function (selector) {
 			if (!selectors.willReturnMultipleRecords(selector.id)) {
-
-				var data = selector.getData(parentElement);
-
-				if (selector.willReturnElements()) {
-					var newParentElement = data[0];
-					var childCommonData = this.getSelectorTreeCommonData(selectors, selector.id, newParentElement);
-					commonData = Object.merge(commonData, childCommonData);
-				}
-				else {
-					commonData = Object.merge(commonData, data[0]);
-				}
+				deferredDataCalls.push(this.getSelectorCommonData.bind(this,selectors, selector, parentElement));
 			}
 		}.bind(this));
-		return commonData;
+
+		var deferredResponse = $.Deferred();
+		$.whenCallSequentially.apply(this, deferredDataCalls).done(function(dataResponses) {
+
+			var commonData = {};
+			dataResponses.forEach(function(data) {
+				commonData = Object.merge(commonData, data[0]);
+			});
+			deferredResponse.resolve(commonData);
+		});
+
+		return deferredResponse;
+	},
+
+	getSelectorCommonData: function(selectors, selector, parentElement) {
+
+		var d = $.Deferred();
+		var deferredData = selector.getData(parentElement);
+		deferredData.done(function(data) {
+
+			if (selector.willReturnElements()) {
+				var newParentElement = data[0];
+				var deferredChildCommonData = this.getSelectorTreeCommonData(selectors, selector.id, newParentElement);
+				deferredChildCommonData.done(function(data){
+					d.resolve(data);
+				});
+			}
+			else {
+				d.resolve(data[0]);
+			}
+		}.bind(this));
+
+		return d;
+	},
+
+	/**
+	 * Returns all data records for a selector that can return multiple records
+	 */
+	getMultiSelectorData: function(selectors, selector, parentElement, commonData) {
+
+		var deferredResponse = $.Deferred();
+
+		// if the selector is not an Element selector then its fetched data is the result.
+		if (!selector.willReturnElements()) {
+
+			var deferredData = selector.getData(parentElement);
+			deferredData.done(function(selectorData) {
+				var newCommonData = Object.clone(commonData, true);
+				var resultData = [];
+
+				selectorData.forEach(function (record) {
+					Object.merge(record, newCommonData, true);
+					resultData.push(record);
+				}.bind(this));
+
+				deferredResponse.resolve(resultData);
+			}.bind(this));
+
+		}
+
+		// handle situation when this selector is an elementSelector
+		var deferredData = selector.getData(parentElement);
+		deferredData.done(function(selectorData) {
+			var deferredDataCalls = [];
+
+			selectorData.forEach(function (element) {
+
+				var newCommonData = Object.clone(commonData, true);
+				var childRecordDeferredCall = this.getSelectorTreeData.bind(this, selectors, selector.id, element, newCommonData);
+				deferredDataCalls.push(childRecordDeferredCall);
+			}.bind(this));
+
+			$.whenCallSequentially.apply(this, deferredDataCalls).done(function(responses) {
+				var resultData = [];
+				responses.forEach(function(args) {
+					var childRecordList = args[0];
+					childRecordList.forEach(function(childRecord){
+						var rec = new Object();
+						Object.merge(rec, childRecord, true);
+						resultData.push(rec);
+					});
+				});
+				deferredResponse.resolve(resultData);
+			}.bind(this));
+		}.bind(this));
+
+		return deferredResponse;
 	},
 
 	getSelectorTreeData: function (selectors, parentSelectorId, parentElement, commonData) {
 
 		var childSelectors = selectors.getDirectChildSelectors(parentSelectorId);
-		var childCommonData = this.getSelectorTreeCommonData(selectors, parentSelectorId, parentElement);
-		commonData = Object.merge(commonData, childCommonData);
+		var childCommonDataDeferred = this.getSelectorTreeCommonData(selectors, parentSelectorId, parentElement);
+		var deferredResponse = $.Deferred();
 
-		var resultData = [];
-		// handle multiple result selectors
-		childSelectors.forEach(function (selector) {
-			if (selectors.willReturnMultipleRecords(selector.id)) {
-				var data = selector.getData(parentElement);
+		childCommonDataDeferred.done(function(childCommonData) {
+			commonData = Object.merge(commonData, childCommonData);
 
-				data.forEach(function (record) {
-					if (selector.willReturnElements()) {
-						var newCommonData = Object.clone(commonData, true);
-						var childRecords = this.getSelectorTreeData(selectors, selector.id, record, newCommonData);
-						childRecords.forEach(function (childRecord) {
-							var rec = new Object();
-							Object.merge(rec, childRecord, true);
-							resultData.push(rec);
-						}.bind(this));
+			var dataDeferredCalls = [];
+
+			childSelectors.forEach(function (selector) {
+				if (selectors.willReturnMultipleRecords(selector.id)) {
+
+					var newCommonData = Object.clone(commonData, true);
+					var dataDeferredCall = this.getMultiSelectorData.bind(this, selectors, selector, parentElement, newCommonData);
+					dataDeferredCalls.push(dataDeferredCall);
+				}
+			}.bind(this));
+
+			// merge all data records together
+			$.whenCallSequentially.apply(this, dataDeferredCalls).done(function(responses) {
+				var resultData = [];
+				responses.forEach(function(args) {
+					args[0].forEach(function(childRecord){
+						var rec = new Object();
+						Object.merge(rec, childRecord, true);
+						resultData.push(rec);
+					});
+				});
+
+				if (resultData.length === 0) {
+					// If there are no multi record groups then return common data.
+					// In a case where common data is empty return nothing.
+					if(Object.keys(commonData).length === 0) {
+						deferredResponse.resolve([]);
 					}
 					else {
-						Object.merge(record, commonData, true);
-						resultData.push(record);
+
+						deferredResponse.resolve([commonData]);
 					}
-				}.bind(this));
-			}
+				}
+				else {
+					deferredResponse.resolve(resultData);
+				}
+
+			}.bind(this));
 		}.bind(this));
 
-		if (resultData.length === 0) {
-			// If there are no multi record groups then return common data.
-			// In a case where common data is empty return nothing.
-			if(Object.keys(commonData).length === 0) {
-				return [];
-			}
-			else {
-				return [commonData];
-			}
-		}
-		else {
-			return resultData;
-		}
+		return deferredResponse;
 	},
 
 	getData: function () {
 
-		var results = [];
 		var selectorTrees = this.findSelectorTrees();
+		var dataDeferredCalls = [];
+
 		selectorTrees.forEach(function (selectorTree) {
-			var treeData = this.getSelectorTreeData(selectorTree, this.parentSelectorId, this.parentElement, {});
-			results = results.concat(treeData);
+
+			var deferredTreeDataCall = this.getSelectorTreeData.bind(this, selectorTree, this.parentSelectorId, this.parentElement, {});
+			dataDeferredCalls.push(deferredTreeDataCall);
 		}.bind(this));
-		return results;
+
+		var responseDeferred = $.Deferred();
+		$.whenCallSequentially.apply(this, dataDeferredCalls).done(function(responses) {
+			var results = [];
+			responses.forEach(function(args) {
+				results = results.concat(args[0]);
+			}.bind(this));
+			responseDeferred.resolve(results);
+		});
+		return responseDeferred;
 	},
 
 	getSingleSelectorData: function(parentSelectorIds, selectorId) {
