@@ -13,19 +13,28 @@ describe("Group Selector", function () {
 			selector: "div"
 		});
 
-		var data = selector.getData($("#selector-group-text"));
-		expect(data).toEqual([
-			{
-				a: [
+		var dataDeferred = selector.getData($("#selector-group-text"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
 					{
-						a: "a"
-					},
-					{
-						a: "b"
+						a: [
+							{
+								a: "a"
+							},
+							{
+								a: "b"
+							}
+						]
 					}
-				]
-			}
-		]);
+				]);
+			});
+		});
 	});
 
 	it("should extract text urls", function () {
@@ -37,21 +46,30 @@ describe("Group Selector", function () {
 			selector: "a"
 		});
 
-		var data = selector.getData($("#selector-group-url"));
-		expect(data).toEqual([
-			{
-				a: [
+		var dataDeferred = selector.getData($("#selector-group-url"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
 					{
-						a: "a",
-						'a-href': "http://aa/"
-					},
-					{
-						a: "b",
-						'a-href': "http://bb/"
+						a: [
+							{
+								a: "a",
+								'a-href': "http://aa/"
+							},
+							{
+								a: "b",
+								'a-href': "http://bb/"
+							}
+						]
 					}
-				]
-			}
-		]);
+				]);
+			});
+		});
 	});
 
 	it("should extract image src", function () {
@@ -63,19 +81,28 @@ describe("Group Selector", function () {
 			selector: "img"
 		});
 
-		var data = selector.getData($("#selector-group-img"));
-		expect(data).toEqual([
-			{
-				a: [
+		var dataDeferred = selector.getData($("#selector-group-img"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
 					{
-						'a-src': "http://aa/"
-					},
-					{
-						'a-src': "http://bb/"
+						a: [
+							{
+								'a-src': "http://aa/"
+							},
+							{
+								'a-src': "http://bb/"
+							}
+						]
 					}
-				]
-			}
-		]);
+				]);
+			});
+		});
 	});
 
 	it("should return only one data column", function () {

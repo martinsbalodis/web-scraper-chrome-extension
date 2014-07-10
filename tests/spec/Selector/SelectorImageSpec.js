@@ -13,12 +13,21 @@ describe("Image Selector", function () {
 			selector: "img"
 		});
 
-		var data = selector.getData($("#selector-image-one-image"));
-		expect(data).toEqual([
-			{
-				'img-src': "http://aa/"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-image-one-image"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						'img-src': "http://aa/"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should extract multiple images", function () {
@@ -30,15 +39,24 @@ describe("Image Selector", function () {
 			selector: "img"
 		});
 
-		var data = selector.getData($("#selector-image-multiple-images"));
-		expect(data).toEqual([
-			{
-				'img-src': "http://aa/"
-			},
-			{
-				'img-src': "http://bb/"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-image-multiple-images"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						'img-src': "http://aa/"
+					},
+					{
+						'img-src': "http://bb/"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should return only src column", function () {
@@ -61,7 +79,16 @@ describe("Image Selector", function () {
 			selector: "img.not-exist"
 		});
 
-		var data = selector.getData($("#not-exist"));
-		expect(data).toEqual([]);
+		var dataDeferred = selector.getData($("#not-exist"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([]);
+			});
+		});
 	});
 });

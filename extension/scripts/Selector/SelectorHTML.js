@@ -18,7 +18,7 @@ var SelectorHTML = {
 	willReturnElements: function () {
 		return false;
 	},
-	getData: function (parentElement) {
+	_getData: function (parentElement) {
 		var elements = this.getDataElements(parentElement);
 
 		var result = [];
@@ -54,6 +54,6 @@ var SelectorHTML = {
 	},
 
 	getFeatures: function () {
-		return ['multiple', 'regex']
+		return ['multiple', 'regex', 'delay']
 	}
 };

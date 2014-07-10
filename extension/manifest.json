@@ -57,6 +57,7 @@
 			"matches": ["*://*/*"],
 			"js": [
 				"assets/jquery-2.0.3.js",
+				"assets/jquery.whencallsequentially.js",
 				"assets/sugar-1.4.1.js",
 				"assets/css-selector/css-selector/cssselector.js",
 				"scripts/DataExtractor.js",

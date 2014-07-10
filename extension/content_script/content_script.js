@@ -68,9 +68,12 @@ chrome.runtime.onMessage.addListener(
 		else if (request.extractData) {
 			console.log("received data extraction request", request);
 			var extractor = new DataExtractor(request);
-			var data = extractor.getData();
-			console.log("dataextractor data", data);
-			sendResponse(data);
+			var deferredData = extractor.getData();
+			deferredData.done(function(data){
+				console.log("dataextractor data", data);
+				sendResponse(data);
+			});
+			return true;
 		}
 		else if(request.previewSelectorData) {
 			console.log("received data-preview extraction request", request);

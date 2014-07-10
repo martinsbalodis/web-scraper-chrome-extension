@@ -13,8 +13,17 @@ describe("Element Selector", function () {
 			selector: "div"
 		});
 
-		var data = selector.getData($("#selector-element-nodata"));
-		expect(data).toEqual([$("#selector-element-nodata div")[0]]);
+		var dataDeferred = selector.getData($("#selector-element-nodata"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([$("#selector-element-nodata div")[0]]);
+			});
+		});
 	});
 
 	it("should return multiple elements", function () {
@@ -26,8 +35,17 @@ describe("Element Selector", function () {
 			selector: "div"
 		});
 
-		var data = selector.getData($("#selector-element-nodata"));
-		expect(data).toEqual([$("#selector-element-nodata div")[0], $("#selector-element-nodata div")[1]]);
+		var dataDeferred = selector.getData($("#selector-element-nodata"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([$("#selector-element-nodata div")[0], $("#selector-element-nodata div")[1]]);
+			});
+		});
 	});
 
 	it("should return no data columns", function () {

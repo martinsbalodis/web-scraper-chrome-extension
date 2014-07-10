@@ -34,4 +34,32 @@ describe("Selector", function () {
 
 		expect(elements.get()).toEqual($el.get());
 	});
+
+	it("should be able to select elements with delay", function() {
+
+		var selector = new Selector({
+			id: 'a',
+			selector: "a",
+			type: 'SelectorText',
+			delay:100
+		});
+		var dataDeferred = selector.getData($el.get());
+
+		// add data after data extraction called
+		$el.html("<a>a</a>");
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						'a': "a"
+					}
+				]);
+			});
+		});
+	});
 });

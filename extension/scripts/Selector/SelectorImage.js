@@ -17,7 +17,7 @@ var SelectorImage = {
 	willReturnElements: function () {
 		return false;
 	},
-	getData: function (parentElement) {
+	_getData: function (parentElement) {
 		var elements = this.getDataElements(parentElement);
 
 		var result = [];
@@ -41,7 +41,7 @@ var SelectorImage = {
 	},
 
 	getFeatures: function () {
-		return ['multiple']
+		return ['multiple', 'delay']
 	},
 
 	getItemCSSSelector: function() {

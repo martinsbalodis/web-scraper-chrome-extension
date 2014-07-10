@@ -13,12 +13,21 @@ describe("Text Selector", function () {
 			selector: "div"
 		});
 
-		var data = selector.getData($("#selector-text-single-text"));
-		expect(data).toEqual([
-			{
-				a: "a"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-text-single-text"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a: "a"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should extract multiple text records", function () {
@@ -30,15 +39,24 @@ describe("Text Selector", function () {
 			selector: "div"
 		});
 
-		var data = selector.getData($("#selector-text-multiple-text"));
-		expect(data).toEqual([
-			{
-				a: "a"
-			},
-			{
-				a: "b"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-text-multiple-text"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a: "a"
+					},
+					{
+						a: "b"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should extract null when there are no elements", function () {
@@ -50,12 +68,21 @@ describe("Text Selector", function () {
 			selector: "div"
 		});
 
-		var data = selector.getData($("#selector-text-single-not-exist"));
-		expect(data).toEqual([
-			{
-				a: null
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-text-single-not-exist"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a: null
+					}
+				]);
+			});
+		});
 	});
 
 	it("should extract null when there is no regex match", function () {
@@ -68,12 +95,21 @@ describe("Text Selector", function () {
 			regex: "wontmatch"
 		});
 
-		var data = selector.getData($("#selector-text-single-regex"));
-		expect(data).toEqual([
-			{
-				a: null
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-text-single-regex"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a: null
+					}
+				]);
+			});
+		});
 	});
 
 	it("should extract text using regex", function () {
@@ -86,12 +122,21 @@ describe("Text Selector", function () {
 			regex: "\\d+"
 		});
 
-		var data = selector.getData($("#selector-text-single-regex"));
-		expect(data).toEqual([
-			{
-				a: '11113123'
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-text-single-regex"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a: '11113123'
+					}
+				]);
+			});
+		});
 	});
 
 	it("should return only one data column", function () {
@@ -115,12 +160,21 @@ describe("Text Selector", function () {
 			selector: "div"
 		});
 
-		var data = selector.getData($("#selector-text-ignore-script"));
-		expect(data).toEqual([
-			{
-				a: "aaa"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-text-ignore-script"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						a: "aaa"
+					}
+				]);
+			});
+		});
 	});
 
 	it("should replace br tags with newlines", function(){
@@ -132,12 +186,21 @@ describe("Text Selector", function () {
 			selector: "p"
 		});
 
-		var data = selector.getData($("#selector-text-newlines"));
-		expect(data).toEqual([
-			{
-				p: "aaa\naaa\naaa\naaa\naaa"
-			}
-		]);
+		var dataDeferred = selector.getData($("#selector-text-newlines"));
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([
+					{
+						p: "aaa\naaa\naaa\naaa\naaa"
+					}
+				]);
+			});
+		});
 	});
 
 //    it("should extract records with url", function () {

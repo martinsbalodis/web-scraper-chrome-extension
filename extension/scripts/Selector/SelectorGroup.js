@@ -18,7 +18,7 @@ var SelectorGroup = {
 	willReturnElements: function () {
 		return false;
 	},
-	getData: function (parentElement) {
+	_getData: function (parentElement) {
 		// cannot reuse this.getDataElements because it depends on *multiple* property
 		var elements = $(this.selector, parentElement);
 
@@ -49,6 +49,6 @@ var SelectorGroup = {
 	},
 
 	getFeatures: function () {
-		return []
+		return ['delay']
 	}
 };

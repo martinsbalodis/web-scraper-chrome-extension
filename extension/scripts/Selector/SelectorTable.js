@@ -31,7 +31,7 @@ var SelectorTable = {
 		}
 		return columns;
 	},
-	getData: function (parentElement) {
+	_getData: function (parentElement) {
 		var elements = this.getDataElements(parentElement);
 
 		var result = [];
@@ -70,7 +70,7 @@ var SelectorTable = {
 	},
 
 	getFeatures: function () {
-		return ['multiple', 'columns']
+		return ['multiple', 'columns', 'delay']
 	},
 
 	getItemCSSSelector: function () {

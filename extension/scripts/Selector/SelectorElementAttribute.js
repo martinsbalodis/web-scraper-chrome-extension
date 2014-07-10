@@ -17,7 +17,7 @@ var SelectorElementAttribute = {
 	willReturnElements: function () {
 		return false;
 	},
-	getData: function (parentElement) {
+	_getData: function (parentElement) {
 		var elements = this.getDataElements(parentElement);
 
 		var result = [];
@@ -41,6 +41,6 @@ var SelectorElementAttribute = {
 	},
 
 	getFeatures: function () {
-		return ['multiple', 'extractAttribute']
+		return ['multiple', 'extractAttribute', 'delay']
 	}
 };

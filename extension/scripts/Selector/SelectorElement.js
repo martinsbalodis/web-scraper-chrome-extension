@@ -19,7 +19,7 @@ var SelectorElement = {
 		return true;
 	},
 
-	getData: function (parentElement) {
+	_getData: function (parentElement) {
 		var elements = this.getDataElements(parentElement);
 		return jQuery.makeArray(elements);
 	},
@@ -29,6 +29,6 @@ var SelectorElement = {
 	},
 
 	getFeatures: function () {
-		return ['multiple']
+		return ['multiple', 'delay']
 	}
 };
