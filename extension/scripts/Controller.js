@@ -37,6 +37,7 @@ SitemapController.prototype = {
 			'SitemapImport',
 			'SitemapExport',
 			'SitemapBrowseData',
+			'SitemapScrapeConfig',
 			'SitemapExportDataCSV',
 			'SitemapEditMetadata',
 			'SelectorList',
@@ -118,6 +119,9 @@ SitemapController.prototype = {
 					click: this.deleteSitemap
 				},
 				'#sitemap-scrape-nav-button': {
+					click: this.showScrapeSitemapConfigPanel
+				},
+				'#submit-scrape-sitemap': {
 					click: this.scrapeSitemap
 				},
 				"#sitemaps button[action=browse-sitemap-data]": {
@@ -778,11 +782,51 @@ SitemapController.prototype = {
 			controller.showSitemaps();
 		});
 	},
+	initScrapeSitemapConfigValidation: function(){
+
+		$('#viewport form').bootstrapValidator({
+			submitHandler: function(){}, // workaround to prevent form submit
+			fields: {
+				"request_interval": {
+					validators: {
+						notEmpty: {
+							message: 'The request interval is required and cannot be empty'
+						},
+						numeric: {
+							message: 'The request interval must be numeric'
+						},
+						callback: {
+							message: 'The request interval must be atleast 2000 milliseconds',
+							callback: function(value, validator) {
+								return value >= 2000;
+							}
+						}
+					}
+				}
+			}
+		});
+	},
+	showScrapeSitemapConfigPanel: function() {
+
+		this.setActiveNavigationButton('sitemap-scrape');
+		var scrapeConfigPanel = ich.SitemapScrapeConfig();
+		$("#viewport").html(scrapeConfigPanel);
+		this.initScrapeSitemapConfigValidation();
+		return true;
+	},
 	scrapeSitemap: function () {
+
+		if(!this.isValidForm()) {
+			return false;
+		}
+
+		var requestInterval = $("input[name=request_interval]").val();
+
 		var sitemap = this.state.currentSitemap;
 		var request = {
 			scrapeSitemap: true,
-			sitemap: JSON.parse(JSON.stringify(sitemap))
+			sitemap: JSON.parse(JSON.stringify(sitemap)),
+			requestInterval: requestInterval
 		};
 		chrome.runtime.sendMessage(request, function (response) {
 			// sitemap scraped

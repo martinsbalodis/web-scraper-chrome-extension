@@ -96,7 +96,8 @@ chrome.runtime.onMessage.addListener(
 				queue: queue,
 				sitemap: sitemap,
 				browser: browser,
-				store: store
+				store: store,
+				requestInterval: request.requestInterval
 			});
 
 			try {
