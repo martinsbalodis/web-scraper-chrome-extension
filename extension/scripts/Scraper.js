@@ -4,6 +4,7 @@ Scraper = function (options) {
 	this.store = options.store;
 	this.browser = options.browser;
 	this.resultWriter = null; // db instance for scraped data writing
+	this.requestInterval = parseInt(options.requestInterval);
 };
 
 Scraper.prototype = {
@@ -11,8 +12,8 @@ Scraper.prototype = {
 	/**
 	 * Scraping delay between two page opening requests
 	 */
-	delay: 2000,
-	_time_previous_scraped: 0,
+	requestInterval: 2000,
+	_timeNextScrapeAvailable: 0,
 
 	initFirstJobs: function () {
 
@@ -99,16 +100,15 @@ Scraper.prototype = {
 
 				var now = (new Date()).getTime();
 				// delay next job if needed
-				if(now > this._time_previous_scraped + this.delay) {
-					this._time_previous_scraped = now;
+				this._timeNextScrapeAvailable = now + this.requestInterval;
+				if(now >= this._timeNextScrapeAvailable) {
 					this._run();
 				}
 				else {
-					var delay = this.delay-(now-this._time_previous_scraped);
-					setTimeout(function(){
-						this._time_previous_scraped = now;
+					var delay = this._timeNextScrapeAvailable - now;
+					setTimeout(function() {
 						this._run();
-					}.bind(this),delay);
+					}.bind(this), delay);
 				}
 			}.bind(this));
 		}.bind(this));
