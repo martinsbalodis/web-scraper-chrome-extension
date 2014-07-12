@@ -19,6 +19,9 @@ var SelectorText = {
 		return false;
 	},
 	_getData: function (parentElement) {
+
+		var dfd = $.Deferred();
+
 		var elements = this.getDataElements(parentElement);
 
 		var result = [];
@@ -52,7 +55,8 @@ var SelectorText = {
 			result.push(data);
 		}
 
-		return result;
+		dfd.resolve(result);
+		return dfd.promise();
 	},
 
 	getDataColumns: function () {
