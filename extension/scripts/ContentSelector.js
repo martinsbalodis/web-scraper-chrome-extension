@@ -10,19 +10,24 @@ var ContentSelector = function (options) {
 
 	this.parent = this.getParentElement();
 
-	this.cssSelector = new CssSelector({
-		enableSmartTableSelector: true,
-		parent: this.parent,
-		ignoredClasses: [
-			"-sitemap-select-item-selected",
-			"-sitemap-select-item-hover",
-			"-sitemap-parent"
-		],
-		query: jQuery
-	});
+	this.initCssSelector(false);
 };
 
 ContentSelector.prototype = {
+
+	initCssSelector: function(allowMultipleSelectors) {
+		this.cssSelector = new CssSelector({
+			enableSmartTableSelector: true,
+			parent: this.parent,
+			allowMultipleSelectors:allowMultipleSelectors,
+			ignoredClasses: [
+				"-sitemap-select-item-selected",
+				"-sitemap-select-item-hover",
+				"-sitemap-parent"
+			],
+			query: jQuery
+		});
+	},
 
 	selectSelector: function (selectionCallback) {
 		this.selectionCallback = selectionCallback;
@@ -49,6 +54,8 @@ ContentSelector.prototype = {
 		this.bindKeyboardSelectionManipulations();
 		// @TODO remove toolbar
 		this.attachToolbar();
+		this.bindMultipleGroupCheckbox();
+		this.bindMultipleGroupPopupHide();
 	},
 
 	/**
@@ -162,19 +169,75 @@ ContentSelector.prototype = {
 	},
 
 	highlightSelectedElements: function () {
-		var resultCssSelector = this.cssSelector.getCssSelector(this.selectedElements, this.top);
+		try {
+			var resultCssSelector = this.cssSelector.getCssSelector(this.selectedElements, this.top);
 
-		$("body #-selector-toolbar .selector").text(resultCssSelector);
-		// highlight selected elements
-		$(".-sitemap-select-item-selected").removeClass('-sitemap-select-item-selected');
-		$(resultCssSelector, this.parent).addClass('-sitemap-select-item-selected');
+			$("body #-selector-toolbar .selector").text(resultCssSelector);
+			// highlight selected elements
+			$(".-sitemap-select-item-selected").removeClass('-sitemap-select-item-selected');
+			$(resultCssSelector, this.parent).addClass('-sitemap-select-item-selected');
+		}
+		catch(err) {
+			if(err === "found multiple element groups, but allowMultipleSelectors disabled") {
+				console.log("multiple different element selection disabled");
+
+				this.showMultipleGroupPopup();
+				// remove last added element
+				this.selectedElements.pop();
+				this.highlightSelectedElements();
+			}
+		}
+	},
+
+	showMultipleGroupPopup: function() {
+		$("#-selector-toolbar .popover").attr("style", "display:block !important;");
+	},
+
+	hideMultipleGroupPopup: function() {
+		$("#-selector-toolbar .popover").attr("style", "");
+	},
+
+	bindMultipleGroupPopupHide: function() {
+		$("#-selector-toolbar .popover .close").click(this.hideMultipleGroupPopup.bind(this));
+	},
+
+	unbindMultipleGroupPopupHide: function() {
+		$("#-selector-toolbar .popover .close").unbind("click");
+	},
+
+	bindMultipleGroupCheckbox: function() {
+		$("#-selector-toolbar [name=diferentElementSelection]").change(function(e) {
+			if($(e.currentTarget).is(":checked")) {
+				this.initCssSelector(true);
+			}
+			else {
+				this.initCssSelector(false);
+			}
+		}.bind(this));
+	},
+	unbindMultipleGroupCheckbox: function(){
+		$("#-selector-toolbar .diferentElementSelection").unbind("change");
 	},
 
 	attachToolbar: function () {
 
 		var $toolbar = '<div id="-selector-toolbar">' +
-			'<span class="selector">&nbsp;</span>' +
-			'<a>Done selecting!</a>' +
+			'<div class="popover top">' +
+				'<button type="button" class="close" data-dismiss="modal">×</button>' +
+				'<div class="arrow"></div>' +
+				'<div class="popover-content">' +
+					'<div class="txt">' +
+						'Different type element selection is disabled. If the element ' +
+						'you clicked should also be included then enable this and ' +
+						'click on the element again. Usually this is not needed.' +
+					'</div>' +
+				'</div>' +
+			'</div>' +
+			'<div class="selector list-item">&nbsp;</div>' +
+			'<div class="input-group-addon list-item">' +
+				'<input type="checkbox" title="Enable different type element selection" name="diferentElementSelection">' +
+			'</div>' +
+			'<a class="list-item">Done selecting!</a>' +
 			'</div>';
 		$("body").append($toolbar);
 
@@ -212,6 +275,8 @@ ContentSelector.prototype = {
 		this.unbindElementSelection();
 		this.unbindElementHighlight();
 		this.unbindKeyboardSelectionMaipulatios();
+		this.unbindMultipleGroupPopupHide();
+		this.unbindMultipleGroupCheckbox();
 		this.removeToolbar();
 
 		var resultCssSelector = this.cssSelector.getCssSelector(this.selectedElements, this.top);

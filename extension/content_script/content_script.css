@@ -21,7 +21,7 @@
 	z-index: 99999 !important;
 }
 
-#-selector-toolbar * {
+#-selector-toolbar .list-item {
 	font: 100%/1em Verdana, Helvetica, sans-serif !important;
 	padding: 3px 12px !important;
 	color: #333333 !important;
@@ -41,9 +41,10 @@
 	display: inline-block !important;
 	text-align: right !important;
 	overflow: hidden !important;
+	height: 20px !important;
 }
 
-#-selector-toolbar a {
+#-selector-toolbar a.list-item {
 	color: #ffffff !important;
 	background-color: #3276b1 !important;
 	text-align: center !important;
@@ -52,7 +53,7 @@
 	-webkit-user-select: none !important;
 }
 
-#-selector-toolbar span.selector {
+#-selector-toolbar div.selector {
 	padding: 3px 6px !important;
 	width: 350px !important;
 	color: #333333 !important;
@@ -60,4 +61,94 @@
 	border-radius: 4px 0 0 4px !important;
 	/*height: 28px !important;*/
 	border-right:none !important;
+}
+
+#-selector-toolbar .input-group-addon {
+	background-color:#eeeeee !important;
+	width:auto !important;
+	padding: 3px 4px !important;
+}
+
+#-selector-toolbar div.popover {
+	position: absolute !important;
+	display: none !important;
+	float: left !important;
+	width: 260px !important;
+	margin: 20px !important;
+	top: -132px !important;
+	left: 211px !important;
+	z-index: 1060 !important;
+	max-width: 276px !important;
+	padding: 1px !important;
+	text-align: left !important;
+	white-space: normal !important;
+	background-color: #fff !important;
+	background-clip: padding-box !important;
+	border: 1px solid rgba(0,0,0,.2) !important;
+	border-radius: 6px !important;
+	box-shadow: 0 5px 10px rgba(0,0,0,.2) !important;
+}
+
+#-selector-toolbar .popover .arrow {
+	position: absolute !important;
+	display: block !important;
+	width: 0 !important;
+	height: 0 !important;
+	border-color: transparent !important;
+	border-style: solid !important;
+	border-width: 11px !important;
+	bottom: -11px !important;
+	left: 50% !important;
+	margin-left: -11px !important;
+	border-top-color: #999 !important;
+	border-top-color: rgba(0,0,0,.25) !important;
+	border-bottom-width: 0 !important;
+}
+
+#-selector-toolbar .popover .arrow:after {
+	box-sizing: border-box !important;
+	position: absolute !important;
+	display: block !important;
+	width: 0 !important;
+	height: 0 !important;
+	border-color: transparent !important;
+	border-style: solid !important;
+	border-width: 10px !important;
+	bottom: 1px !important;
+	margin-left: -10px !important;
+	content: " " !important;
+	border-top-color: #fff !important;
+	border-bottom-width: 0 !important;
+	visibility: visible !important;
+}
+
+#-selector-toolbar .popover .close {
+	margin: 0 !important;
+	text-transform: none !important;
+	text-shadow: 0 1px 0 #ffffff !important;
+	float: right !important;
+	font-size: 21px !important;
+	font-weight: bold !important;
+	line-height: 1 !important;
+	background: transparent !important;
+	border: 0 !important;
+	padding: 0 3px 0 0 !important;
+}
+
+#-selector-toolbar .popover .txt {
+	margin:0 !important;
+	border:0 !important;
+	padding:0 !important;
+}
+
+#-selector-toolbar .popover .close:hover {
+	color: #000000 !important;
+	text-decoration: none !important;
+	cursor: pointer !important;
+	opacity: 0.5 !important;
+	filter: alpha(opacity=50) !important;
+}
+
+#-selector-toolbar div.popover-content {
+	padding: 9px 14px !important;
 }
