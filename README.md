@@ -32,15 +32,22 @@ Image             | 1 or *           | image src       | N                    | 
 HTML              | 1 or *           | html            | N                    | N
 Element Attribute | 1 or *           | text            | N                    | N
 Table             | 1 or *           | text            | N                    | N
+ScrollDown        | 1 or *           | None            | N                    | Y
 
 ### Text
-Used for text selection. All HTML will be stripped and only text will be returned. You can additionaly apply regex to resulting data. Regex is applied before data export so you can change the regex after data is scraped. If a link element is selected then also its href wttribute will be returned, but the scraper will not follow the link.
+Used for text selection. All HTML will be stripped and only text will be returned. You can additionaly apply regex to resulting data. Regex is applied before data export so you can change the regex after data is scraped. If a link element is selected then also its href attribute will be returned, but the scraper will not follow the link.
 
 ### Element
 This selector will not return any data. Use this selector select multiple elements and add child selectors within this selector.
 
+### ScrollDown
+This is another Element selector that works similarly to Element selector but additionally it scrolls down the page 
+multiple times to find those elements which are added when page is scrolled down to the bottom. Use the delay attribute 
+to configure waiting interval between scrolling and element search. Scrolling is stopped after no new elements are 
+found. If the page can scroll infinitely then this selector will be stuck in an infinite loop.
+
 ### Group
-Use Group selector to select multiple items. The resulting items data will be seerialized as JSON and stored within one record.
+Use Group selector to select multiple items. The resulting items data will be serialized as JSON and stored within one record.
 
 ### Link
 Use this selector to select links. The scraper will follow links and select data from each child page.

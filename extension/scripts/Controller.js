@@ -659,6 +659,10 @@ SitemapController.prototype = {
 				{
 					type: 'SelectorTable',
 					title: 'Table'
+				},
+				{
+					type: 'SelectorScrollElement',
+					title: 'ScrollDown'
 				}
 			]
 		});
