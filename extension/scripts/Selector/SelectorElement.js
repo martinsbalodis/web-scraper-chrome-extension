@@ -20,8 +20,13 @@ var SelectorElement = {
 	},
 
 	_getData: function (parentElement) {
+
+		var dfd = $.Deferred();
+
 		var elements = this.getDataElements(parentElement);
-		return jQuery.makeArray(elements);
+		dfd.resolve(jQuery.makeArray(elements));
+
+		return dfd.promise();
 	},
 
 	getDataColumns: function () {

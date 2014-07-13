@@ -19,6 +19,9 @@ var SelectorGroup = {
 		return false;
 	},
 	_getData: function (parentElement) {
+
+		var dfd = $.Deferred();
+
 		// cannot reuse this.getDataElements because it depends on *multiple* property
 		var elements = $(this.selector, parentElement);
 
@@ -41,7 +44,9 @@ var SelectorGroup = {
 
 		var result = {};
 		result[this.id] = records;
-		return [result];
+
+		dfd.resolve([result]);
+		return dfd.promise();
 	},
 
 	getDataColumns: function () {

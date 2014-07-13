@@ -1,7 +1,12 @@
 describe("Link Selector", function () {
 
-	beforeEach(function () {
+	var $el;
 
+	beforeEach(function () {
+		$el = jQuery("#tests").html("");
+		if($el.length === 0) {
+			$el = $("<div id='tests' style='display:none'></div>").appendTo("body");
+		}
 	});
 
 	it("should extract single link", function () {
@@ -97,6 +102,75 @@ describe("Link Selector", function () {
 		runs(function () {
 			dataDeferred.done(function(data) {
 				expect(data).toEqual([]);
+			});
+		});
+	});
+
+	it("should extract url from a window.open call", function() {
+
+		$el.append($("<a onclick=\"window.open('http://example.com/')\"></a>"));
+		var selector = new Selector({
+			type: 'SelectorLink'
+		});
+
+		var deferredURL = selector.getPopupURL($el.find("a")[0]);
+
+		waitsFor(function() {
+			return deferredURL.state() === 'resolved';
+		}, "wait for url extraction", 1000);
+
+		runs(function () {
+			deferredURL.done(function(data) {
+				expect(data).toEqual("http://example.com/");
+			});
+		});
+	});
+
+	it("should extract url from an async window.open call", function() {
+
+		$el.append($("<a onclick=\"setTimeout(function(){window.open('http://example.com/');},100)\"></a>"));
+		var selector = new Selector({
+			type: 'SelectorLink'
+		});
+
+		var deferredURL = selector.getPopupURL($el.find("a")[0]);
+
+		waitsFor(function() {
+			return deferredURL.state() === 'resolved';
+		}, "wait for url extraction", 1000);
+
+		runs(function () {
+			deferredURL.done(function(data) {
+				expect(data).toEqual("http://example.com/");
+			});
+		});
+	});
+
+	it("should getData url from an async window.open call", function() {
+
+		$el.append($("<a onclick=\"setTimeout(function(){window.open('http://example.com/');},100)\">a</a>"));
+		var selector = new Selector({
+			id: 'a',
+			type: 'SelectorLink',
+			multiple: true,
+			selector: "a",
+			clickPopup: true
+		});
+
+		var dataDeferred = selector.getData($el[0]);
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			dataDeferred.done(function(data) {
+				expect(data).toEqual([{
+					a : 'a',
+					_followSelectorId : 'a',
+					'a-href' : 'http://example.com/',
+					_follow : 'http://example.com/'
+				}]);
 			});
 		});
 	});

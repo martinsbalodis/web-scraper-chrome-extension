@@ -706,6 +706,7 @@ SitemapController.prototype = {
 		var selectorsSelector = $("#edit-selector [name=selector]").val();
 		var type = $("#edit-selector [name=type]").val();
 		var multiple = $("#edit-selector [name=multiple]").is(":checked");
+		var clickPopup = $("#edit-selector [name=clickPopup]").is(":checked");
 		var regex = $("#edit-selector [name=regex]").val();
 		var delay = $("#edit-selector [name=delay]").val();
 		var parentSelectors = $("#edit-selector [name=parentSelectors]").val();
@@ -731,6 +732,7 @@ SitemapController.prototype = {
 			selector: selectorsSelector,
 			type: type,
 			multiple: multiple,
+			clickPopup: clickPopup,
 			regex: regex,
 			extractAttribute:extractAttribute,
 			parentSelectors: parentSelectors,

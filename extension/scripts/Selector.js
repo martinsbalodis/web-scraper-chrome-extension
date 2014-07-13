@@ -108,8 +108,10 @@ Selector.prototype = {
 		var d = $.Deferred();
 		var timeout = this.delay || 0;
 		setTimeout(function() {
-			var data = this._getData(parentElement);
-			d.resolve(data);
+			var deferredData = this._getData(parentElement);
+			deferredData.done(function(data){
+				d.resolve(data);	
+			});
 		}.bind(this), timeout);
 
 		return d.promise();

@@ -75,9 +75,9 @@ Scraper.prototype = {
 					var followSelectorId = record._followSelectorId;
 					delete record['_follow'];
 					delete record['_followSelectorId'];
-					var job = new Job(rec['_follow'], rec['_followSelectorId'], this, job, record);
-					if (this.queue.canBeAdded(job)) {
-						this.queue.add(job);
+					var newJob = new Job(rec['_follow'], rec['_followSelectorId'], this, job, record);
+					if (this.queue.canBeAdded(newJob)) {
+						this.queue.add(newJob);
 					}
 					// store already scraped links
 					else {

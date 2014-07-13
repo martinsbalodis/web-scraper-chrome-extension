@@ -32,6 +32,9 @@ var SelectorTable = {
 		return columns;
 	},
 	_getData: function (parentElement) {
+
+		var dfd = $.Deferred();
+
 		var elements = this.getDataElements(parentElement);
 
 		var result = [];
@@ -55,7 +58,9 @@ var SelectorTable = {
 				result.push(data);
 			}.bind(this));
 		}.bind(this));
-		return result;
+
+		dfd.resolve(result);
+		return dfd.promise();
 	},
 
 	getDataColumns: function () {

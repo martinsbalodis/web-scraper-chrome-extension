@@ -19,6 +19,9 @@ var SelectorHTML = {
 		return false;
 	},
 	_getData: function (parentElement) {
+
+		var dfd = $.Deferred();
+
 		var elements = this.getDataElements(parentElement);
 
 		var result = [];
@@ -46,7 +49,8 @@ var SelectorHTML = {
 			result.push(data);
 		}
 
-		return result;
+		dfd.resolve(result);
+		return dfd.promise();
 	},
 
 	getDataColumns: function () {
