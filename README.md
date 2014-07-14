@@ -33,6 +33,7 @@ HTML              | 1 or *           | html            | N                    | 
 Element Attribute | 1 or *           | text            | N                    | N
 Table             | 1 or *           | text            | N                    | N
 ScrollDown        | 1 or *           | None            | N                    | Y
+Element click     | 1 or *           | None            | N                    | Y
 
 ### Text
 Used for text selection. All HTML will be stripped and only text will be returned. You can additionaly apply regex to resulting data. Regex is applied before data export so you can change the regex after data is scraped. If a link element is selected then also its href attribute will be returned, but the scraper will not follow the link.
@@ -45,6 +46,10 @@ This is another Element selector that works similarly to Element selector but ad
 multiple times to find those elements which are added when page is scrolled down to the bottom. Use the delay attribute 
 to configure waiting interval between scrolling and element search. Scrolling is stopped after no new elements are 
 found. If the page can scroll infinitely then this selector will be stuck in an infinite loop.
+
+### Element click 
+This Element selectors is for sites that dynamically load data after clicking a button. Using this selector you must 
+specify additional selector for the buttons that will be clicked.
 
 ### Group
 Use Group selector to select multiple items. The resulting items data will be serialized as JSON and stored within one record.
