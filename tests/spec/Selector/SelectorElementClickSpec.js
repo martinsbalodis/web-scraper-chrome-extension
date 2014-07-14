@@ -77,9 +77,47 @@ describe("Click Element Selector", function () {
 		}, "wait for data extraction", 5000);
 
 		runs(function () {
-			dataDeferred.done(function(data) {
-				expect(data).toEqual($el.find("div").get());
+
+			var data;
+			dataDeferred.done(function(resultData) {
+				data = resultData;
 			});
+			expect(data.length).toEqual(1);
+			expect(data).toEqual($el.find("div").get());
+		});
+	});
+
+	it("should skip clicking if click element is removed from dom", function(){
+
+		$el.append($("<a>a</a><a class='remove'>b</a>"));
+		$el.find("a").click(function() {
+			$el.append("<div>test</div>");
+			$el.find(".remove").remove();
+		});
+
+		var selector = new Selector({
+			id: 'div',
+			type: 'SelectorElementClick',
+			multiple: true,
+			clickElementSelector: "a",
+			selector: "div",
+			delay: 100
+		});
+
+		var dataDeferred = selector.getData($el[0]);
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+
+			var data;
+			dataDeferred.done(function(resultData) {
+				data = resultData;
+			});
+			expect(data.length).toEqual(1);
+			expect(data).toEqual($el.find("div").get());
 		});
 	});
 
@@ -108,9 +146,13 @@ describe("Click Element Selector", function () {
 		}, "wait for data extraction", 5000);
 
 		runs(function () {
-			dataDeferred.done(function(data) {
-				expect(data).toEqual($el.find("div").get());
+
+			var data;
+			dataDeferred.done(function(resultData) {
+				data = resultData;
 			});
+			expect(data.length).toEqual(1);
+			expect(data).toEqual($el.find("div").get());
 		});
 	});
 

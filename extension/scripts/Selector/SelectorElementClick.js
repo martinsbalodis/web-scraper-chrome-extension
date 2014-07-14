@@ -35,9 +35,17 @@ var SelectorElementClick = {
 		var clickElements = this.getClickElements(parentElement);
 
 		var deferredResultCalls = [];
-		$(clickElements).each(function(clickElement) {
+		$(clickElements).each(function(i, clickElement) {
 
 			deferredResultCalls.push(function() {
+
+				var deferredResponse = $.Deferred();
+
+				// check whether this element is still available in dom. If its not then there is no data to extract.
+				if($(clickElement).closest("html").length === 0) {
+					deferredResponse.resolve([]);
+					return deferredResponse.promise();
+				}
 
 				// click clickElement. executed in browsers scope
 				var cs = new CssSelector({
@@ -53,12 +61,11 @@ var SelectorElementClick = {
 				script.text  = "" +
 					"(function(){ " +
 						"var el = document.querySelectorAll('"+cssSelector+"')[0]; " +
-						"el.onclick(); " +
+						"el.click(); " +
 					"})();";
 				document.body.appendChild(script);
 
 				// sleep for `delay` and the extract elements
-				var deferredResponse = $.Deferred();
 				setTimeout(function() {
 					var elements = this.getDataElements(parentElement);
 					deferredResponse.resolve(elements);
