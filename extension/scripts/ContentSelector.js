@@ -37,8 +37,14 @@ ContentSelector.prototype = {
 	previewSelector: function () {
 
 		this.highlightParent();
-		var $elements = this.selector.getDataElements(this.parent);
-		$elements.addClass('-sitemap-select-item-selected');
+		var elements = this.selector.getDataElements(this.parent);
+		$(elements).addClass('-sitemap-select-item-selected');
+	},
+
+	previewClickElementSelector: function () {
+		this.highlightParent();
+		var elements = this.selector.getClickElements(this.parent);
+		$(elements).addClass('-sitemap-select-item-selected');
 	},
 
 	initSelection: function () {

@@ -173,6 +173,9 @@ SitemapController.prototype = {
 				"#edit-selector button[action=preview-selector]": {
 					click: this.previewSelector
 				},
+				"#edit-selector button[action=preview-click-element-selector]": {
+					click: this.previewClickElementSelector
+				},
 				"#edit-selector button[action=preview-selector-data]": {
 					click: this.previewSelectorDataFromSelectorEditing
 				}
@@ -663,6 +666,10 @@ SitemapController.prototype = {
 				{
 					type: 'SelectorScrollElement',
 					title: 'ScrollDown'
+				},
+				{
+					type: 'SelectorElementClick',
+					title: 'Element click'
 				}
 			]
 		});
@@ -708,6 +715,7 @@ SitemapController.prototype = {
 	getCurrentlyEditedSelector: function () {
 		var id = $("#edit-selector [name=id]").val();
 		var selectorsSelector = $("#edit-selector [name=selector]").val();
+		var clickElementSelector = $("#edit-selector [name=clickElementSelector]").val();
 		var type = $("#edit-selector [name=type]").val();
 		var multiple = $("#edit-selector [name=multiple]").is(":checked");
 		var clickPopup = $("#edit-selector [name=clickPopup]").is(":checked");
@@ -734,6 +742,7 @@ SitemapController.prototype = {
 		var newSelector = new Selector({
 			id: id,
 			selector: selectorsSelector,
+			clickElementSelector: clickElementSelector,
 			type: type,
 			multiple: multiple,
 			clickPopup: clickPopup,
@@ -901,6 +910,7 @@ SitemapController.prototype = {
 
 		var sitemap = this.getCurrentlyEditedSelectorSitemap();
 		var selector = this.getCurrentlyEditedSelector();
+		var input = $(button).closest(".form-group").find("input.selector-value");
 
 		// run css selector through background page
 		var request = {
@@ -909,7 +919,7 @@ SitemapController.prototype = {
 			sitemap: JSON.parse(JSON.stringify(sitemap))
 		};
 		chrome.runtime.sendMessage(request, function (response) {
-			$("#edit-selector input[name=selector]").val(response.selector);
+			$(input).val(response.selector);
 			// @TODO how could this be encapsulated?
 			if(selector.type === 'SelectorTable') {
 				// update columns
@@ -944,6 +954,27 @@ SitemapController.prototype = {
 			// run css selector through background page
 			var request = {
 				previewSelector: true,
+				sitemap: JSON.parse(JSON.stringify(sitemap)),
+				selectorId: selector.id
+			};
+			chrome.runtime.sendMessage(request);
+		}
+		else {
+			var request = {
+				cancelPreviewSelector: true
+			};
+			chrome.runtime.sendMessage(request);
+		}
+	},
+	previewClickElementSelector: function(button) {
+
+		if ($(button).hasClass('active')) {
+			var sitemap = this.getCurrentlyEditedSelectorSitemap();
+			var selector = this.getCurrentlyEditedSelector();
+
+			// run css selector through background page
+			var request = {
+				previewClickElementSelector: true,
 				sitemap: JSON.parse(JSON.stringify(sitemap)),
 				selectorId: selector.id
 			};

@@ -19,6 +19,12 @@ var SelectorElementClick = {
 		return true;
 	},
 
+	getClickElements: function(parentElement) {
+		// @TODO do we need here _parent_ ?
+		var clickElements = $(parentElement).find(this.clickElementSelector);
+		return clickElements;
+	},
+
 	_getData: function (parentElement) {
 
 		var delay = parseInt(this.delay) || 0;
@@ -26,8 +32,7 @@ var SelectorElementClick = {
 		// elements that are available before clicking
 		var startElements = this.getDataElements(parentElement);
 
-		// @TODO do we need here _parent_ ?
-		var clickElements = $(parent).find(this.clickElementSelector);
+		var clickElements = this.getClickElements(parentElement);
 
 		var deferredResultCalls = [];
 		$(clickElements).each(function(clickElement) {
@@ -94,6 +99,6 @@ var SelectorElementClick = {
 	},
 
 	getFeatures: function () {
-		return ['multiple', 'delay']
+		return ['multiple', 'delay', 'clickElementSelector']
 	}
 };

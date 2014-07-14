@@ -72,7 +72,7 @@ chrome.runtime.onMessage.addListener(
 			});
 			return true;
 		}
-		else if (request.previewSelector || request.cancelPreviewSelector) {
+		else if (request.previewSelector || request.cancelPreviewSelector || request.previewClickElementSelector) {
 			chrome.tabs.query({
 				active: true,
 				currentWindow: true

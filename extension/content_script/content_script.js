@@ -62,6 +62,15 @@ chrome.runtime.onMessage.addListener(
 			cs.previewSelector();
 			return false;
 		}
+		else if(request.previewClickElementSelector) {
+
+			var cs = new ContentSelector({
+				sitemap: request.sitemap,
+				selectorId: request.selectorId
+			});
+			cs.previewClickElementSelector();
+			return false;
+		}
 		else if (request.cancelPreviewSelector) {
 			ContentSelector.prototype.unbindElementSelectionHighlight();
 		}
