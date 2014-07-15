@@ -34,6 +34,7 @@ SitemapController.prototype = {
 			'SitemapList',
 			'SitemapListItem',
 			'SitemapCreate',
+			'SitemapStartUrlField',
 			'SitemapImport',
 			'SitemapExport',
 			'SitemapBrowseData',
@@ -178,6 +179,12 @@ SitemapController.prototype = {
 				},
 				"#edit-selector button[action=preview-selector-data]": {
 					click: this.previewSelectorDataFromSelectorEditing
+				},
+				"button.add-extra-start-url": {
+					click: this.addStartUrl
+				},
+				"button.remove-start-url": {
+					click: this.removeStartUrl
 				}
 			});
 			this.showSitemaps();
@@ -293,7 +300,7 @@ SitemapController.prototype = {
 						}
 					}
 				},
-				startUrl: {
+				"startUrl[]": {
 					validators: {
 						notEmpty: {
 							message: 'The start URL is required and cannot be empty'
@@ -396,25 +403,46 @@ SitemapController.prototype = {
 		});
 	},
 
+	getSitemapFromMetadataForm: function(){
+
+		var id = $("#viewport form input[name=_id]").val();
+		var $startUrlInputs = $("#viewport form .input-start-url");
+		var startUrl;
+		if($startUrlInputs.length === 1) {
+			startUrl = $startUrlInputs.val();
+		}
+		else {
+			startUrl = [];
+			$startUrlInputs.each(function(i, element) {
+				startUrl.push($(element).val());
+			});
+		}
+
+		return {
+			id:id,
+			startUrl:startUrl
+		};
+	},
+
 	createSitemap: function (form) {
-		var id = $("#create-sitemap input[name=_id]").val();
-		var startUrl = $("#create-sitemap input[name=startUrl]").val();
 
 		// cancel submit if invalid form
 		if(!this.isValidForm()) {
 			return false;
 		}
 
+		var sitemapData = this.getSitemapFromMetadataForm();
+
 		// check whether sitemap with this id already exist
-		this.store.sitemapExists(id, function (sitemapExists) {
+		this.store.sitemapExists(sitemapData.id, function (sitemapExists) {
 			if(sitemapExists) {
 				var validator = this.getFormValidator();
 				validator.updateStatus('_id', 'INVALID', 'callback');
 			}
 			else {
 				var sitemap = new Sitemap({
-					_id: id,
-					startUrl: startUrl,
+					_id: sitemapData.id,
+					startUrl: sitemapData.startUrl,
 					selectors: []
 				});
 				this.store.createSitemap(sitemap, function (sitemap) {
@@ -469,10 +497,7 @@ SitemapController.prototype = {
 
 	editSitemapMetadataSave: function (button) {
 		var sitemap = this.state.currentSitemap;
-		var data = {
-			id: $("#edit-sitemap input[name=_id]").val(),
-			startUrl: $("#edit-sitemap input[name=startUrl]").val()
-		};
+		var sitemapData = this.getSitemapFromMetadataForm();
 
 		// cancel submit if invalid form
 		if(!this.isValidForm()) {
@@ -480,18 +505,18 @@ SitemapController.prototype = {
 		}
 
 		// check whether sitemap with this id already exist
-		this.store.sitemapExists(data.id, function (sitemapExists) {
-			if(sitemap._id !== data.id && sitemapExists) {
+		this.store.sitemapExists(sitemapData.id, function (sitemapExists) {
+			if(sitemap._id !== sitemapData.id && sitemapExists) {
 				var validator = this.getFormValidator();
 				validator.updateStatus('_id', 'INVALID', 'callback');
 				return;
 			}
 
 			// change data
-			sitemap.startUrl = data.startUrl;
+			sitemap.startUrl = sitemapData.startUrl;
 
 			// just change sitemaps url
-			if (data.id === sitemap._id) {
+			if (sitemapData.id === sitemap._id) {
 				this.store.saveSitemap(sitemap, function (sitemap) {
 					this.showSitemapSelectorList();
 				}.bind(this));
@@ -500,7 +525,7 @@ SitemapController.prototype = {
 			else {
 				var newSitemap = new Sitemap(sitemap);
 				var oldSitemap = sitemap;
-				newSitemap._id = data.id;
+				newSitemap._id = sitemapData.id;
 				this.store.createSitemap(newSitemap, function (newSitemap) {
 					this.store.deleteSitemap(oldSitemap, function () {
 						this.state.currentSitemap = newSitemap;
@@ -1089,5 +1114,32 @@ SitemapController.prototype = {
 				$(this).remove();
 			});
 		});
+	},
+	/**
+	 * Add start url to sitemap creation or editing form
+	 * @param button
+	 */
+	addStartUrl: function(button) {
+
+		var $startUrlInputField = ich.SitemapStartUrlField();
+		$("#viewport .start-url-block:last").after($startUrlInputField);
+		var validator = this.getFormValidator();
+		validator.addField($startUrlInputField.find("input"));
+	},
+	/**
+	 * Remove start url from sitemap creation or editing form.
+	 * @param button
+	 */
+	removeStartUrl: function(button) {
+
+		var $block = $(button).closest(".start-url-block");
+		if($("#viewport .start-url-block").length > 1) {
+
+			// remove from validator
+			var validator = this.getFormValidator();
+			validator.removeField($block.find("input"));
+			
+			$block.remove();
+		}
 	}
 };

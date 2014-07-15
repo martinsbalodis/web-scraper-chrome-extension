@@ -1,6 +1,15 @@
 <tr>
 	<td class="id">{{_id}}</td>
-	<td>{{startUrl}}</td>
+	<td>
+		{{#startUrl.push}}
+			{{#startUrl}}
+				{{.}},
+			{{/startUrl}}
+		{{/startUrl.push}}
+		{{^startUrl.push}}
+			{{startUrl}}
+		{{/startUrl.push}}
+	</td>
 	<td>
 		<button action="browse-sitemap-data" type="button" class="btn btn-primary btn-xs">Browse</button>
 		<!--<button action="csv-download-sitemap-data" type="button" class="btn btn-primary btn-xs">CSV</button>-->
