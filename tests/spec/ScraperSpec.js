@@ -168,4 +168,20 @@ describe("Scraper", function () {
 		s.initFirstJobs();
 		expect(q.jobs.length).toBe(100);
 	});
+
+	it("should create multiple start jobs if multiple urls provided", function(){
+
+		var sitemap = new Sitemap({
+			startUrl: ['http://example.com/1', 'http://example.com/2', 'http://example.com/3']
+		});
+
+		var s = new Scraper({
+			queue: q,
+			sitemap: sitemap,
+			store: store
+		});
+
+		s.initFirstJobs();
+		expect(q.jobs.length).toBe(3);
+	});
 });

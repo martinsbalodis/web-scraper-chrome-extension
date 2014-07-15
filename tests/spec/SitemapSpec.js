@@ -361,6 +361,19 @@ describe("Sitemap", function () {
 		expect(sitemap.getStartUrls()).toEqual(expectedURLS);
 	});
 
+	it("Should return multiple start urls when startUrl is an array", function(){
+
+		var sitemap = new Sitemap({
+			startUrl: ["http://example.com/1.html", "http://example.com/2.html", "http://example.com/3.html"]
+		});
+		var expectedURLS = [
+			"http://example.com/1.html",
+			"http://example.com/2.html",
+			"http://example.com/3.html"
+		];
+		expect(sitemap.getStartUrls()).toEqual(expectedURLS);
+	});
+
 	it("Should return only selectors which can have child selectors", function () {
 		var sitemap = new Sitemap({
 			selectors: [
