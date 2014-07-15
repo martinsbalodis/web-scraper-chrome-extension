@@ -253,7 +253,13 @@ SitemapController.prototype = {
 	 */
 	isValidForm: function() {
 		var validator = this.getFormValidator();
-		validator.validate();
+
+		//validator.validate();
+		// validate method calls submit which is not needed in this case.
+		for (var field in validator.options.fields) {
+			validator.validateField(field);
+		}
+
 		var valid = validator.isValid();
 		return valid;
 	},
@@ -264,7 +270,6 @@ SitemapController.prototype = {
 	initSitemapValidation: function() {
 
 		$('#viewport form').bootstrapValidator({
-			submitHandler: function(){}, // workaround to prevent form submit
 			fields: {
 				"_id": {
 					validators: {
@@ -314,7 +319,6 @@ SitemapController.prototype = {
 
 	initImportStiemapValidation: function(){
 		$('#viewport form').bootstrapValidator({
-			submitHandler: function(){}, // workaround to prevent form submit
 			fields: {
 				"_id": {
 					validators: {
@@ -577,7 +581,6 @@ SitemapController.prototype = {
 	initSelectorValidation: function() {
 
 		$('#viewport form').bootstrapValidator({
-			submitHandler: function(){}, // workaround to prevent form submit
 			fields: {
 				"id": {
 					validators: {
@@ -800,7 +803,6 @@ SitemapController.prototype = {
 	initScrapeSitemapConfigValidation: function(){
 
 		$('#viewport form').bootstrapValidator({
-			submitHandler: function(){}, // workaround to prevent form submit
 			fields: {
 				"request_interval": {
 					validators: {
