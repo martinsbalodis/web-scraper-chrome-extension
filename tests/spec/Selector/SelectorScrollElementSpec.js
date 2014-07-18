@@ -14,7 +14,7 @@ describe("Scroll Element Selector", function () {
 		$el.append("<div>a</div><div>b</div>");
 		var selector = new Selector({
 			id: 'a',
-			type: 'SelectorElement',
+			type: 'SelectorScrollElement',
 			multiple: false,
 			selector: "div"
 		});
@@ -37,7 +37,7 @@ describe("Scroll Element Selector", function () {
 		$el.append("<div>a</div><div>b</div>");
 		var selector = new Selector({
 			id: 'a',
-			type: 'SelectorElement',
+			type: 'SelectorScrollElement',
 			multiple: true,
 			selector: "div"
 		});
@@ -112,7 +112,7 @@ describe("Scroll Element Selector", function () {
 	it("should return no data columns", function () {
 		var selector = new Selector({
 			id: 'a',
-			type: 'SelectorElement',
+			type: 'SelectorScrollElement',
 			multiple: true,
 			selector: "div"
 		});
