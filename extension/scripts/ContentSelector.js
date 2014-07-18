@@ -252,7 +252,10 @@ ContentSelector.prototype = {
 		}.bind(this));
 	},
 	highlightParent: function () {
-		$(this.parent).addClass("-sitemap-parent");
+        // do not highlight parent if its the body
+        if(!$(this.parent).is("body") && !$(this.parent).is("#webpage")) {
+            $(this.parent).addClass("-sitemap-parent");
+        }
 	},
 
 	unbindElementSelection: function () {
