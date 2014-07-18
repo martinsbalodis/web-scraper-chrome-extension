@@ -30,8 +30,6 @@ var SelectorLink = {
 			return dfd;
 		}
 
-		console.log(this);
-
 		// extract links one by one
 		var deferredDataExtractionCalls = [];
 		$(elements).each(function (k, element) {
@@ -62,10 +60,10 @@ var SelectorLink = {
 			}.bind(this, element));
 		}.bind(this));
 
-		$.whenCallSequentially.apply(this, deferredDataExtractionCalls).done(function(responses) {
+		$.whenCallSequentially(deferredDataExtractionCalls).done(function(responses) {
 			var result = [];
-			responses.forEach(function(args) {
-				result.push(args[0]);
+			responses.forEach(function(dataResult) {
+				result.push(dataResult);
 			});
 			dfd.resolve(result);
 		});

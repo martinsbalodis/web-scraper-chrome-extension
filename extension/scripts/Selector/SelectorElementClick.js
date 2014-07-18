@@ -76,13 +76,13 @@ var SelectorElementClick = {
 
 
 		var deferredResponse = $.Deferred();
-		$.whenCallSequentially.apply(this, deferredResultCalls).done(function(results) {
+		$.whenCallSequentially(deferredResultCalls).done(function(results) {
 
 			var dataElements = [];
 
 			// elements that we got after clicking
-			results.forEach(function(args) {
-				$(args[0]).each(function(i, element){
+			results.forEach(function(elements) {
+				$(elements).each(function(i, element){
 					if(dataElements.indexOf(element) === -1) {
 						dataElements.push(element);
 					}

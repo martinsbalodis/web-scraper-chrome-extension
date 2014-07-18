@@ -121,11 +121,11 @@ DataExtractor.prototype = {
 		}.bind(this));
 
 		var deferredResponse = $.Deferred();
-		$.whenCallSequentially.apply(this, deferredDataCalls).done(function(dataResponses) {
+		$.whenCallSequentially(deferredDataCalls).done(function(responses) {
 
 			var commonData = {};
-			dataResponses.forEach(function(data) {
-				commonData = Object.merge(commonData, data[0]);
+            responses.forEach(function(data) {
+				commonData = Object.merge(commonData, data);
 			});
 			deferredResponse.resolve(commonData);
 		});
@@ -191,10 +191,9 @@ DataExtractor.prototype = {
 				deferredDataCalls.push(childRecordDeferredCall);
 			}.bind(this));
 
-			$.whenCallSequentially.apply(this, deferredDataCalls).done(function(responses) {
+			$.whenCallSequentially(deferredDataCalls).done(function(responses) {
 				var resultData = [];
-				responses.forEach(function(args) {
-					var childRecordList = args[0];
+				responses.forEach(function(childRecordList) {
 					childRecordList.forEach(function(childRecord){
 						var rec = new Object();
 						Object.merge(rec, childRecord, true);
@@ -229,10 +228,10 @@ DataExtractor.prototype = {
 			}.bind(this));
 
 			// merge all data records together
-			$.whenCallSequentially.apply(this, dataDeferredCalls).done(function(responses) {
+			$.whenCallSequentially(dataDeferredCalls).done(function(responses) {
 				var resultData = [];
-				responses.forEach(function(args) {
-					args[0].forEach(function(childRecord){
+				responses.forEach(function(childRecords) {
+                    childRecords.forEach(function(childRecord){
 						var rec = new Object();
 						Object.merge(rec, childRecord, true);
 						resultData.push(rec);
@@ -272,10 +271,10 @@ DataExtractor.prototype = {
 		}.bind(this));
 
 		var responseDeferred = $.Deferred();
-		$.whenCallSequentially.apply(this, dataDeferredCalls).done(function(responses) {
+		$.whenCallSequentially(dataDeferredCalls).done(function(responses) {
 			var results = [];
-			responses.forEach(function(args) {
-				results = results.concat(args[0]);
+			responses.forEach(function(dataResults) {
+				results = results.concat(dataResults);
 			}.bind(this));
 			responseDeferred.resolve(results);
 		});

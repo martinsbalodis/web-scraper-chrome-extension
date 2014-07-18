@@ -6,25 +6,22 @@
  *
  * @returns $.Deferred().promise()
  */
-$.whenCallSequentially = function() {
+$.whenCallSequentially = function(functionCalls) {
 
 	var deferredResonse = $.Deferred();
-	var functionCalls = arguments;
-	var functionCalls = [];
-	Array.prototype.push.apply(functionCalls, arguments);
 
-	var resultArguments = new Array();
+	var resultData = new Array();
 
 	var execute = function() {
 		if(functionCalls.length === 0) {
-			deferredResonse.resolve(resultArguments);
+			deferredResonse.resolve(resultData);
 			return;
 		}
 
 		var nextCall = functionCalls.shift();
 		var deferredDataResonse = nextCall();
-		deferredDataResonse.done(function() {
-			resultArguments.push(arguments);
+		deferredDataResonse.done(function(data) {
+            resultData.push(data);
 			execute();
 		});
 	};
