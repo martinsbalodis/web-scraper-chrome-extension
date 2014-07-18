@@ -100,7 +100,7 @@ var SelectorLink = {
 					"window.open = open; " +
 				"};" +
 				"window.open = openNew; " +
-				"el.onclick(); " +
+				"el.click(); " +
 			"})();";
 		document.body.appendChild(script);
 

@@ -146,6 +146,31 @@ describe("Link Selector", function () {
 		});
 	});
 
+	it("should extract url from an async, binded with jQury window.open call", function() {
+
+		$el.append($("<a></a>"));
+		$el.find("a").click(function() {
+			setTimeout(function(){
+				window.open('http://example.com/')
+			}, 10);
+		});
+		var selector = new Selector({
+			type: 'SelectorLink'
+		});
+
+		var deferredURL = selector.getPopupURL($el.find("a")[0]);
+
+		waitsFor(function() {
+			return deferredURL.state() === 'resolved';
+		}, "wait for url extraction", 1000);
+
+		runs(function () {
+			deferredURL.done(function(data) {
+				expect(data).toEqual("http://example.com/");
+			});
+		});
+	});
+
 	it("should getData url from an async window.open call", function() {
 
 		$el.append($("<a onclick=\"setTimeout(function(){window.open('http://example.com/');},100)\">a</a>"));
