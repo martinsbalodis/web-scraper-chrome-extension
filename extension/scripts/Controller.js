@@ -947,6 +947,11 @@ SitemapController.prototype = {
 		};
 		chrome.runtime.sendMessage(request, function (response) {
 			$(input).val(response.selector);
+
+			// update validation for selector field
+			var validator = this.getFormValidator();
+			validator.revalidateField(input);
+
 			// @TODO how could this be encapsulated?
 			if(selector.type === 'SelectorTable') {
 				// update columns
@@ -957,7 +962,7 @@ SitemapController.prototype = {
 					$tbody.append($row);
 				});
 			}
-		});
+		}.bind(this));
 	},
 
 	selectSelectorParent: function(button) {
