@@ -5,6 +5,12 @@ chrome.runtime.onMessage.addListener(
 
 		if (request.selectSelector) {
 
+			// cancel previous selection
+			if(window.cs !== undefined) {
+				window.cs.removeSelector();
+				window.cs = undefined;
+			}
+
 			window.cs = new ContentSelector({
 				sitemap: request.sitemap,
 				selectorId: request.selectorId
@@ -34,10 +40,18 @@ chrome.runtime.onMessage.addListener(
 					}
 				}
 				sendResponse(response);
+				window.cs = undefined;
 			});
 
 			// response will be returned later
 			return true;
+		}
+		else if(request.cancelSelectorSelection) {
+			if(window.cs !== undefined) {
+				window.cs.removeSelector();
+				window.cs = undefined;
+			}
+			sendResponse();
 		}
 		else if (request.selectSelectorParent) {
 			if (window.cs !== undefined) {

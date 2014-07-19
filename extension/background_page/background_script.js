@@ -72,6 +72,13 @@ chrome.runtime.onMessage.addListener(
 			});
 			return true;
 		}
+		else if (request.cancelSelectorSelection) {
+
+			sendToActiveTab(request, function (response) {
+				sendResponse(response);
+			});
+			return true;
+		}
 		else if (request.previewSelector || request.cancelPreviewSelector || request.previewClickElementSelector) {
 			chrome.tabs.query({
 				active: true,

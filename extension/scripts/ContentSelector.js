@@ -279,7 +279,10 @@ ContentSelector.prototype = {
 		$("#-selector-toolbar").remove();
 	},
 
-	selectionFinished: function () {
+	/**
+	 * Remove toolbar and unbind events
+	 */
+	removeSelector: function() {
 
 		this.unbindElementSelection();
 		this.unbindElementHighlight();
@@ -287,6 +290,11 @@ ContentSelector.prototype = {
 		this.unbindMultipleGroupPopupHide();
 		this.unbindMultipleGroupCheckbox();
 		this.removeToolbar();
+	},
+
+	selectionFinished: function () {
+
+		this.removeSelector();
 
 		var resultCssSelector = this.cssSelector.getCssSelector(this.selectedElements, this.top);
 		this.selectionCallback(resultCssSelector);

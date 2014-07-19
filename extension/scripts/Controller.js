@@ -722,6 +722,7 @@ SitemapController.prototype = {
 		})
 	},
 	saveSelector: function (button) {
+
 		var sitemap = this.state.currentSitemap;
 		var selector = this.state.currentSelector;
 		var newSelector = this.getCurrentlyEditedSelector();
@@ -731,10 +732,14 @@ SitemapController.prototype = {
 			return false;
 		}
 
-		sitemap.updateSelector(selector, newSelector);
+		// cancel possible element selection
+		this.cancelSelectorSelection(function() {
 
-		this.store.saveSitemap(sitemap, function () {
-			this.showSitemapSelectorList();
+			sitemap.updateSelector(selector, newSelector);
+
+			this.store.saveSitemap(sitemap, function () {
+				this.showSitemapSelectorList();
+			}.bind(this));
 		}.bind(this));
 	},
 	/**
@@ -793,7 +798,11 @@ SitemapController.prototype = {
 		return sitemap;
 	},
 	cancelSelectorEditing: function (button) {
-		this.showSitemapSelectorList();
+
+		// cancel possible element selection
+		this.cancelSelectorSelection(function() {
+			this.showSitemapSelectorList();
+		}.bind(this));
 	},
 	addSelector: function () {
 
@@ -965,6 +974,13 @@ SitemapController.prototype = {
 		}.bind(this));
 	},
 
+	cancelSelectorSelection: function(callback) {
+		var request = {
+			cancelSelectorSelection: true
+		};
+		chrome.runtime.sendMessage(request, callback);
+	},
+
 	selectSelectorParent: function(button) {
 		var request = {
 			selectSelectorParent: true
@@ -979,24 +995,27 @@ SitemapController.prototype = {
 	},
 	previewSelector: function (button) {
 
-		if ($(button).hasClass('active')) {
-			var sitemap = this.getCurrentlyEditedSelectorSitemap();
-			var selector = this.getCurrentlyEditedSelector();
+		// cancel possible element selection
+		this.cancelSelectorSelection(function() {
+			if ($(button).hasClass('active')) {
+				var sitemap = this.getCurrentlyEditedSelectorSitemap();
+				var selector = this.getCurrentlyEditedSelector();
 
-			// run css selector through background page
-			var request = {
-				previewSelector: true,
-				sitemap: JSON.parse(JSON.stringify(sitemap)),
-				selectorId: selector.id
-			};
-			chrome.runtime.sendMessage(request);
-		}
-		else {
-			var request = {
-				cancelPreviewSelector: true
-			};
-			chrome.runtime.sendMessage(request);
-		}
+				// run css selector through background page
+				var request = {
+					previewSelector: true,
+					sitemap: JSON.parse(JSON.stringify(sitemap)),
+					selectorId: selector.id
+				};
+				chrome.runtime.sendMessage(request);
+			}
+			else {
+				var request = {
+					cancelPreviewSelector: true
+				};
+				chrome.runtime.sendMessage(request);
+			}
+		}.bind(this));
 	},
 	previewClickElementSelector: function(button) {
 
