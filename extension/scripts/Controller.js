@@ -122,6 +122,9 @@ SitemapController.prototype = {
 				'#sitemap-scrape-nav-button': {
 					click: this.showScrapeSitemapConfigPanel
 				},
+				'#submit-scrape-sitemap-form': {
+					submit: function(){return false;}
+				},
 				'#submit-scrape-sitemap': {
 					click: this.scrapeSitemap
 				},
@@ -882,7 +885,7 @@ SitemapController.prototype = {
 		chrome.runtime.sendMessage(request, function (response) {
 			// sitemap scraped
 		});
-		return true;
+		return false;
 	},
 	sitemapListBrowseSitemapData: function (button) {
 		var sitemap = $(button).closest("tr").data("sitemap");
