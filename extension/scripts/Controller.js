@@ -853,6 +853,22 @@ SitemapController.prototype = {
 							}
 						}
 					}
+				},
+				"page_load_delay": {
+					validators: {
+						notEmpty: {
+							message: 'The page load delay is required and cannot be empty'
+						},
+						numeric: {
+							message: 'The page load delay must be numeric'
+						},
+						callback: {
+							message: 'The page load delay must be atleast 500 milliseconds',
+							callback: function(value, validator) {
+								return value >= 500;
+							}
+						}
+					}
 				}
 			}
 		});
@@ -872,12 +888,14 @@ SitemapController.prototype = {
 		}
 
 		var requestInterval = $("input[name=request_interval]").val();
+		var pageLoadDelay= $("input[name=page_load_delay]").val();
 
 		var sitemap = this.state.currentSitemap;
 		var request = {
 			scrapeSitemap: true,
 			sitemap: JSON.parse(JSON.stringify(sitemap)),
-			requestInterval: requestInterval
+			requestInterval: requestInterval,
+			pageLoadDelay: pageLoadDelay
 		};
 		chrome.runtime.sendMessage(request, function (response) {
 			// sitemap scraped

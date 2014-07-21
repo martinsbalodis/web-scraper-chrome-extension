@@ -5,6 +5,7 @@ Scraper = function (options) {
 	this.browser = options.browser;
 	this.resultWriter = null; // db instance for scraped data writing
 	this.requestInterval = parseInt(options.requestInterval);
+	this.pageLoadDelay = parseInt(optons.pageLoadDelay);
 };
 
 Scraper.prototype = {
@@ -13,6 +14,7 @@ Scraper.prototype = {
 	 * Scraping delay between two page opening requests
 	 */
 	requestInterval: 2000,
+	pageLoadDelay: 1000,
 	_timeNextScrapeAvailable: 0,
 
 	initFirstJobs: function () {
