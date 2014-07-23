@@ -56,43 +56,12 @@ chrome.runtime.onMessage.addListener(
 			store.getSitemapData(new Sitemap(request.sitemap), sendResponse);
 			return true;
 		}
-
-		else if (request.selectSelector) {
-
-			sendToActiveTab(request, function (response) {
-				console.log("selectors selected", response);
-				sendResponse(response);
-			});
-			return true;
-		}
 		else if (request.selectSelectorParent || request.selectSelectorChild) {
 
 			sendToActiveTab(request, function (response) {
 				sendResponse(response);
 			});
 			return true;
-		}
-		else if (request.cancelSelectorSelection) {
-
-			sendToActiveTab(request, function (response) {
-				sendResponse(response);
-			});
-			return true;
-		}
-		else if (request.previewSelector || request.cancelPreviewSelector || request.previewClickElementSelector) {
-			chrome.tabs.query({
-				active: true,
-				currentWindow: true
-			}, function (tabs) {
-				if (tabs.length < 1) {
-					this.console.log("couldn't find active tab");
-				}
-				else {
-					var tab = tabs[0];
-					chrome.tabs.sendMessage(tab.id, request);
-				}
-			});
-			return false;
 		}
 		else if (request.scrapeSitemap) {
 			var sitemap = new Sitemap(request.sitemap);
@@ -137,6 +106,16 @@ chrome.runtime.onMessage.addListener(
 					chrome.tabs.sendMessage(tab.id, request, sendResponse);
 				}
 			});
+			return true;
+		}
+		else if(request.backgroundScriptCall) {
+
+			var backgroundScript = getBackgroundScript("BackgroundScript");
+			var deferredResponse = backgroundScript[request.fn](request.request)
+			deferredResponse.done(function(response){
+				sendResponse(response);
+			});
+
 			return true;
 		}
 	}
