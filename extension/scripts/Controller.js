@@ -8,6 +8,9 @@ var SitemapController = function (options) {
 
 SitemapController.prototype = {
 
+	backgroundScript: getBackgroundScript("DevTools"),
+	contentScript: getContentScript("DevTools"),
+
 	control: function (controls) {
 		var controller = this;
 
@@ -174,11 +177,20 @@ SitemapController.prototype = {
 				"#edit-selector button[action=select-selector-child]": {
 					click: this.selectSelectorChild
 				},
+				"#edit-selector button[action=select-table-header-row-selector]": {
+					click: this.selectTableHeaderRowSelector
+				},
+				"#edit-selector button[action=select-table-data-row-selector]": {
+					click: this.selectTableDataRowSelector
+				},
 				"#edit-selector button[action=preview-selector]": {
 					click: this.previewSelector
 				},
 				"#edit-selector button[action=preview-click-element-selector]": {
 					click: this.previewClickElementSelector
+				},
+				"#edit-selector button[action=preview-table-row-selector]": {
+					click: this.previewTableRowSelector
 				},
 				"#edit-selector button[action=preview-selector-data]": {
 					click: this.previewSelectorDataFromSelectorEditing
@@ -632,6 +644,20 @@ SitemapController.prototype = {
 						}
 					}
 				},
+				tableHeaderRowSelector: {
+					validators: {
+						notEmpty: {
+							message: 'Header row selector is required and cannot be empty'
+						}
+					}
+				},
+				tableDataRowSelector: {
+					validators: {
+						notEmpty: {
+							message: 'Data row selector is required and cannot be empty'
+						}
+					}
+				},
 				delay: {
 					validators: {
 						numeric: {
@@ -736,8 +762,7 @@ SitemapController.prototype = {
 		}
 
 		// cancel possible element selection
-		this.cancelSelectorSelection(function() {
-
+		this.contentScript.removeCurrentContentSelector().done(function(){
 			sitemap.updateSelector(selector, newSelector);
 
 			this.store.saveSitemap(sitemap, function () {
@@ -751,6 +776,8 @@ SitemapController.prototype = {
 	getCurrentlyEditedSelector: function () {
 		var id = $("#edit-selector [name=id]").val();
 		var selectorsSelector = $("#edit-selector [name=selector]").val();
+		var tableDataRowSelector = $("#edit-selector [name=tableDataRowSelector]").val();
+		var tableHeaderRowSelector = $("#edit-selector [name=tableHeaderRowSelector]").val();
 		var clickElementSelector = $("#edit-selector [name=clickElementSelector]").val();
 		var type = $("#edit-selector [name=type]").val();
 		var multiple = $("#edit-selector [name=multiple]").is(":checked");
@@ -778,6 +805,8 @@ SitemapController.prototype = {
 		var newSelector = new Selector({
 			id: id,
 			selector: selectorsSelector,
+			tableHeaderRowSelector: tableHeaderRowSelector,
+			tableDataRowSelector: tableDataRowSelector,
 			clickElementSelector: clickElementSelector,
 			type: type,
 			multiple: multiple,
@@ -803,7 +832,7 @@ SitemapController.prototype = {
 	cancelSelectorEditing: function (button) {
 
 		// cancel possible element selection
-		this.cancelSelectorSelection(function() {
+		this.contentScript.removeCurrentContentSelector().done(function() {
 			this.showSitemapSelectorList();
 		}.bind(this));
 	},
@@ -947,41 +976,136 @@ SitemapController.prototype = {
 
 	selectSelector: function (button) {
 
+		var input = $(button).closest(".form-group").find("input.selector-value");
 		var sitemap = this.getCurrentlyEditedSelectorSitemap();
 		var selector = this.getCurrentlyEditedSelector();
-		var input = $(button).closest(".form-group").find("input.selector-value");
+		var currentStateParentSelectorIds = this.getCurrentStateParentSelectorIds();
+		var parentCSSSelector = sitemap.selectors.getParentCSSSelectorWithinOnePage(currentStateParentSelectorIds);
 
-		// run css selector through background page
-		var request = {
-			selectSelector: true,
-			selectorId: selector.id,
-			sitemap: JSON.parse(JSON.stringify(sitemap))
-		};
-		chrome.runtime.sendMessage(request, function (response) {
-			$(input).val(response.selector);
+		var deferredSelector = this.contentScript.selectSelector({
+			parentCSSSelector: parentCSSSelector,
+			allowedElements: selector.getItemCSSSelector()
+		});
+
+		deferredSelector.done(function(result) {
+
+			$(input).val(result.CSSSelector);
 
 			// update validation for selector field
 			var validator = this.getFormValidator();
 			validator.revalidateField(input);
 
 			// @TODO how could this be encapsulated?
+			// update header row, data row selectors after selecting the table. selectors are updated based on tables
+			// inner html
 			if(selector.type === 'SelectorTable') {
-				// update columns
-				var $tbody = $(".feature-columns table tbody");
-				$tbody.html("");
-				response.columns.forEach(function(column) {
-					var $row = ich.SelectorEditTableColumn(column);
-					$tbody.append($row);
-				});
+
+				this.getSelectorHTML().done(function(html) {
+
+					var tableHeaderRowSelector = SelectorTable.getTableHeaderRowSelectorFromTableHTML(html);
+					var tableDataRowSelector = SelectorTable.getTableDataRowSelectorFromTableHTML(html);
+					$("input[name=tableHeaderRowSelector]").val(tableHeaderRowSelector);
+					$("input[name=tableDataRowSelector]").val(tableDataRowSelector);
+
+					var headerColumns = SelectorTable.getTableHeaderColumnsFromHTML(tableHeaderRowSelector, html);
+					this.renderTableHeaderColumns(headerColumns);
+				}.bind(this));
 			}
+
 		}.bind(this));
 	},
 
-	cancelSelectorSelection: function(callback) {
-		var request = {
-			cancelSelectorSelection: true
-		};
-		chrome.runtime.sendMessage(request, callback);
+	getCurrentStateParentSelectorIds: function() {
+
+		var parentSelectorIds = this.state.editSitemapBreadcumbsSelectors.map(function(selector) {
+			return selector.id;
+		});
+
+		return parentSelectorIds;
+	},
+
+	selectTableHeaderRowSelector: function(button) {
+
+		var input = $(button).closest(".form-group").find("input.selector-value");
+		var sitemap = this.getCurrentlyEditedSelectorSitemap();
+		var selector = this.getCurrentlyEditedSelector();
+		var currentStateParentSelectorIds = this.getCurrentStateParentSelectorIds();
+		var parentCSSSelector = sitemap.selectors.getCSSSelectorWithinOnePage(selector.id, currentStateParentSelectorIds);
+
+		var deferredSelector = this.contentScript.selectSelector({
+			parentCSSSelector: parentCSSSelector,
+			allowedElements: "tr"
+		});
+
+		deferredSelector.done(function(result) {
+
+			var tableHeaderRowSelector = result.CSSSelector
+			$(input).val(tableHeaderRowSelector);
+
+			this.getSelectorHTML().done(function(html) {
+
+				var headerColumns = SelectorTable.getTableHeaderColumnsFromHTML(tableHeaderRowSelector, html);
+				this.renderTableHeaderColumns(headerColumns);
+
+			}.bind(this));
+
+			// update validation for selector field
+			var validator = this.getFormValidator();
+			validator.revalidateField(input);
+
+		}.bind(this));
+	},
+
+	selectTableDataRowSelector: function(button) {
+
+		var input = $(button).closest(".form-group").find("input.selector-value");
+		var sitemap = this.getCurrentlyEditedSelectorSitemap();
+		var selector = this.getCurrentlyEditedSelector();
+		var currentStateParentSelectorIds = this.getCurrentStateParentSelectorIds();
+		var parentCSSSelector = sitemap.selectors.getCSSSelectorWithinOnePage(selector.id, currentStateParentSelectorIds);
+
+		var deferredSelector = this.contentScript.selectSelector({
+			parentCSSSelector: parentCSSSelector,
+			allowedElements: "tr"
+		});
+
+		deferredSelector.done(function(result) {
+
+			$(input).val(result.CSSSelector);
+
+			// update validation for selector field
+			var validator = this.getFormValidator();
+			validator.revalidateField(input);
+
+		}.bind(this));
+	},
+
+	/**
+	 * update table selector column editing fields
+	 */
+	renderTableHeaderColumns: function(headerColumns) {
+
+		// reset previous columns
+		var $tbody = $(".feature-columns table tbody");
+		$tbody.html("");
+		headerColumns.forEach(function(column) {
+			var $row = ich.SelectorEditTableColumn(column);
+			$tbody.append($row);
+		});
+	},
+
+	/**
+	 * Returns HTML that the current selector would select
+	 */
+	getSelectorHTML: function() {
+
+		var sitemap = this.getCurrentlyEditedSelectorSitemap();
+		var selector = this.getCurrentlyEditedSelector();
+		var currentStateParentSelectorIds = this.getCurrentStateParentSelectorIds();
+		var CSSSelector = sitemap.selectors.getCSSSelectorWithinOnePage(selector.id, currentStateParentSelectorIds);
+		var deferredHTML = this.contentScript.getHTML({CSSSelector: CSSSelector});
+
+		return deferredHTML;
 	},
 
 	selectSelectorParent: function(button) {
@@ -998,72 +1122,95 @@ SitemapController.prototype = {
 	},
 	previewSelector: function (button) {
 
-		// cancel possible element selection
-		this.cancelSelectorSelection(function() {
-			if ($(button).hasClass('active')) {
-				var sitemap = this.getCurrentlyEditedSelectorSitemap();
-				var selector = this.getCurrentlyEditedSelector();
+		if (!$(button).hasClass('preview')) {
 
-				// run css selector through background page
-				var request = {
-					previewSelector: true,
-					sitemap: JSON.parse(JSON.stringify(sitemap)),
-					selectorId: selector.id
-				};
-				chrome.runtime.sendMessage(request);
-			}
-			else {
-				var request = {
-					cancelPreviewSelector: true
-				};
-				chrome.runtime.sendMessage(request);
-			}
-		}.bind(this));
+			var sitemap = this.getCurrentlyEditedSelectorSitemap();
+			var selector = this.getCurrentlyEditedSelector();
+			var currentStateParentSelectorIds = this.getCurrentStateParentSelectorIds();
+			var parentCSSSelector = sitemap.selectors.getParentCSSSelectorWithinOnePage(currentStateParentSelectorIds);
+			var deferredSelectorPreview = this.contentScript.previewSelector({
+				parentCSSSelector: parentCSSSelector,
+				elementCSSSelector: selector.selector
+			});
+
+			deferredSelectorPreview.done(function() {
+				$(button).addClass("preview");
+			});
+		}
+		else {
+
+			this.contentScript.removeCurrentContentSelector();
+			$(button).removeClass("preview");
+		}
 	},
 	previewClickElementSelector: function(button) {
 
-		if ($(button).hasClass('active')) {
-			var sitemap = this.getCurrentlyEditedSelectorSitemap();
-			var selector = this.getCurrentlyEditedSelector();
+		if (!$(button).hasClass('preview')) {
 
-			// run css selector through background page
-			var request = {
-				previewClickElementSelector: true,
-				sitemap: JSON.parse(JSON.stringify(sitemap)),
-				selectorId: selector.id
-			};
-			chrome.runtime.sendMessage(request);
+			var sitemap = this.state.currentSitemap;
+			var selector = this.getCurrentlyEditedSelector();
+			var currentStateParentSelectorIds = this.getCurrentStateParentSelectorIds();
+			var parentCSSSelector = sitemap.selectors.getParentCSSSelectorWithinOnePage(currentStateParentSelectorIds);
+
+			var deferredSelectorPreview = this.contentScript.previewSelector({
+				parentCSSSelector: parentCSSSelector,
+				elementCSSSelector: selector.clickElementSelector
+			});
+
+			deferredSelectorPreview.done(function() {
+				$(button).addClass("preview");
+			});
 		}
 		else {
-			var request = {
-				cancelPreviewSelector: true
-			};
-			chrome.runtime.sendMessage(request);
+			this.contentScript.removeCurrentContentSelector();
+			$(button).removeClass("preview");
+		}
+	},
+	previewTableRowSelector: function(button) {
+
+		if (!$(button).hasClass('preview')) {
+
+			var sitemap = this.state.currentSitemap;
+			var selector = this.getCurrentlyEditedSelector();
+			var currentStateParentSelectorIds = this.getCurrentStateParentSelectorIds();
+			var parentCSSSelector = sitemap.selectors.getCSSSelectorWithinOnePage(selector.id, currentStateParentSelectorIds);
+			var rowSelector = $(button).closest(".form-group").find("input").val();
+
+			var deferredSelectorPreview = this.contentScript.previewSelector({
+				parentCSSSelector: parentCSSSelector,
+				elementCSSSelector: rowSelector
+			});
+
+			deferredSelectorPreview.done(function() {
+				$(button).addClass("preview");
+			});
+		}
+		else {
+			this.contentScript.removeCurrentContentSelector();
+			$(button).removeClass("preview");
 		}
 	},
 	previewSelectorFromSelectorTree: function (button) {
 
-		if (!$(button).hasClass('active')) {
-			$(button).addClass('active');
+		if (!$(button).hasClass('preview')) {
 
 			var sitemap = this.state.currentSitemap;
 			var selector = $(button).closest("tr").data('selector');
-			var parentSelectorId = selector.parentSelectors[0];
+			var currentStateParentSelectorIds = this.getCurrentStateParentSelectorIds();
+			var parentCSSSelector = sitemap.selectors.getParentCSSSelectorWithinOnePage(currentStateParentSelectorIds);
+			var deferredSelectorPreview = this.contentScript.previewSelector({
+				parentCSSSelector: parentCSSSelector,
+				elementCSSSelector: selector.selector
+			});
 
-			// run css selector through background page
-			var request = {
-				previewSelector: true,
-				sitemap: JSON.parse(JSON.stringify(sitemap)),
-				selectorId: selector.id
-			};
-			chrome.runtime.sendMessage(request);
+			deferredSelectorPreview.done(function() {
+				$(button).addClass("preview");
+			});
 		}
 		else {
-			$(button).removeClass('active');
-			var request = {
-				cancelPreviewSelector: true
-			};
-			chrome.runtime.sendMessage(request);
+
+			this.contentScript.removeCurrentContentSelector();
+			$(button).removeClass("preview");
 		}
 	},
 	previewSelectorDataFromSelectorTree: function (button) {

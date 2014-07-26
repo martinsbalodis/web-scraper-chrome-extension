@@ -56,5 +56,46 @@ var selectorMatchers = {
 			expect(actualSelectorTrees[i]).matchSelectors(expectedSelectorTrees[i]);
 		}
 		return true;
+	},
+	deferredToEqual: function(expectedData) {
+
+		var deferredData = this.actual;
+		var data;
+
+		waitsFor(function() {
+			var state = deferredData.state();
+			if(state === "resolved") return true;
+			if(state === "rejected") {
+				expect(state).toEqual("resolved");
+				return true;
+			}
+
+			return false;
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			deferredData.done(function(d) {
+				data = d;
+			});
+			expect(data).toEqual(expectedData);
+		});
+		return true;
+	},
+	deferredToFail: function() {
+
+		var deferredData = this.actual;
+
+		waitsFor(function() {
+			var state = deferredData.state();
+			if(state === "rejected") return true;
+			if(state === "resolved") {
+				expect(state).toEqual("rejected");
+				return true;
+			}
+
+			return false;
+		}, "wait for data extraction", 5000);
+
+		return true;
 	}
 };

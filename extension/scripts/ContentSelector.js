@@ -1,20 +1,57 @@
-var ContentSelector = function (options) {
-	this.sitemap = new Sitemap(options.sitemap);
-	this.selectorId = options.selectorId;
-	this.selector = this.sitemap.getSelectorById(this.selectorId);
-	this.parentSelectorId = this.selector.parentSelectors[0];
-	this.parentSelector = this.sitemap.getSelectorById(this.parentSelectorId);
+/**
+ * @param options.parentCSSSelector	Elements can be only selected within this element
+ * @param options.allowedElements	Elements that can only be selected
+ * @constructor
+ */
+ContentSelector = function(options) {
 
-	this.selectedElements = [];
-	this.top = 0;
+	// deferred response
+	this.deferredCSSSelectorResponse = $.Deferred();
 
-	this.parent = this.getParentElement();
+	this.allowedElements = options.allowedElements;
+	this.parentCSSSelector = options.parentCSSSelector.trim();
 
-	this.initCssSelector(false);
+	if(this.parentCSSSelector) {
+		this.parent = $(this.parentCSSSelector)[0];
+
+		//  handle situation when parent selector not found
+		if(this.parent === undefined) {
+			this.deferredCSSSelectorResponse.reject("parent selector not found");
+			return;
+		}
+	}
+	else {
+		this.parent = $("body")[0];
+	}
 };
 
 ContentSelector.prototype = {
 
+	/**
+	 * get css selector selected by the user
+	 */
+	getCSSSelector: function(request) {
+
+		if(this.deferredCSSSelectorResponse.state() !== "rejected") {
+
+			// elements that are selected by the user
+			this.selectedElements = [];
+			// element selected from top
+			this.top = 0;
+
+			// initialize css selector
+			this.initCssSelector(false);
+
+			this.initGUI();
+		}
+
+		return this.deferredCSSSelectorResponse.promise();
+	},
+
+	/**
+	 * initialize or reconfigure css selector class
+	 * @param allowMultipleSelectors
+	 */
 	initCssSelector: function(allowMultipleSelectors) {
 		this.cssSelector = new CssSelector({
 			enableSmartTableSelector: true,
@@ -29,92 +66,46 @@ ContentSelector.prototype = {
 		});
 	},
 
-	selectSelector: function (selectionCallback) {
-		this.selectionCallback = selectionCallback;
-		this.initSelection();
+	previewSelector: function (elementCSSSelector) {
+
+		if(this.deferredCSSSelectorResponse.state() !== "rejected") {
+
+			this.highlightParent();
+			$(this.parent).find(elementCSSSelector).addClass('-sitemap-select-item-selected');
+			this.deferredCSSSelectorResponse.resolve();
+		}
+
+		return this.deferredCSSSelectorResponse.promise();
 	},
 
-	previewSelector: function () {
+//	cancelPreviewSelector: function() {
+//
+//		this.unbindElementSelectionHighlight();
+//		$('.-sitemap-select-item-selected').removeClass('-sitemap-select-item-selected');
+//	},
 
-		this.highlightParent();
-		var elements = this.selector.getDataElements(this.parent);
-		$(elements).addClass('-sitemap-select-item-selected');
-	},
+//	previewClickElementSelector: function () {
+//		this.highlightParent();
+//		var elements = this.selector.getClickElements(this.parent);
+//		$(elements).addClass('-sitemap-select-item-selected');
+//	},
 
-	previewClickElementSelector: function () {
-		this.highlightParent();
-		var elements = this.selector.getClickElements(this.parent);
-		$(elements).addClass('-sitemap-select-item-selected');
-	},
-
-	initSelection: function () {
+	initGUI: function () {
 
 		this.highlightParent();
 
 		// all elements except toolbar
-		var itemCSSSelector = this.selector.getItemCSSSelector();
-		this.$allElements = $(itemCSSSelector+":not(#-selector-toolbar):not(#-selector-toolbar *)", this.parent);
+		this.$allElements = $(this.allowedElements+":not(#-selector-toolbar):not(#-selector-toolbar *)", this.parent);
 
 		this.bindElementHighlight();
 		this.bindElementSelection();
 		this.bindKeyboardSelectionManipulations();
-		// @TODO remove toolbar
 		this.attachToolbar();
 		this.bindMultipleGroupCheckbox();
 		this.bindMultipleGroupPopupHide();
 	},
 
-	/**
-	 * Returns element in which the selections should occur. Usually its body but in case the parent selector is
-	 * SelectorElement then returns an element selected by the parent selector
-	 */
-	getParentElement: function () {
-
-		var parentSelectors = [];
-		var parentSelectorId = this.parentSelectorId;
-		while (true) {
-			var selector = this.sitemap.getSelectorById(parentSelectorId);
-			if (selector && selector.willReturnElements()) {
-				parentSelectors.push(selector);
-				if (selector.parentSelectors.length === 0) {
-					break;
-				}
-				parentSelectorId = selector.parentSelectors[0];
-			}
-			else {
-				break;
-			}
-		}
-
-		var parent = $("body")[0];
-
-		// special case for playground
-		if(chrome.extension === undefined) {
-			parent = $("#webpage")[0];
-		}
-
-		for (var i = parentSelectors.length - 1; i >= 0; i--) {
-			var selector = parentSelectors[i];
-			var $parents = $(parent).find(selector.selector);
-			if ($parents.length === 0) {
-				return null;
-			}
-			else {
-				parent = $parents[0];
-			}
-		}
-
-		if (parent === null) {
-			alert("Could not find the parent element");
-			this.selectionFinished();
-			return;
-		}
-
-		return parent;
-	},
-
 	bindElementSelection: function () {
-
 		this.$allElements.bind("click.elementSelector", function (e) {
 			this.selectedElements.push(e.currentTarget);
 			this.highlightSelectedElements();
@@ -229,19 +220,19 @@ ContentSelector.prototype = {
 
 		var $toolbar = '<div id="-selector-toolbar">' +
 			'<div class="popover top">' +
-				'<button type="button" class="close" data-dismiss="modal">×</button>' +
-				'<div class="arrow"></div>' +
-				'<div class="popover-content">' +
-					'<div class="txt">' +
-						'Different type element selection is disabled. If the element ' +
-						'you clicked should also be included then enable this and ' +
-						'click on the element again. Usually this is not needed.' +
-					'</div>' +
-				'</div>' +
+			'<button type="button" class="close" data-dismiss="modal">×</button>' +
+			'<div class="arrow"></div>' +
+			'<div class="popover-content">' +
+			'<div class="txt">' +
+			'Different type element selection is disabled. If the element ' +
+			'you clicked should also be included then enable this and ' +
+			'click on the element again. Usually this is not needed.' +
+			'</div>' +
+			'</div>' +
 			'</div>' +
 			'<div class="selector list-item">&nbsp;</div>' +
 			'<div class="input-group-addon list-item">' +
-				'<input type="checkbox" title="Enable different type element selection" name="diferentElementSelection">' +
+			'<input type="checkbox" title="Enable different type element selection" name="diferentElementSelection">' +
 			'</div>' +
 			'<a class="list-item">Done selecting!</a>' +
 			'</div>';
@@ -252,14 +243,14 @@ ContentSelector.prototype = {
 		}.bind(this));
 	},
 	highlightParent: function () {
-        // do not highlight parent if its the body
-        if(!$(this.parent).is("body") && !$(this.parent).is("#webpage")) {
-            $(this.parent).addClass("-sitemap-parent");
-        }
+		// do not highlight parent if its the body
+		if(!$(this.parent).is("body") && !$(this.parent).is("#webpage")) {
+			$(this.parent).addClass("-sitemap-parent");
+		}
 	},
 
 	unbindElementSelection: function () {
-		this.$allElements.unbind("click.elementSelector");
+		$(this.$allElements).unbind("click.elementSelector");
 		// remove highlighted element classes
 		this.unbindElementSelectionHighlight();
 	},
@@ -268,7 +259,7 @@ ContentSelector.prototype = {
 		$(".-sitemap-parent").removeClass('-sitemap-parent');
 	},
 	unbindElementHighlight: function () {
-		this.$allElements.unbind("mouseenter.elementSelector")
+		$(this.$allElements).unbind("mouseenter.elementSelector")
 			.unbind("mouseleave.elementSelector");
 	},
 	unbindKeyboardSelectionMaipulatios: function () {
@@ -282,7 +273,7 @@ ContentSelector.prototype = {
 	/**
 	 * Remove toolbar and unbind events
 	 */
-	removeSelector: function() {
+	removeGUI: function() {
 
 		this.unbindElementSelection();
 		this.unbindElementHighlight();
@@ -294,9 +285,16 @@ ContentSelector.prototype = {
 
 	selectionFinished: function () {
 
-		this.removeSelector();
+		var resultCssSelector;
+		if(this.selectedElements.length > 0) {
+			resultCssSelector = this.cssSelector.getCssSelector(this.selectedElements, this.top);
+		}
+		else {
+			resultCssSelector = "";
+		}
 
-		var resultCssSelector = this.cssSelector.getCssSelector(this.selectedElements, this.top);
-		this.selectionCallback(resultCssSelector);
+		this.deferredCSSSelectorResponse.resolve({
+			CSSSelector: resultCssSelector
+		});
 	}
 };

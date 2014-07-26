@@ -44,6 +44,8 @@
 			"scripts/ChromePopupBrowser.js",
 			"scripts/Config.js",
 			"scripts/Store.js",
+			"scripts/ContentScript.js",
+			"scripts/BackgroundScript.js",
 			"background_page/background_script.js"
 		]
 	},
@@ -64,7 +66,6 @@
 				"assets/css-selector/lib/CssSelector.js",
 				"scripts/DataExtractor.js",
 				"scripts/ContentSelector.js",
-				"content_script/content_script.js",
 				"scripts/Selector.js",
 				"scripts/Selector/SelectorElement.js",
 				"scripts/Selector/SelectorGroup.js",
@@ -77,7 +78,10 @@
 				"scripts/Selector/SelectorScrollElement.js",
 				"scripts/Selector/SelectorElementClick.js",
 				"scripts/SelectorList.js",
-				"scripts/Sitemap.js"
+				"scripts/Sitemap.js",
+				"scripts/ContentScript.js",
+				"scripts/BackgroundScript.js",
+				"content_script/content_script.js"
 			],
 			"css": [
 				"content_script/content_script.css"

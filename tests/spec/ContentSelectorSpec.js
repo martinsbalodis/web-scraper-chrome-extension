@@ -1,98 +1,119 @@
 describe("ContentSelector", function () {
 
+	var $el;
+
 	beforeEach(function () {
 
+		this.addMatchers(selectorMatchers);
+
+		$el = jQuery("#tests").html("");
+		if($el.length === 0) {
+			$el = $("<div id='tests' style='display:none'></div>").appendTo("body");
+		}
 	});
 
-	it("should be able to extract needed selectors from all selector tree", function () {
+	var removeContentSelectorGUI = function(contentSelector) {
 
-		var selectors = [
-			{
-				id: "url",
-				multiple: true,
-				selector: "a",
-				type: 'SelectorLink',
-				parentSelectors: ['_root']
-			},
-			{
-				id: "main-div",
-				multiple: false,
-				selector: "#content-selector-tests",
-				type: 'SelectorElement',
-				parentSelectors: ['url']
-			},
-			{
-				id: "div",
-				type: "SelectorElement",
-				selector: "div",
-				multiple: true,
-				parentSelectors: ['main-div']
-			},
-			{
-				id: "span",
-				type: "SelectorElement",
-				selector: "span",
-				multiple: true,
-				parentSelectors: ['div']
-			},
-			{
-				id: "el",
-				type: "SelectorElement",
-				selector: "el",
-				multiple: true,
-				parentSelectors: ['span']
-			}
-		];
+		expect($("#-selector-toolbar").length).toEqual(1);
+		contentSelector.removeGUI();
+		expect($("#-selector-toolbar").length).toEqual(0);
+	};
 
-		var sitemap = new Sitemap({
-			selectors: selectors
+	it("should be able to get css selector from user", function() {
+
+		$el.append('<div id="content-script-css-selector-test"><a class="needed"></a><a></a></div>');
+
+		var contentSelector = new ContentSelector({
+			parentCSSSelector: "div#content-script-css-selector-test",
+			allowedElements: "a"
 		});
 
-		var generatedSelector;
-		var cs = new ContentSelector({
-			sitemap: sitemap,
-			selectorId: 'el'
-		});
-		cs.selectSelector(function (selector) {
-			generatedSelector = selector;
-		});
+		var deferredCSSSelector = contentSelector.getCSSSelector();
 
-		cs.selectedElements = $("#content-selector-tests-expected").children();
+		// click on the element that will be selected
+		$el.find("a.needed").click();
 
-		var expectedParent = $("#content-selector-tests-expected")[0];
-		var parent = cs.getParentElement();
-		expect(parent).toEqual(expectedParent);
-		cs.selectionFinished();
+		// finish selection
+		$("body #-selector-toolbar a").click();
 
-		expect(generatedSelector).toEqual("table");
+		expect(deferredCSSSelector).deferredToEqual({CSSSelector: "a.needed"});
+
+		removeContentSelectorGUI(contentSelector);
 	});
 
-	it("should be able to return body when there are no parent selectors", function () {
+	it("should be return empty css selector when no element selected", function() {
 
-		var sitemap = new Sitemap({
-			selectors: [{
-					id: "el",
-					type: "SelectorElement",
-					selector: "el",
-					multiple: true,
-					parentSelectors: ['_root']
-				}]
+		$el.append('<div id="content-script-css-selector-test"></div>');
+
+		var contentSelector = new ContentSelector({
+			parentCSSSelector: "div#content-script-css-selector-test",
+			allowedElements: "a"
 		});
 
-		var generatedSelector;
-		var cs = new ContentSelector({
-			sitemap: sitemap,
-			selectorId: 'el'
-		});
-		cs.selectSelector(function (selector) {
-		});
-		cs.selectedElements = $("#content-selector-tests-expected").children();
+		var deferredCSSSelector = contentSelector.getCSSSelector();
 
-		// webpage playground forced this to be #webpage :(
-		var expectedParent = $("#webpage")[0];
-		var parent = cs.getParentElement();
-		expect(parent).toEqual(expectedParent);
-		cs.selectionFinished();
+		// finish selection
+		$("body #-selector-toolbar a").click();
+
+		expect(deferredCSSSelector).deferredToEqual({CSSSelector: ""});
+
+		removeContentSelectorGUI(contentSelector);
 	});
 
+	it("should use body as parent element when no parent selector specified", function() {
+
+		var contentSelector = new ContentSelector({
+			parentCSSSelector: " ",
+			allowedElements: "a"
+		});
+
+		// finish selection
+		$("body #-selector-toolbar a").click();
+
+		expect(contentSelector.parent).toEqual($("body")[0]);
+	});
+
+	it("should reject selection when parent selector not found", function() {
+
+		var contentSelector = new ContentSelector({
+			parentCSSSelector: "div#content-script-css-selector-test",
+			allowedElements: "a"
+		});
+
+		var deferredCSSSelector = contentSelector.getCSSSelector();
+		expect(deferredCSSSelector).deferredToFail();
+	});
+
+	it("should be able to preview selected elements", function() {
+
+		$el.append('<div id="content-script-css-selector-test"><a></a></div>');
+
+		var contentSelector = new ContentSelector({
+			parentCSSSelector: "div#content-script-css-selector-test"
+		});
+
+		contentSelector.previewSelector("a");
+
+		expect($(".-sitemap-select-item-selected").length).toEqual(1);
+		expect($el.find("#content-script-css-selector-test").hasClass("-sitemap-parent")).toEqual(true);
+		expect($el.find("a").hasClass("-sitemap-select-item-selected")).toEqual(true);
+
+		contentSelector.removeGUI();
+
+		expect($(".-sitemap-select-item-selected").length).toEqual(0);
+		expect($el.find("#content-script-css-selector-test").hasClass("-sitemap-parent")).toEqual(false);
+		expect($el.find("a").hasClass("-sitemap-select-item-selected")).toEqual(false);
+	});
+
+	it("should reject selector preview request when parent element not found", function() {
+
+		var contentSelector = new ContentSelector({
+			parentCSSSelector: "div#content-script-css-selector-test"
+		});
+
+		var deferredSelectorPreview = contentSelector.previewSelector("a");
+		expect(deferredSelectorPreview).deferredToFail();
+
+		expect($(".-sitemap-select-item-selected").length).toEqual(0);
+	});
 });

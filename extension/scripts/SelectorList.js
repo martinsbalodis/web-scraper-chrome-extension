@@ -208,4 +208,44 @@ SelectorList.prototype.getSelectorById = function (selectorId) {
 			return selector;
 		}
 	}
-}
+};
+
+/**
+ * returns css selector for a given element. css selector includes all parent element selectors
+ * @param selectorId
+ * @param parentSelectorIds array of parent selector ids from devtools Breadcumb
+ * @returns string
+ */
+SelectorList.prototype.getCSSSelectorWithinOnePage = function (selectorId, parentSelectorIds) {
+
+	var CSSSelector = this.getSelector(selectorId).selector;
+	var parentCSSSelector = this.getParentCSSSelectorWithinOnePage(parentSelectorIds);
+	CSSSelector = parentCSSSelector+CSSSelector;
+
+	return CSSSelector;
+};
+
+/**
+ * returns css selector for parent selectors that are within one page
+ * @param parentSelectorIds array of parent selector ids from devtools Breadcumb
+ * @returns string
+ */
+SelectorList.prototype.getParentCSSSelectorWithinOnePage = function (parentSelectorIds) {
+
+	var CSSSelector = "";
+
+	for (var i = parentSelectorIds.length-1; i > 0; i--) {
+
+		var parentSelectorId = parentSelectorIds[i];
+		var parentSelector = this.getSelector(parentSelectorId);
+		if(parentSelector.willReturnElements()) {
+			CSSSelector = parentSelector.selector + " " + CSSSelector;
+		}
+		else {
+			break;
+		}
+	}
+
+	return CSSSelector;
+};
+

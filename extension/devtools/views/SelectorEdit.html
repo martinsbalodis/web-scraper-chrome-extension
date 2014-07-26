@@ -40,7 +40,7 @@
 	</div>
 
 	<div class="form-group feature feature-clickElementSelector">
-		<label for="selector" class="col-lg-1 control-label">Click selector</label>
+		<label for="clickElementSelector" class="col-lg-1 control-label">Click selector</label>
 
 		<div class="col-lg-10">
 			<div class="input-group">
@@ -53,6 +53,34 @@
 					<button class="btn btn-default" type="button" action="select-selector-parent" title="Select parent element">&#65516;</button>
 					<button class="btn btn-default" type="button" action="select-selector-child" title="Select child element">&#65514;</button>
 				</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- tableHeaderSelector -->
+	<div class="form-group feature feature-tableHeaderRowSelector">
+		<label for="tableHeaderRowSelector" class="col-lg-1 control-label">Header row selector</label>
+		<div class="col-lg-10">
+			<div class="input-group">
+				  <span class="input-group-btn">
+					<button class="btn btn-default" action="select-table-header-row-selector" type="button">Select</button>
+					<button class="btn btn-default" action="preview-table-row-selector" type="button" data-toggle="button">Element preview</button>
+				  </span>
+				<input type="text" class="form-control selector-value" id="tableHeaderRowSelector" name="tableHeaderRowSelector" value="{{selector.tableHeaderRowSelector}}">
+			</div>
+		</div>
+	</div>
+
+	<!-- tableRowSelector -->
+	<div class="form-group feature feature-tableDataRowSelector">
+		<label for="tableDataRowSelector" class="col-lg-1 control-label">Data row selector</label>
+		<div class="col-lg-10">
+			<div class="input-group">
+				  <span class="input-group-btn">
+					<button class="btn btn-default" action="select-table-data-row-selector" type="button">Select</button>
+					<button class="btn btn-default" action="preview-table-row-selector" type="button" data-toggle="button">Element preview</button>
+				  </span>
+				<input type="text" class="form-control selector-value" id="tableDataRowSelector" name="tableDataRowSelector" value="{{selector.tableDataRowSelector}}">
 			</div>
 		</div>
 	</div>

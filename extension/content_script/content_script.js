@@ -3,57 +3,7 @@ chrome.runtime.onMessage.addListener(
 
 		console.log("chrome.runtime.onMessage", request);
 
-		if (request.selectSelector) {
-
-			// cancel previous selection
-			if(window.cs !== undefined) {
-				window.cs.removeSelector();
-				window.cs = undefined;
-			}
-
-			window.cs = new ContentSelector({
-				sitemap: request.sitemap,
-				selectorId: request.selectorId
-			});
-			window.cs.selectSelector(function (resultCSSSelector) {
-				var response = {
-					selector: resultCSSSelector
-				};
-				// @TODO implement additional data response somehow better
-				// @TODO add test to table selector
-				if(window.cs.selector.type === "SelectorTable") {
-					var $tables = $(resultCSSSelector);
-					if($tables.length > 0) {
-						var columns = [];
-						var $headerRow = $($tables[0]).find("thead tr");
-						if ($headerRow.length > 0) {
-							$headerRow.find("td,th").each(function (i) {
-								var header = $(this).text().trim();
-								columns.push({
-									header:header,
-									name:header,
-									extract:true
-								});
-							});
-						}
-						response.columns = columns;
-					}
-				}
-				sendResponse(response);
-				window.cs = undefined;
-			});
-
-			// response will be returned later
-			return true;
-		}
-		else if(request.cancelSelectorSelection) {
-			if(window.cs !== undefined) {
-				window.cs.removeSelector();
-				window.cs = undefined;
-			}
-			sendResponse();
-		}
-		else if (request.selectSelectorParent) {
+		if (request.selectSelectorParent) {
 			if (window.cs !== undefined) {
 				window.cs.selectParent();
 				window.cs.highlightSelectedElements();
@@ -66,27 +16,6 @@ chrome.runtime.onMessage.addListener(
 				window.cs.highlightSelectedElements();
 			}
 			return false;
-		}
-		else if (request.previewSelector) {
-
-			var cs = new ContentSelector({
-				sitemap: request.sitemap,
-				selectorId: request.selectorId
-			});
-			cs.previewSelector();
-			return false;
-		}
-		else if(request.previewClickElementSelector) {
-
-			var cs = new ContentSelector({
-				sitemap: request.sitemap,
-				selectorId: request.selectorId
-			});
-			cs.previewClickElementSelector();
-			return false;
-		}
-		else if (request.cancelPreviewSelector) {
-			ContentSelector.prototype.unbindElementSelectionHighlight();
 		}
 		else if (request.extractData) {
 			console.log("received data extraction request", request);
@@ -106,6 +35,20 @@ chrome.runtime.onMessage.addListener(
 				console.log("dataextractor data", data);
 				sendResponse(data);
 			});
+			return true;
+		}
+		// Universal ContentScript communication handler
+		else if(request.contentScriptCall) {
+
+			var contentScript = getContentScript("ContentScript");
+
+			console.log("received ContentScript request", request);
+
+			var deferredResponse = contentScript[request.fn](request.request);
+			deferredResponse.done(function(response) {
+				sendResponse(response);
+			});
+
 			return true;
 		}
 	}

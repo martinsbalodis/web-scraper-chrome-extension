@@ -410,4 +410,109 @@ describe("SelectorList", function () {
 		var pageSelectors = selectorList.getOnePageSelectors("parent2");
 		expect(pageSelectors).matchSelectorList(expectedSelectorList);
 	});
+
+	it("should extract css selector within one page for a selector with no parent selectors", function() {
+
+		var selectorList = new SelectorList([
+			{
+				id:'div',
+				type: 'SelectorText',
+				selector: "div"
+			}
+		]);
+
+		var CSSSelector = selectorList.getCSSSelectorWithinOnePage("div", ["_root"]);
+		expect(CSSSelector).toEqual("div");
+	});
+
+	it("should extract css selector within one page for a selector with parent element selector", function() {
+
+		var selectorList = new SelectorList([
+			{
+				id:'parent1',
+				type: 'SelectorElement',
+				selector: "div.parent"
+			},
+			{
+				id:'div',
+				type: 'SelectorText',
+				selector: "div"
+			}
+		]);
+
+		var CSSSelector = selectorList.getCSSSelectorWithinOnePage("div", ["_root", "parent1"]);
+		expect(CSSSelector).toEqual("div.parent div");
+	});
+
+	it("should extract css selector within one page from a list of parent selectors", function() {
+
+		var selectorList = new SelectorList([
+			{
+				id:'parent2',
+				type: 'SelectorElement',
+				selector: "div.parent2"
+			},
+			{
+				id:'parent1',
+				type: 'SelectorElement',
+				selector: "div.parent"
+			},
+			{
+				id:'div',
+				type: 'SelectorText',
+				selector: "div"
+			}
+		]);
+
+		var CSSSelector = selectorList.getParentCSSSelectorWithinOnePage(["_root", "parent2", "parent1"]);
+		expect(CSSSelector).toEqual("div.parent2 div.parent ");
+	});
+
+	it("should extract css selector within one page for a selector with parent element selectors", function() {
+
+		var selectorList = new SelectorList([
+			{
+				id:'parent2',
+				type: 'SelectorElement',
+				selector: "div.parent2"
+			},
+			{
+				id:'parent1',
+				type: 'SelectorElement',
+				selector: "div.parent"
+			},
+			{
+				id:'div',
+				type: 'SelectorText',
+				selector: "div"
+			}
+		]);
+
+		var CSSSelector = selectorList.getCSSSelectorWithinOnePage("div", ["_root", "parent2", "parent1"]);
+		expect(CSSSelector).toEqual("div.parent2 div.parent div");
+	});
+
+	it("should extract css selector within one page for a selector with parent non element selectors", function() {
+
+		var selectorList = new SelectorList([
+			{
+				id:'parent2',
+				type: 'SelectorLink',
+				selector: "div.parent2"
+			},
+			{
+				id:'parent1',
+				type: 'SelectorElement',
+				selector: "div.parent"
+			},
+			{
+				id:'div',
+				type: 'SelectorText',
+				selector: "div"
+			}
+		]);
+
+		var CSSSelector = selectorList.getCSSSelectorWithinOnePage("div", ["_root", "parent2", "parent1"]);
+		expect(CSSSelector).toEqual("div.parent div");
+	});
 });
