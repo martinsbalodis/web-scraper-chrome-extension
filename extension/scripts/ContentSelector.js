@@ -116,23 +116,14 @@ ContentSelector.prototype = {
 	},
 
 	bindElementHighlight: function () {
-		this.$allElements.bind("mouseenter.elementSelector",function () {
 
+		$(this.$allElements).bind("mouseover.elementSelector", function(e) {
 			$(this).addClass("-sitemap-select-item-hover");
-
-			var $el = $(this).parent();
-			setTimeout(function () {
-				// remove highlight from paret elements
-				while ($el.parent().length) {
-					$el.removeClass("-sitemap-select-item-hover");
-					$el = $el.parent();
-				}
-			}, 1);
 			return false;
-		}).bind("mouseleave.elementSelector", function () {
-				$(this).removeClass("-sitemap-select-item-hover");
-			}
-		);
+		}).bind("mouseout.elementSelector", function(e) {
+			$(this).removeClass("-sitemap-select-item-hover");
+			return false;
+		});
 	},
 
 	selectChild: function () {
@@ -259,8 +250,8 @@ ContentSelector.prototype = {
 		$(".-sitemap-parent").removeClass('-sitemap-parent');
 	},
 	unbindElementHighlight: function () {
-		$(this.$allElements).unbind("mouseenter.elementSelector")
-			.unbind("mouseleave.elementSelector");
+		$(this.$allElements).unbind("mouseover.elementSelector")
+			.unbind("mouseout.elementSelector");
 	},
 	unbindKeyboardSelectionMaipulatios: function () {
 		$(document).unbind("keydown.selectionManipulation");
