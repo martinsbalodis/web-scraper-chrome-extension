@@ -3,21 +3,7 @@ chrome.runtime.onMessage.addListener(
 
 		console.log("chrome.runtime.onMessage", request);
 
-		if (request.selectSelectorParent) {
-			if (window.cs !== undefined) {
-				window.cs.selectParent();
-				window.cs.highlightSelectedElements();
-			}
-			return false;
-		}
-		else if (request.selectSelectorChild) {
-			if (window.cs !== undefined) {
-				window.cs.selectChild();
-				window.cs.highlightSelectedElements();
-			}
-			return false;
-		}
-		else if (request.extractData) {
+		if (request.extractData) {
 			console.log("received data extraction request", request);
 			var extractor = new DataExtractor(request);
 			var deferredData = extractor.getData();

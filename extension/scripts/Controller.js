@@ -171,12 +171,6 @@ SitemapController.prototype = {
 				"#edit-selector button[action=select-selector]": {
 					click: this.selectSelector
 				},
-				"#edit-selector button[action=select-selector-parent]": {
-					click: this.selectSelectorParent
-				},
-				"#edit-selector button[action=select-selector-child]": {
-					click: this.selectSelectorChild
-				},
 				"#edit-selector button[action=select-table-header-row-selector]": {
 					click: this.selectTableHeaderRowSelector
 				},
@@ -1106,19 +1100,6 @@ SitemapController.prototype = {
 		var deferredHTML = this.contentScript.getHTML({CSSSelector: CSSSelector});
 
 		return deferredHTML;
-	},
-
-	selectSelectorParent: function(button) {
-		var request = {
-			selectSelectorParent: true
-		};
-		chrome.runtime.sendMessage(request);
-	},
-	selectSelectorChild: function(button) {
-		var request = {
-			selectSelectorChild: true
-		};
-		chrome.runtime.sendMessage(request);
 	},
 	previewSelector: function (button) {
 
