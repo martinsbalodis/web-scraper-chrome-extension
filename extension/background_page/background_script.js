@@ -56,13 +56,6 @@ chrome.runtime.onMessage.addListener(
 			store.getSitemapData(new Sitemap(request.sitemap), sendResponse);
 			return true;
 		}
-		else if (request.selectSelectorParent || request.selectSelectorChild) {
-
-			sendToActiveTab(request, function (response) {
-				sendResponse(response);
-			});
-			return true;
-		}
 		else if (request.scrapeSitemap) {
 			var sitemap = new Sitemap(request.sitemap);
 			var queue = new Queue();

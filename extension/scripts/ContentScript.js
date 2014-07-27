@@ -104,16 +104,20 @@ var ContentScript = {
  */
 var getContentScript = function(location) {
 
+	var contentScript;
+
 	// Handle calls from different places
 	if(location === "ContentScript") {
-		return ContentScript;
+		contentScript = ContentScript;
+		contentScript.backgroundScript = getBackgroundScript("ContentScript");
+		return contentScript;
 	}
 	else if(location === "BackgroundScript" || location === "DevTools") {
 
 		var backgroundScript = getBackgroundScript(location);
 
 		// if called within background script proxy calls to content script
-		var contentScript = {};
+		contentScript = {};
 			Object.keys(ContentScript).forEach(function(attr) {
 			if(typeof ContentScript[attr] === 'function') {
 				contentScript[attr] = function(request) {
@@ -131,7 +135,7 @@ var getContentScript = function(location) {
 				contentScript[attr] = ContentScript[attr];
 			}
 		});
-
+		contentScript.backgroundScript = backgroundScript;
 		return contentScript;
 	}
 	else {

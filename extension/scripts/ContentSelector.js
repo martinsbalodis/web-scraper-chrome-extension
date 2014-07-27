@@ -78,18 +78,6 @@ ContentSelector.prototype = {
 		return this.deferredCSSSelectorResponse.promise();
 	},
 
-//	cancelPreviewSelector: function() {
-//
-//		this.unbindElementSelectionHighlight();
-//		$('.-sitemap-select-item-selected').removeClass('-sitemap-select-item-selected');
-//	},
-
-//	previewClickElementSelector: function () {
-//		this.highlightParent();
-//		var elements = this.selector.getClickElements(this.parent);
-//		$(elements).addClass('-sitemap-select-item-selected');
-//	},
-
 	initGUI: function () {
 
 		this.highlightParent();
@@ -115,15 +103,31 @@ ContentSelector.prototype = {
 		}.bind(this));
 	},
 
+	/**
+	 * Add to select elements the element that is under the mouse
+	 */
+	selectMouseOverElement: function() {
+
+		var element = this.mouseOverElement;
+		if(element) {
+			this.selectedElements.push(element);
+			this.highlightSelectedElements();
+		}
+	},
+
 	bindElementHighlight: function () {
 
 		$(this.$allElements).bind("mouseover.elementSelector", function(e) {
-			$(this).addClass("-sitemap-select-item-hover");
+			var element = e.currentTarget;
+			this.mouseOverElement = element;
+			$(element).addClass("-sitemap-select-item-hover");
 			return false;
-		}).bind("mouseout.elementSelector", function(e) {
-			$(this).removeClass("-sitemap-select-item-hover");
+		}.bind(this)).bind("mouseout.elementSelector", function(e) {
+			var element = e.currentTarget;
+			this.mouseOverElement = null;
+			$(element).removeClass("-sitemap-select-item-hover");
 			return false;
-		});
+		}.bind(this));
 	},
 
 	selectChild: function () {
@@ -139,21 +143,51 @@ ContentSelector.prototype = {
 	// User with keyboard arrows can select child or paret elements of selected elements.
 	bindKeyboardSelectionManipulations: function () {
 
+		// check for focus
+		var lastFocusStatus;
+		this.keyPressFocusInterval = setInterval(function() {
+			var focus = document.hasFocus();
+			if(focus === lastFocusStatus) return;
+			lastFocusStatus = focus;
+
+			$("#-selector-toolbar .key-button").toggleClass("hide", !focus);
+			$("#-selector-toolbar .key-events").toggleClass("hide", focus);
+		}.bind(this), 200);
+
+
 		// Using up/down arrows user can select elements from top of the
 		// selected element
 		$(document).bind("keydown.selectionManipulation", function (event) {
 
-			// up
-			if (event.keyCode === 38) {
+			// select child C
+			if (event.keyCode === 67) {
+				this.animateClickedKey($("#-selector-toolbar .key-button-child"));
 				this.selectChild();
 			}
-			// down
-			else if (event.keyCode === 40) {
+			// select parent P
+			else if (event.keyCode === 80) {
+				this.animateClickedKey($("#-selector-toolbar .key-button-parent"));
 				this.selectParent();
+			}
+			// select element
+			else if (event.keyCode === 83) {
+				this.animateClickedKey($("#-selector-toolbar .key-button-select"));
+				this.selectMouseOverElement();
 			}
 
 			this.highlightSelectedElements();
 		}.bind(this));
+	},
+
+	animateClickedKey: function(element) {
+		$(element).removeClass("clicked").removeClass("clicked-animation");
+		setTimeout(function() {
+			$(element).addClass("clicked");
+			setTimeout(function(){
+				$(element).addClass("clicked-animation");
+			},100);
+		},1);
+
 	},
 
 	highlightSelectedElements: function () {
@@ -210,26 +244,30 @@ ContentSelector.prototype = {
 	attachToolbar: function () {
 
 		var $toolbar = '<div id="-selector-toolbar">' +
-			'<div class="popover top">' +
-			'<button type="button" class="close" data-dismiss="modal">×</button>' +
-			'<div class="arrow"></div>' +
-			'<div class="popover-content">' +
-			'<div class="txt">' +
-			'Different type element selection is disabled. If the element ' +
-			'you clicked should also be included then enable this and ' +
-			'click on the element again. Usually this is not needed.' +
-			'</div>' +
-			'</div>' +
-			'</div>' +
-			'<div class="selector list-item">&nbsp;</div>' +
+			'<div class="list-item"><div class="selector-container"><div class="selector"></div></div></div>' +
 			'<div class="input-group-addon list-item">' +
-			'<input type="checkbox" title="Enable different type element selection" name="diferentElementSelection">' +
+				'<input type="checkbox" title="Enable different type element selection" name="diferentElementSelection">' +
+				'<div class="popover top">' +
+				'<div class="close">×</div>' +
+				'<div class="arrow"></div>' +
+				'<div class="popover-content">' +
+				'<div class="txt">' +
+				'Different type element selection is disabled. If the element ' +
+				'you clicked should also be included then enable this and ' +
+				'click on the element again. Usually this is not needed.' +
+				'</div>' +
+				'</div>' +
+				'</div>' +
 			'</div>' +
-			'<a class="list-item">Done selecting!</a>' +
+			'<div class="list-item key-events"><div title="Click here to enable key press events for selection">Enable key events</div></div>' +
+			'<div class="list-item key-button key-button-select hide" title="Use S key to select element">S</div>' +
+			'<div class="list-item key-button key-button-parent hide" title="Use P key to select parent">P</div>' +
+			'<div class="list-item key-button key-button-child hide" title="Use C key to select child">C</div>' +
+			'<div class="list-item done-selecting-button">Done selecting!</div>' +
 			'</div>';
 		$("body").append($toolbar);
 
-		$("body #-selector-toolbar a").click(function () {
+		$("body #-selector-toolbar .done-selecting-button").click(function () {
 			this.selectionFinished();
 		}.bind(this));
 	},
@@ -255,6 +293,7 @@ ContentSelector.prototype = {
 	},
 	unbindKeyboardSelectionMaipulatios: function () {
 		$(document).unbind("keydown.selectionManipulation");
+		clearInterval(this.keyPressFocusInterval);
 	},
 	removeToolbar: function () {
 		$("body #-selector-toolbar a").unbind("click");
