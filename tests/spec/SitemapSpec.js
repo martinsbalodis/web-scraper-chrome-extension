@@ -349,6 +349,18 @@ describe("Sitemap", function () {
 		expect(sitemap.getStartUrls()).toEqual(expectedURLS);
 	});
 
+	it("should return multiple start urls with specified incremental", function () {
+		var sitemap = new Sitemap({
+			startUrl: "http://example.com/?id=[0-20:10]"
+		});
+		var expectedURLS = [
+			"http://example.com/?id=0",
+			"http://example.com/?id=10",
+			"http://example.com/?id=20"
+		];
+		expect(sitemap.getStartUrls()).toEqual(expectedURLS);
+	});
+
 	it("Should return multiple start urls with padding", function () {
 		var sitemap = new Sitemap({
 			startUrl: "http://example.com/[001-003].html"
