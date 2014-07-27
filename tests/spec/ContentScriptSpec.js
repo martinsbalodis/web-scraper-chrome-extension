@@ -64,7 +64,7 @@ describe("ContentScript", function () {
 		$el.find("a.needed").click();
 
 		// finish selection
-		$("body #-selector-toolbar a").click();
+		$("#-selector-toolbar .done-selecting-button").click();
 
 		expect(deferredCSSSelector).deferredToEqual({CSSSelector: "a.needed"});
 
@@ -82,7 +82,7 @@ describe("ContentScript", function () {
 		});
 
 		// finish selection
-		$("body #-selector-toolbar a").click();
+		$("#-selector-toolbar .done-selecting-button").click();
 
 		expect(deferredCSSSelector).deferredToEqual({CSSSelector: ""});
 

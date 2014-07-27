@@ -34,7 +34,7 @@ describe("ContentSelector", function () {
 		$el.find("a.needed").click();
 
 		// finish selection
-		$("body #-selector-toolbar a").click();
+		$("#-selector-toolbar .done-selecting-button").click();
 
 		expect(deferredCSSSelector).deferredToEqual({CSSSelector: "a.needed"});
 
@@ -53,7 +53,7 @@ describe("ContentSelector", function () {
 		var deferredCSSSelector = contentSelector.getCSSSelector();
 
 		// finish selection
-		$("body #-selector-toolbar a").click();
+		$("#-selector-toolbar .done-selecting-button").click();
 
 		expect(deferredCSSSelector).deferredToEqual({CSSSelector: ""});
 
@@ -68,7 +68,7 @@ describe("ContentSelector", function () {
 		});
 
 		// finish selection
-		$("body #-selector-toolbar a").click();
+		$("#-selector-toolbar .done-selecting-button").click();
 
 		expect(contentSelector.parent).toEqual($("body")[0]);
 	});

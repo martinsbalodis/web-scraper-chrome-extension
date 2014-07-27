@@ -67,7 +67,7 @@ var getBackgroundScript = function(location) {
 	if(location === "BackgroundScript") {
 		return BackgroundScript;
 	}
-	else if(location === "DevTools") {
+	else if(location === "DevTools" || location === "ContentScript") {
 
 		// if called within background script proxy calls to content script
 		var backgroundScript = {};

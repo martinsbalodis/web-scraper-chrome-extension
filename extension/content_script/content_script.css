@@ -30,58 +30,750 @@
 }
 
 #-selector-toolbar {
+	outline:1px red solid;
+}
+
+/**
+ * reset all css values for a div
+ * http://jsfiddle.net/Gb89Y/2/
+ * after loading css with this script you need to fix width, height
+ */
+#-selector-toolbar, #-selector-toolbar div {
+	align-content: stretch !important;
+	align-items: stretch !important;
+	align-self: stretch !important;
+	alignment-baseline: auto !important;
+	background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box !important;
+	background-attachment: scroll !important;
+	background-clip: border-box !important;
+	background-color: rgba(0, 0, 0, 0) !important;
+	background-image: none !important;
+	background-origin: padding-box !important;
+	background-position: 0% 0% !important;
+	background-position-x: 0% !important;
+	background-position-y: 0% !important;
+	background-repeat: repeat !important;
+	background-size: auto !important;
+	baseline-shift: baseline !important;
+	border: 0px none rgb(0, 0, 0) !important;
+	border-bottom: 0px none rgb(0, 0, 0) !important;
+	border-bottom-color: rgb(0, 0, 0) !important;
+	border-bottom-left-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+	border-bottom-style: none !important;
+	border-bottom-width: 0px !important;
+	border-collapse: separate !important;
+	border-color: rgb(0, 0, 0) !important;
+	border-image: none !important;
+	border-image-outset: 0px !important;
+	border-image-repeat: stretch !important;
+	border-image-slice: 100% !important;
+	border-image-source: none !important;
+	border-image-width: 1 !important;
+	border-left: 0px none rgb(0, 0, 0) !important;
+	border-left-color: rgb(0, 0, 0) !important;
+	border-left-style: none !important;
+	border-left-width: 0px !important;
+	border-radius: 0px !important;
+	border-right: 0px none rgb(0, 0, 0) !important;
+	border-right-color: rgb(0, 0, 0) !important;
+	border-right-style: none !important;
+	border-right-width: 0px !important;
+	border-spacing: 0px 0px !important;
+	border-style: none !important;
+	border-top: 0px none rgb(0, 0, 0) !important;
+	border-top-color: rgb(0, 0, 0) !important;
+	border-top-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
+	border-top-style: none !important;
+	border-top-width: 0px !important;
+	border-width: 0px !important;
+	bottom: auto !important;
+	box-shadow: none !important;
+	box-sizing: content-box !important;
+	buffered-rendering: auto !important;
+	caption-side: top !important;
+	clear: none !important;
+	clip: auto !important;
+	clip-path: none !important;
+	clip-rule: nonzero !important;
+	color: rgb(0, 0, 0) !important;
+	color-interpolation: srgb !important;
+	color-interpolation-filters: linearrgb !important;
+	color-rendering: auto !important;
+	cursor: auto !important;
+	direction: ltr !important;
+	display: block !important;
+	dominant-baseline: auto !important;
+	empty-cells: show !important;
+	fill: rgb(0, 0, 0) !important;
+	fill-opacity: 1 !important;
+	fill-rule: nonzero !important;
+	filter: none !important;
+	flex: 0 1 auto !important;
+	flex-basis: auto !important;
+	flex-direction: row !important;
+	flex-flow: row nowrap !important;
+	flex-grow: 0 !important;
+	flex-shrink: 1 !important;
+	flex-wrap: nowrap !important;
+	float: none !important;
+	flood-color: rgb(0, 0, 0) !important;
+	flood-opacity: 1 !important;
+	font: normal normal normal 16px/normal 'Times New Roman' !important;
+	font-family: 'Times New Roman' !important;
+	font-kerning: auto !important;
+	font-size: 16px !important;
+	font-style: normal !important;
+	font-variant: normal !important;
+	font-variant-ligatures: normal !important;
+	font-weight: normal !important;
+	glyph-orientation-horizontal: 0deg !important;
+	glyph-orientation-vertical: auto !important;
+	height: auto !important;
+	image-rendering: auto !important;
+	justify-content: flex-start !important;
+	kerning: 0 !important;
+	left: auto !important;
+	letter-spacing: normal !important;
+	lighting-color: rgb(255, 255, 255) !important;
+	line-height: normal !important;
+	list-style: disc outside none !important;
+	list-style-image: none !important;
+	list-style-position: outside !important;
+	list-style-type: disc !important;
+	margin: 0px !important;
+	margin-bottom: 0px !important;
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+	margin-top: 0px !important;
+	marker-end: none !important;
+	marker-mid: none !important;
+	marker-start: none !important;
+	mask: none !important;
+	mask-type: luminance !important;
+	max-height: none !important;
+	max-width: none !important;
+	min-height: 0px !important;
+	min-width: 0px !important;
+	object-fit: fill !important;
+	object-position: 50% 50% !important;
+	opacity: 1 !important;
+	order: 0 !important;
+	orphans: auto !important;
+	outline: rgb(0, 0, 0) none 0px !important;
+	outline-color: rgb(0, 0, 0) !important;
+	outline-offset: 0px !important;
+	outline-style: none !important;
+	outline-width: 0px !important;
+	overflow: visible !important;
+	overflow-wrap: normal !important;
+	overflow-x: visible !important;
+	overflow-y: visible !important;
+	padding: 0px !important;
+	padding-bottom: 0px !important;
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+	padding-top: 0px !important;
+	page-break-after: auto !important;
+	page-break-before: auto !important;
+	page-break-inside: auto !important;
+	pointer-events: auto !important;
+	position: static !important;
+	resize: none !important;
+	right: auto !important;
+	shape-rendering: auto !important;
+	speak: normal !important;
+	stop-color: rgb(0, 0, 0) !important;
+	stop-opacity: 1 !important;
+	stroke: none !important;
+	stroke-dasharray: none !important;
+	stroke-dashoffset: 0 !important;
+	stroke-linecap: butt !important;
+	stroke-linejoin: miter !important;
+	stroke-miterlimit: 4 !important;
+	stroke-opacity: 1 !important;
+	stroke-width: 1 !important;
+	tab-size: 8 !important;
+	table-layout: auto !important;
+	text-align: start !important;
+	text-anchor: start !important;
+	text-decoration: none solid rgb(0, 0, 0) !important;
+	text-indent: 0px !important;
+	text-overflow: clip !important;
+	text-rendering: auto !important;
+	text-shadow: none !important;
+	text-transform: none !important;
+	top: auto !important;
+	transition: all 0s ease 0s !important;
+	transition-delay: 0s !important;
+	transition-duration: 0s !important;
+	transition-property: all !important;
+	transition-timing-function: ease !important;
+	unicode-bidi: normal !important;
+	vector-effect: none !important;
+	vertical-align: baseline !important;
+	visibility: visible !important;
+	-webkit-animation: none 0s ease 0s 1 normal none running !important;
+	-webkit-animation-delay: 0s !important;
+	-webkit-animation-direction: normal !important;
+	-webkit-animation-duration: 0s !important;
+	-webkit-animation-fill-mode: none !important;
+	-webkit-animation-iteration-count: 1 !important;
+	-webkit-animation-name: none !important;
+	-webkit-animation-play-state: running !important;
+	-webkit-animation-timing-function: ease !important;
+	-webkit-app-region: no-drag !important;
+	-webkit-appearance: none !important;
+	-webkit-aspect-ratio: none !important;
+	-webkit-backface-visibility: visible !important;
+	-webkit-background-clip: border-box !important;
+	-webkit-background-composite: source-over !important;
+	-webkit-background-origin: padding-box !important;
+	-webkit-background-size: auto !important;
+	-webkit-border-after: 0px none rgb(0, 0, 0) !important;
+	-webkit-border-after-color: rgb(0, 0, 0) !important;
+	-webkit-border-after-style: none !important;
+	-webkit-border-after-width: 0px !important;
+	-webkit-border-before: 0px none rgb(0, 0, 0) !important;
+	-webkit-border-before-color: rgb(0, 0, 0) !important;
+	-webkit-border-before-style: none !important;
+	-webkit-border-before-width: 0px !important;
+	-webkit-border-end: 0px none rgb(0, 0, 0) !important;
+	-webkit-border-end-color: rgb(0, 0, 0) !important;
+	-webkit-border-end-style: none !important;
+	-webkit-border-end-width: 0px !important;
+	-webkit-border-fit: border !important;
+	-webkit-border-horizontal-spacing: 0px !important;
+	-webkit-border-image: none !important;
+	-webkit-border-start: 0px none rgb(0, 0, 0) !important;
+	-webkit-border-start-color: rgb(0, 0, 0) !important;
+	-webkit-border-start-style: none !important;
+	-webkit-border-start-width: 0px !important;
+	-webkit-border-vertical-spacing: 0px !important;
+	-webkit-box-align: stretch !important;
+	-webkit-box-decoration-break: slice !important;
+	-webkit-box-direction: normal !important;
+	-webkit-box-flex: 0 !important;
+	-webkit-box-flex-group: 1 !important;
+	-webkit-box-lines: single !important;
+	-webkit-box-ordinal-group: 1 !important;
+	-webkit-box-orient: horizontal !important;
+	-webkit-box-pack: start !important;
+	-webkit-box-reflect: none !important;
+	-webkit-box-shadow: none !important;
+	-webkit-clip-path: none !important;
+	-webkit-column-axis: auto !important;
+	-webkit-column-break-after: auto !important;
+	-webkit-column-break-before: auto !important;
+	-webkit-column-break-inside: auto !important;
+	-webkit-column-count: auto !important;
+	-webkit-column-gap: normal !important;
+	-webkit-column-progression: normal !important;
+	-webkit-column-rule: 0px none rgb(0, 0, 0) !important;
+	-webkit-column-rule-color: rgb(0, 0, 0) !important;
+	-webkit-column-rule-style: none !important;
+	-webkit-column-rule-width: 0px !important;
+	-webkit-column-span: none !important;
+	-webkit-column-width: auto !important;
+	-webkit-columns: auto auto !important;
+	-webkit-filter: none !important;
+	-webkit-font-feature-settings: normal !important;
+	-webkit-font-smoothing: auto !important;
+	-webkit-highlight: none !important;
+	-webkit-hyphenate-character: auto !important;
+	-webkit-line-box-contain: block inline replaced !important;
+	-webkit-line-break: auto !important;
+	-webkit-line-clamp: none !important;
+	-webkit-locale: auto !important;
+	-webkit-logical-height: auto !important;
+	-webkit-logical-width: auto !important;
+	-webkit-margin-after: 0px !important;
+	-webkit-margin-after-collapse: collapse !important;
+	-webkit-margin-before: 0px !important;
+	-webkit-margin-before-collapse: collapse !important;
+	-webkit-margin-bottom-collapse: collapse !important;
+	-webkit-margin-end: 0px !important;
+	-webkit-margin-start: 0px !important;
+	-webkit-margin-top-collapse: collapse !important;
+	-webkit-mask-box-image: none !important;
+	-webkit-mask-box-image-outset: 0px !important;
+	-webkit-mask-box-image-repeat: stretch !important;
+	-webkit-mask-box-image-slice: 0 fill !important;
+	-webkit-mask-box-image-source: none !important;
+	-webkit-mask-box-image-width: auto !important;
+	-webkit-mask-clip: border-box !important;
+	-webkit-mask-composite: source-over !important;
+	-webkit-mask-image: none !important;
+	-webkit-mask-origin: border-box !important;
+	-webkit-mask-position: 0% 0% !important;
+	-webkit-mask-position-x: 0% !important;
+	-webkit-mask-position-y: 0% !important;
+	-webkit-mask-repeat: repeat !important;
+	-webkit-mask-size: auto !important;
+	-webkit-max-logical-height: none !important;
+	-webkit-max-logical-width: none !important;
+	-webkit-min-logical-height: 0px !important;
+	-webkit-min-logical-width: 0px !important;
+	-webkit-padding-after: 0px !important;
+	-webkit-padding-before: 0px !important;
+	-webkit-padding-end: 0px !important;
+	-webkit-padding-start: 0px !important;
+	-webkit-perspective: none !important;
+	-webkit-perspective-origin: 396px 0px !important;
+	-webkit-print-color-adjust: economy !important;
+	-webkit-rtl-ordering: logical !important;
+	-webkit-ruby-position: before !important;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0.180392) !important;
+	-webkit-text-combine: none !important;
+	-webkit-text-decorations-in-effect: none !important;
+	-webkit-text-emphasis-color: rgb(0, 0, 0) !important;
+	-webkit-text-emphasis-position: over !important;
+	-webkit-text-emphasis-style: none !important;
+	-webkit-text-fill-color: rgb(0, 0, 0) !important;
+	-webkit-text-orientation: vertical-right !important;
+	-webkit-text-security: none !important;
+	-webkit-text-stroke-color: rgb(0, 0, 0) !important;
+	-webkit-text-stroke-width: 0px !important;
+	-webkit-transform: none !important;
+	-webkit-transform-origin: 396px 0px !important;
+	-webkit-transform-style: flat !important;
+	-webkit-transition: all 0s ease 0s !important;
+	-webkit-transition-delay: 0s !important;
+	-webkit-transition-duration: 0s !important;
+	-webkit-transition-property: all !important;
+	-webkit-transition-timing-function: ease !important;
+	-webkit-user-drag: auto !important;
+	-webkit-user-modify: read-only !important;
+	-webkit-user-select: text !important;
+	-webkit-writing-mode: horizontal-tb !important;
+	white-space: normal !important;
+	widows: auto !important;
+	width: auto !important;
+	word-break: normal !important;
+	word-spacing: 0px !important;
+	word-wrap: normal !important;
+	writing-mode: lr-tb !important;
+	z-index: auto !important;
+	zoom: 1 !important;
+}
+
+#-selector-toolbar:after, #-selector-toolbar:before, #-selector-toolbar *:after, #-selector-toolbar *:before {
+	content: "";
+	display: none;
+	box-sizing: border-box;
+}
+
+#-selector-toolbar input {
+	align-content: stretch !important;
+	align-items: stretch !important;
+	align-self: stretch !important;
+	alignment-baseline: auto !important;
+	background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box !important;
+	background-attachment: scroll !important;
+	background-clip: border-box !important;
+	background-color: rgba(0, 0, 0, 0) !important;
+	background-image: none !important;
+	background-origin: padding-box !important;
+	background-position: 0% 0% !important;
+	background-position-x: 0% !important;
+	background-position-y: 0% !important;
+	background-repeat: repeat !important;
+	background-size: auto !important;
+	baseline-shift: baseline !important;
+	border: 0px none rgb(0, 0, 0) !important;
+	border-bottom: 0px none rgb(0, 0, 0) !important;
+	border-bottom-color: rgb(0, 0, 0) !important;
+	border-bottom-left-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+	border-bottom-style: none !important;
+	border-bottom-width: 0px !important;
+	border-collapse: separate !important;
+	border-color: rgb(0, 0, 0) !important;
+	border-image: none !important;
+	border-image-outset: 0px !important;
+	border-image-repeat: stretch !important;
+	border-image-slice: 100% !important;
+	border-image-source: none !important;
+	border-image-width: 1 !important;
+	border-left: 0px none rgb(0, 0, 0) !important;
+	border-left-color: rgb(0, 0, 0) !important;
+	border-left-style: none !important;
+	border-left-width: 0px !important;
+	border-radius: 0px !important;
+	border-right: 0px none rgb(0, 0, 0) !important;
+	border-right-color: rgb(0, 0, 0) !important;
+	border-right-style: none !important;
+	border-right-width: 0px !important;
+	border-spacing: 0px 0px !important;
+	border-style: none !important;
+	border-top: 0px none rgb(0, 0, 0) !important;
+	border-top-color: rgb(0, 0, 0) !important;
+	border-top-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
+	border-top-style: none !important;
+	border-top-width: 0px !important;
+	border-width: 0px !important;
+	bottom: auto !important;
+	box-shadow: none !important;
+	box-sizing: border-box !important;
+	buffered-rendering: auto !important;
+	caption-side: top !important;
+	clear: none !important;
+	clip: auto !important;
+	clip-path: none !important;
+	clip-rule: nonzero !important;
+	color: rgb(0, 0, 0) !important;
+	color-interpolation: srgb !important;
+	color-interpolation-filters: linearrgb !important;
+	color-rendering: auto !important;
+	cursor: auto !important;
+	direction: ltr !important;
+	display: inline-block !important;
+	dominant-baseline: auto !important;
+	empty-cells: show !important;
+	fill: rgb(0, 0, 0) !important;
+	fill-opacity: 1 !important;
+	fill-rule: nonzero !important;
+	filter: none !important;
+	flex: 0 1 auto !important;
+	flex-basis: auto !important;
+	flex-direction: row !important;
+	flex-flow: row nowrap !important;
+	flex-grow: 0 !important;
+	flex-shrink: 1 !important;
+	flex-wrap: nowrap !important;
+	float: none !important;
+	flood-color: rgb(0, 0, 0) !important;
+	flood-opacity: 1 !important;
+	font: normal normal normal 13px/normal Arial !important;
+	font-family: Arial !important;
+	font-kerning: auto !important;
+	font-size: 13px !important;
+	font-style: normal !important;
+	font-variant: normal !important;
+	font-variant-ligatures: normal !important;
+	font-weight: normal !important;
+	glyph-orientation-horizontal: 0deg !important;
+	glyph-orientation-vertical: auto !important;
+	height: 13px !important;
+	image-rendering: auto !important;
+	justify-content: flex-start !important;
+	kerning: 0 !important;
+	left: auto !important;
+	letter-spacing: normal !important;
+	lighting-color: rgb(255, 255, 255) !important;
+	line-height: normal !important;
+	list-style: disc outside none !important;
+	list-style-image: none !important;
+	list-style-position: outside !important;
+	list-style-type: disc !important;
+	margin: 3px 3px 3px 4px !important;
+	margin-bottom: 3px !important;
+	margin-left: 4px !important;
+	margin-right: 3px !important;
+	margin-top: 3px !important;
+	marker-end: none !important;
+	marker-mid: none !important;
+	marker-start: none !important;
+	mask: none !important;
+	mask-type: luminance !important;
+	max-height: none !important;
+	max-width: none !important;
+	min-height: 0px !important;
+	min-width: 0px !important;
+	object-fit: fill !important;
+	object-position: 50% 50% !important;
+	opacity: 1 !important;
+	order: 0 !important;
+	orphans: auto !important;
+	outline: rgb(0, 0, 0) none 0px !important;
+	outline-color: rgb(0, 0, 0) !important;
+	outline-offset: 0px !important;
+	outline-style: none !important;
+	outline-width: 0px !important;
+	overflow: visible !important;
+	overflow-wrap: normal !important;
+	overflow-x: visible !important;
+	overflow-y: visible !important;
+	padding: 0px !important;
+	padding-bottom: 0px !important;
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+	padding-top: 0px !important;
+	page-break-after: auto !important;
+	page-break-before: auto !important;
+	page-break-inside: auto !important;
+	pointer-events: auto !important;
+	position: static !important;
+	resize: none !important;
+	right: auto !important;
+	shape-rendering: auto !important;
+	speak: normal !important;
+	stop-color: rgb(0, 0, 0) !important;
+	stop-opacity: 1 !important;
+	stroke: none !important;
+	stroke-dasharray: none !important;
+	stroke-dashoffset: 0 !important;
+	stroke-linecap: butt !important;
+	stroke-linejoin: miter !important;
+	stroke-miterlimit: 4 !important;
+	stroke-opacity: 1 !important;
+	stroke-width: 1 !important;
+	tab-size: 8 !important;
+	table-layout: auto !important;
+	text-align: start !important;
+	text-anchor: start !important;
+	text-decoration: none solid rgb(0, 0, 0) !important;
+	text-indent: 0px !important;
+	text-overflow: clip !important;
+	text-rendering: auto !important;
+	text-shadow: none !important;
+	text-transform: none !important;
+	top: auto !important;
+	transition: all 0s ease 0s !important;
+	transition-delay: 0s !important;
+	transition-duration: 0s !important;
+	transition-property: all !important;
+	transition-timing-function: ease !important;
+	unicode-bidi: normal !important;
+	vector-effect: none !important;
+	vertical-align: baseline !important;
+	visibility: visible !important;
+	-webkit-animation: none 0s ease 0s 1 normal none running !important;
+	-webkit-animation-delay: 0s !important;
+	-webkit-animation-direction: normal !important;
+	-webkit-animation-duration: 0s !important;
+	-webkit-animation-fill-mode: none !important;
+	-webkit-animation-iteration-count: 1 !important;
+	-webkit-animation-name: none !important;
+	-webkit-animation-play-state: running !important;
+	-webkit-animation-timing-function: ease !important;
+	-webkit-app-region: no-drag !important;
+	-webkit-appearance: checkbox !important;
+	-webkit-aspect-ratio: none !important;
+	-webkit-backface-visibility: visible !important;
+	-webkit-background-clip: border-box !important;
+	-webkit-background-composite: source-over !important;
+	-webkit-background-origin: padding-box !important;
+	-webkit-background-size: auto !important;
+	-webkit-border-after: 0px none rgb(0, 0, 0) !important;
+	-webkit-border-after-color: rgb(0, 0, 0) !important;
+	-webkit-border-after-style: none !important;
+	-webkit-border-after-width: 0px !important;
+	-webkit-border-before: 0px none rgb(0, 0, 0) !important;
+	-webkit-border-before-color: rgb(0, 0, 0) !important;
+	-webkit-border-before-style: none !important;
+	-webkit-border-before-width: 0px !important;
+	-webkit-border-end: 0px none rgb(0, 0, 0) !important;
+	-webkit-border-end-color: rgb(0, 0, 0) !important;
+	-webkit-border-end-style: none !important;
+	-webkit-border-end-width: 0px !important;
+	-webkit-border-fit: border !important;
+	-webkit-border-horizontal-spacing: 0px !important;
+	-webkit-border-image: none !important;
+	-webkit-border-start: 0px none rgb(0, 0, 0) !important;
+	-webkit-border-start-color: rgb(0, 0, 0) !important;
+	-webkit-border-start-style: none !important;
+	-webkit-border-start-width: 0px !important;
+	-webkit-border-vertical-spacing: 0px !important;
+	-webkit-box-align: stretch !important;
+	-webkit-box-decoration-break: slice !important;
+	-webkit-box-direction: normal !important;
+	-webkit-box-flex: 0 !important;
+	-webkit-box-flex-group: 1 !important;
+	-webkit-box-lines: single !important;
+	-webkit-box-ordinal-group: 1 !important;
+	-webkit-box-orient: horizontal !important;
+	-webkit-box-pack: start !important;
+	-webkit-box-reflect: none !important;
+	-webkit-box-shadow: none !important;
+	-webkit-clip-path: none !important;
+	-webkit-column-axis: auto !important;
+	-webkit-column-break-after: auto !important;
+	-webkit-column-break-before: auto !important;
+	-webkit-column-break-inside: auto !important;
+	-webkit-column-count: auto !important;
+	-webkit-column-gap: normal !important;
+	-webkit-column-progression: normal !important;
+	-webkit-column-rule: 0px none rgb(0, 0, 0) !important;
+	-webkit-column-rule-color: rgb(0, 0, 0) !important;
+	-webkit-column-rule-style: none !important;
+	-webkit-column-rule-width: 0px !important;
+	-webkit-column-span: none !important;
+	-webkit-column-width: auto !important;
+	-webkit-columns: auto auto !important;
+	-webkit-filter: none !important;
+	-webkit-font-feature-settings: normal !important;
+	-webkit-font-smoothing: auto !important;
+	-webkit-highlight: none !important;
+	-webkit-hyphenate-character: auto !important;
+	-webkit-line-box-contain: block inline replaced !important;
+	-webkit-line-break: auto !important;
+	-webkit-line-clamp: none !important;
+	-webkit-locale: auto !important;
+	-webkit-logical-height: 13px !important;
+	-webkit-logical-width: 13px !important;
+	-webkit-margin-after: 3px !important;
+	-webkit-margin-after-collapse: collapse !important;
+	-webkit-margin-before: 3px !important;
+	-webkit-margin-before-collapse: collapse !important;
+	-webkit-margin-bottom-collapse: collapse !important;
+	-webkit-margin-end: 3px !important;
+	-webkit-margin-start: 4px !important;
+	-webkit-margin-top-collapse: collapse !important;
+	-webkit-mask-box-image: none !important;
+	-webkit-mask-box-image-outset: 0px !important;
+	-webkit-mask-box-image-repeat: stretch !important;
+	-webkit-mask-box-image-slice: 0 fill !important;
+	-webkit-mask-box-image-source: none !important;
+	-webkit-mask-box-image-width: auto !important;
+	-webkit-mask-clip: border-box !important;
+	-webkit-mask-composite: source-over !important;
+	-webkit-mask-image: none !important;
+	-webkit-mask-origin: border-box !important;
+	-webkit-mask-position: 0% 0% !important;
+	-webkit-mask-position-x: 0% !important;
+	-webkit-mask-position-y: 0% !important;
+	-webkit-mask-repeat: repeat !important;
+	-webkit-mask-size: auto !important;
+	-webkit-max-logical-height: none !important;
+	-webkit-max-logical-width: none !important;
+	-webkit-min-logical-height: 0px !important;
+	-webkit-min-logical-width: 0px !important;
+	-webkit-padding-after: 0px !important;
+	-webkit-padding-before: 0px !important;
+	-webkit-padding-end: 0px !important;
+	-webkit-padding-start: 0px !important;
+	-webkit-perspective: none !important;
+	-webkit-perspective-origin: 6.5px 6.5px !important;
+	-webkit-print-color-adjust: economy !important;
+	-webkit-rtl-ordering: logical !important;
+	-webkit-ruby-position: before !important;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0.180392) !important;
+	-webkit-text-combine: none !important;
+	-webkit-text-decorations-in-effect: none !important;
+	-webkit-text-emphasis-color: rgb(0, 0, 0) !important;
+	-webkit-text-emphasis-position: over !important;
+	-webkit-text-emphasis-style: none !important;
+	-webkit-text-fill-color: rgb(0, 0, 0) !important;
+	-webkit-text-orientation: vertical-right !important;
+	-webkit-text-security: none !important;
+	-webkit-text-stroke-color: rgb(0, 0, 0) !important;
+	-webkit-text-stroke-width: 0px !important;
+	-webkit-transform: none !important;
+	-webkit-transform-origin: 6.5px 6.5px !important;
+	-webkit-transform-style: flat !important;
+	-webkit-transition: all 0s ease 0s !important;
+	-webkit-transition-delay: 0s !important;
+	-webkit-transition-duration: 0s !important;
+	-webkit-transition-property: all !important;
+	-webkit-transition-timing-function: ease !important;
+	-webkit-user-drag: auto !important;
+	-webkit-user-modify: read-only !important;
+	-webkit-user-select: text !important;
+	-webkit-writing-mode: horizontal-tb !important;
+	white-space: normal !important;
+	widows: auto !important;
+	width: 13px !important;
+	word-break: normal !important;
+	word-spacing: 0px !important;
+	word-wrap: normal !important;
+	writing-mode: lr-tb !important;
+	z-index: auto !important;
+	zoom: 1 !important;
+}
+
+#-selector-toolbar {
 	position: fixed !important;
 	bottom: 20px !important;
 	left: 10px !important;
 	z-index: 99999 !important;
+	background-color: #FFF !important;
 }
 
-#-selector-toolbar .list-item {
+#-selector-toolbar div.list-item {
 	font: 100%/1em Verdana, Helvetica, sans-serif !important;
-	padding: 3px 12px !important;
+	padding: 0px 5px !important;
 	color: #333333 !important;
 	font-size: 14px !important;
-	font-weight: normal !important;
-	line-height: 1.428571429 !important;
-	white-space: nowrap !important;
-	vertical-align: middle !important;
 	border: 1px solid #285e8e !important;
-	text-transform: none !important;
-	margin: 0 !important;
-	letter-spacing: normal !important;
-	word-spacing: normal !important;
-	text-indent: 0px !important;
-	text-shadow: none !important;
-	text-decoration: none !important;
-	display: inline-block !important;
+	border-right:none !important;
+	display: table-cell !important;
 	text-align: right !important;
-	overflow: hidden !important;
-	height: 20px !important;
+	height: 26px !important;
+	width:20px !important;
+	line-height:26px !important;
+	text-align: center !important;
 }
 
-#-selector-toolbar a.list-item {
-	color: #ffffff !important;
-	background-color: #3276b1 !important;
-	text-align: center !important;
-	cursor: pointer !important;
+#-selector-toolbar div.list-item:first-child {
+	border-radius: 4px 0 0 4px !important;
+}
+
+#-selector-toolbar div.list-item:last-child {
 	border-radius: 0 4px 4px 0 !important;
-	-webkit-user-select: none !important;
+}
+
+#-selector-toolbar div.done-selecting-button {
+	color: #ffffff !important;
+	-webkit-text-fill-color: #FFF !important;
+	background-color: #3276b1 !important;
+	cursor: pointer !important;
+	width:130px !important;
+}
+
+#-selector-toolbar div.selector-container {
+	width: 350px !important;
+	overflow: hidden !important;
+	margin-bottom:-100px !important;
 }
 
 #-selector-toolbar div.selector {
-	padding: 3px 6px !important;
-	width: 350px !important;
+	width: 10000px !important;
+	float:right !important;
 	color: #333333 !important;
-	background: #FFFFFF none no-repeat !important;
-	border-radius: 4px 0 0 4px !important;
-	/*height: 28px !important;*/
-	border-right:none !important;
+	text-align: right !important;
+	font: 100%/1em Verdana, Helvetica, sans-serif !important;
+	line-height:26px !important;
+	font-size: 14px !important;
 }
 
-#-selector-toolbar .input-group-addon {
+#-selector-toolbar div.key-button {
+	cursor: help !important;
+	background: #FFF !important;
+}
+
+#-selector-toolbar div.key-button.clicked {
+	background: #88bc43 !important;
+}
+
+#-selector-toolbar div.key-button.clicked-animation {
+	transition: background 0.5s ease-in !important;
+	background: #FFF !important;
+}
+
+#-selector-toolbar div.key-events {
+	width: 82px !important;
+}
+
+#-selector-toolbar div.key-events div {
+	cursor: pointer !important;
+	width: 82px !important;
+	float:right !important;
+	font: 100%/1em Verdana, Helvetica, sans-serif !important;
+	line-height:26px !important;
+	font-size: 9px !important;
+	margin-bottom:-100px !important;
+}
+
+#-selector-toolbar div.hide {
+	display:none !important;
+}
+
+#-selector-toolbar div.input-group-addon {
 	background-color:#eeeeee !important;
-	width:auto !important;
-	padding: 3px 4px !important;
+	position:relative !important;
 }
 
 #-selector-toolbar div.popover {
@@ -90,8 +782,8 @@
 	float: left !important;
 	width: 260px !important;
 	margin: 20px !important;
-	top: -132px !important;
-	left: 211px !important;
+	top: -138px !important;
+	left: -137px !important;
 	z-index: 1060 !important;
 	max-width: 276px !important;
 	padding: 1px !important;
@@ -104,7 +796,7 @@
 	box-shadow: 0 5px 10px rgba(0,0,0,.2) !important;
 }
 
-#-selector-toolbar .popover .arrow {
+#-selector-toolbar div.popover div.arrow {
 	position: absolute !important;
 	display: block !important;
 	width: 0 !important;
@@ -120,7 +812,7 @@
 	border-bottom-width: 0 !important;
 }
 
-#-selector-toolbar .popover .arrow:after {
+#-selector-toolbar div.popover div.arrow:after {
 	box-sizing: border-box !important;
 	position: absolute !important;
 	display: block !important;
@@ -137,9 +829,7 @@
 	visibility: visible !important;
 }
 
-#-selector-toolbar .popover .close {
-	margin: 0 !important;
-	text-transform: none !important;
+#-selector-toolbar div.popover div.close {
 	text-shadow: 0 1px 0 #ffffff !important;
 	float: right !important;
 	font-size: 21px !important;
@@ -150,13 +840,7 @@
 	padding: 0 3px 0 0 !important;
 }
 
-#-selector-toolbar .popover .txt {
-	margin:0 !important;
-	border:0 !important;
-	padding:0 !important;
-}
-
-#-selector-toolbar .popover .close:hover {
+#-selector-toolbar div.popover div.close:hover {
 	color: #000000 !important;
 	text-decoration: none !important;
 	cursor: pointer !important;
