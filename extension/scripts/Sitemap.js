@@ -76,21 +76,26 @@ Sitemap.prototype = {
 				return str;
 			};
 
-			var re = /^(.*?)\[(\d+)\-(\d+)\](.*)$/;
+			var re = /^(.*?)\[(\d+)\-(\d+)(:(\d+))?\](.*)$/;
 			var matches = startUrl.match(re);
 			if(matches) {
 				var startStr = matches[2];
 				var endStr = matches[3];
 				var start = parseInt(startStr);
 				var end = parseInt(endStr);
-				for (var i = start; i <= end; i++) {
+				var incremental = 1;
+				console.log(matches[5]);
+				if(matches[5] !== undefined) {
+					incremental = parseInt(matches[5]);
+				}
+				for (var i = start; i <= end; i+=incremental) {
 
 					// with zero padding
 					if(startStr.length === endStr.length) {
-						urls.push(matches[1]+lpad(i.toString(), startStr.length)+matches[4]);
+						urls.push(matches[1]+lpad(i.toString(), startStr.length)+matches[6]);
 					}
 					else {
-						urls.push(matches[1]+i+matches[4]);
+						urls.push(matches[1]+i+matches[6]);
 					}
 				}
 				return urls;
