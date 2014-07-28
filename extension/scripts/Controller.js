@@ -775,6 +775,7 @@ SitemapController.prototype = {
 		var clickElementSelector = $("#edit-selector [name=clickElementSelector]").val();
 		var type = $("#edit-selector [name=type]").val();
 		var multiple = $("#edit-selector [name=multiple]").is(":checked");
+		var downloadImage = $("#edit-selector [name=downloadImage]").is(":checked");
 		var clickPopup = $("#edit-selector [name=clickPopup]").is(":checked");
 		var regex = $("#edit-selector [name=regex]").val();
 		var delay = $("#edit-selector [name=delay]").val();
@@ -804,6 +805,7 @@ SitemapController.prototype = {
 			clickElementSelector: clickElementSelector,
 			type: type,
 			multiple: multiple,
+			downloadImage: downloadImage,
 			clickPopup: clickPopup,
 			regex: regex,
 			extractAttribute:extractAttribute,

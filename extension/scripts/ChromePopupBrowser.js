@@ -81,7 +81,7 @@ ChromePopupBrowser.prototype = {
 					console.log("extracted data from web page", data);
 					callback.call(scope, data);
 				});
-			});
+			}.bind(this));
 		}, this);
 	}
 };

@@ -11,6 +11,8 @@ ChromeAPI.prototype = {
 		this.currentTab = 0;
 		this.tabData = [];
 		this.tabs = [];
+		this.prevDownloaId = 0;
+		this.downloadsOnChangedListeners = [];
 		this.tabUpdateCb = function () {
 		}
 	},
@@ -72,6 +74,36 @@ ChromeAPI.prototype = {
 	chromeStorageSyncGet: function (items, callback) {
 		callback({});
 	},
+	downloadsDownload: function(request, callback) {
+
+		var downloadId = this.prevDownloaId++;
+		callback(downloadId);
+
+		setTimeout(function() {
+			this.downloadsOnChangedListeners.forEach(function(listener) {
+
+				var downloadItem = {
+					id: downloadId,
+					state: {
+						current: "complete"
+					}
+				};
+
+				listener(downloadItem);
+			}.bind(this));
+		}.bind(this),1);
+	},
+	downloadsOnChangedAddListener: function(listener) {
+
+		this.downloadsOnChangedListeners.push(listener);
+	},
+	downloadsOnChangedRemoveListener: function(listener) {
+
+		var index = this.downloadsOnChangedListeners.indexOf(listener);
+		if(index !== -1) {
+			this.downloadsOnChangedListeners[index] = function(){};
+		}
+	},
 	defineAPI: function () {
 		window.chrome = {
 			windows: {
@@ -101,6 +133,13 @@ ChromeAPI.prototype = {
 				},
 				sync: {
 					get: this.chromeStorageSyncGet.bind(this)
+				}
+			},
+			downloads: {
+				download: this.downloadsDownload.bind(this),
+				onChanged: {
+					addListener: this.downloadsOnChangedAddListener.bind(this),
+					removeListener: this.downloadsOnChangedRemoveListener.bind(this)
 				}
 			}
 		};

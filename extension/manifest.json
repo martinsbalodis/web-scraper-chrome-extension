@@ -4,7 +4,7 @@
 	"name": "Web Scraper",
 	"short_name": "Web Scraper",
 	"description": "Tool for data extraction from websites",
-	"permissions": ["<all_urls>", "tabs", "notifications", "storage", "unlimitedStorage"],
+	"permissions": ["<all_urls>", "tabs", "notifications", "storage", "unlimitedStorage", "downloads"],
 	"icons": {
 		"16": "assets/images/icon16.png",
 		"48": "assets/images/icon48.png",
@@ -24,7 +24,9 @@
 	"background": {
 		"scripts": [
 			"assets/jquery-2.0.3.js",
+			"assets/jquery.whencallsequentially.js",
 			"assets/pouchdb-nightly.min.js",
+			"assets/base64.js",
 			"scripts/Selector.js",
 			"scripts/Selector/SelectorElement.js",
 			"scripts/Selector/SelectorGroup.js",
@@ -64,6 +66,7 @@
 				"assets/jquery.whencallsequentially.js",
 				"assets/sugar-1.4.1.js",
 				"assets/css-selector/lib/CssSelector.js",
+				"assets/base64.js",
 				"scripts/DataExtractor.js",
 				"scripts/ContentSelector.js",
 				"scripts/Selector.js",

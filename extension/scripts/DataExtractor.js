@@ -277,7 +277,7 @@ DataExtractor.prototype = {
 				results = results.concat(dataResults);
 			}.bind(this));
 			responseDeferred.resolve(results);
-		});
+		}.bind(this));
 		return responseDeferred;
 	},
 
