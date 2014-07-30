@@ -638,6 +638,13 @@ SitemapController.prototype = {
 						}
 					}
 				},
+				clickElementSelector: {
+					validators: {
+						notEmpty: {
+							message: 'Click selector is required and cannot be empty'
+						}
+					}
+				},
 				tableHeaderRowSelector: {
 					validators: {
 						notEmpty: {
