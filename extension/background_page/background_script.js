@@ -77,7 +77,7 @@ chrome.runtime.onMessage.addListener(
 					if (window.webkitNotifications.checkPermission() == 0) {
 						var notification = webkitNotifications.createNotification(
 							'assets/images/icon38.png',
-							'Scraping finished1',
+							'Scraping finished!',
 							'Finished scraping ' + sitemap._id
 						);
 						notification.show();
