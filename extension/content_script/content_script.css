@@ -1,32 +1,34 @@
-.-sitemap-preview {
-	outline: 1px #d94e37 solid !important;
-}
-
 .-sitemap-parent {
 	outline: 2px #FFCC33 solid !important;
-    background-color: rgba(255, 204, 51, 0.31) !important;
+    background-color: rgba(255, 204, 51, 0.20) !important;
+	background: rgba(255, 204, 51, 0.20) !important;
 }
 
 .-sitemap-parent * {
-    background-color: rgba(255, 204, 51, 0.31) !important;
+    background-color: rgba(255, 204, 51, 0.20) !important;
+	background: rgba(255, 204, 51, 0.20) !important;
 }
 
 .-sitemap-select-item-hover {
 	outline: 2px solid green !important;
-    background-color: rgba(0, 128, 0, 0.31) !important;
+    background-color: rgba(0, 213, 0, 0.20) !important;
+	background: rgba(0, 213, 0, 0.20) !important;
 }
 
 .-sitemap-select-item-hover * {
-    background-color: rgba(0, 128, 0, 0.31) !important;
+    background-color: rgba(0, 213, 0, 0.20) !important;
+	background: rgba(0, 213, 0, 0.20) !important;
 }
 
 .-sitemap-select-item-selected {
 	outline: 2px solid #C70000 !important;
-    background-color: rgba(128, 0, 0, 0.31) !important;
+    background-color: rgba(213, 0, 0, 0.2) !important;
+	background: rgba(213, 0, 0, 0.2) !important;
 }
 
 .-sitemap-select-item-selected * {
-    background-color: rgba(128, 0, 0, 0.31) !important;
+    background-color: rgba(213, 0, 0, 0.2) !important;
+	background: rgba(213, 0, 0, 0.2) !important;
 }
 
 #-selector-toolbar {
