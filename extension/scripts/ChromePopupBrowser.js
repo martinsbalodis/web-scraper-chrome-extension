@@ -1,14 +1,15 @@
-var ChromePopupBrowser = function () {
-	var browser = this;
+var ChromePopupBrowser = function (options) {
+
+	this.pageLoadDelay = options.pageLoadDelay;
+
 	// @TODO this limits to a single scraping window
 	chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 		if (changeInfo.status === 'complete') {
 			setTimeout(function () {
-				browser.cbTabUpdated.call(window, tabId, changeInfo, tab);
-
-			}, 500);
+				this.cbTabUpdated.call(window, tabId, changeInfo, tab);
+			}.bind(this), this.pageLoadDelay);
 		}
-	});
+	}.bind(this));
 
 	// @TODO somehow handle the closed window
 };

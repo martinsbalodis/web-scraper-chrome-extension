@@ -5,6 +5,7 @@ Scraper = function (options) {
 	this.browser = options.browser;
 	this.resultWriter = null; // db instance for scraped data writing
 	this.requestInterval = parseInt(options.requestInterval);
+	this.pageLoadDelay = parseInt(options.pageLoadDelay);
 };
 
 Scraper.prototype = {

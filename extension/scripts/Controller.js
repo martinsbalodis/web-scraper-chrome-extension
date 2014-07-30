@@ -866,7 +866,7 @@ SitemapController.prototype = {
 
 		$('#viewport form').bootstrapValidator({
 			fields: {
-				"request_interval": {
+				"requestInterval": {
 					validators: {
 						notEmpty: {
 							message: 'The request interval is required and cannot be empty'
@@ -878,6 +878,22 @@ SitemapController.prototype = {
 							message: 'The request interval must be atleast 2000 milliseconds',
 							callback: function(value, validator) {
 								return value >= 2000;
+							}
+						}
+					}
+				},
+				"pageLoadDelay": {
+					validators: {
+						notEmpty: {
+							message: 'The page load delay is required and cannot be empty'
+						},
+						numeric: {
+							message: 'The page laod delay must be numeric'
+						},
+						callback: {
+							message: 'The page load delay must be atleast 500 milliseconds',
+							callback: function(value, validator) {
+								return value >= 500;
 							}
 						}
 					}
@@ -899,13 +915,15 @@ SitemapController.prototype = {
 			return false;
 		}
 
-		var requestInterval = $("input[name=request_interval]").val();
+		var requestInterval = $("input[name=requestInterval]").val();
+		var pageLoadDelay = $("input[name=pageLoadDelay]").val();
 
 		var sitemap = this.state.currentSitemap;
 		var request = {
 			scrapeSitemap: true,
 			sitemap: JSON.parse(JSON.stringify(sitemap)),
-			requestInterval: requestInterval
+			requestInterval: requestInterval,
+			pageLoadDelay: pageLoadDelay
 		};
 		chrome.runtime.sendMessage(request, function (response) {
 			// sitemap scraped

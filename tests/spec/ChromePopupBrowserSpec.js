@@ -6,7 +6,9 @@ describe("Chrome popup browser", function () {
 
 	it("should init a popup window", function () {
 
-		var browser = new ChromePopupBrowser();
+		var browser = new ChromePopupBrowser({
+			pageLoadDelay: 500
+		});
 		browser._initPopupWindow(function () {
 		});
 		expect(browser.tab).toEqual({id: 0});
@@ -15,7 +17,9 @@ describe("Chrome popup browser", function () {
 
 	it("should load a page", function () {
 
-		var browser = new ChromePopupBrowser();
+		var browser = new ChromePopupBrowser({
+			pageLoadDelay: 500
+		});
 		browser._initPopupWindow(function () {
 		});
 		var tabLoadSuccess = false;
@@ -45,7 +49,9 @@ describe("Chrome popup browser", function () {
 			]
 		});
 
-		var browser = new ChromePopupBrowser();
+		var browser = new ChromePopupBrowser({
+			pageLoadDelay: 500
+		});
 		browser._initPopupWindow(function () {
 		});
 		var fetched = false;

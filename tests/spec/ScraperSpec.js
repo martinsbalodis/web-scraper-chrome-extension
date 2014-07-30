@@ -31,7 +31,9 @@ describe("Scraper", function () {
 			]
 		});
 
-		var browser = new ChromePopupBrowser();
+		var browser = new ChromePopupBrowser({
+			pageLoadDelay: 500
+		});
 
 		var s = new Scraper({
 			queue: q,
@@ -79,7 +81,9 @@ describe("Scraper", function () {
 			]
 		});
 
-		var browser = new ChromePopupBrowser();
+		var browser = new ChromePopupBrowser({
+			pageLoadDelay: 500
+		});
 
 		var s = new Scraper({
 			queue: q,
@@ -259,7 +263,9 @@ describe("Scraper", function () {
 			]
 		});
 
-		var browser = new ChromePopupBrowser();
+		var browser = new ChromePopupBrowser({
+			pageLoadDelay: 500
+		});
 
 		var s = new Scraper({
 			queue: q,

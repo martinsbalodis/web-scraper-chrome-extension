@@ -59,7 +59,9 @@ chrome.runtime.onMessage.addListener(
 		else if (request.scrapeSitemap) {
 			var sitemap = new Sitemap(request.sitemap);
 			var queue = new Queue();
-			var browser = new ChromePopupBrowser();
+			var browser = new ChromePopupBrowser({
+				pageLoadDelay: request.pageLoadDelay
+			});
 
 			var scraper = new Scraper({
 				queue: queue,
