@@ -60,7 +60,9 @@ ContentSelector.prototype = {
 			ignoredClasses: [
 				"-sitemap-select-item-selected",
 				"-sitemap-select-item-hover",
-				"-sitemap-parent"
+				"-sitemap-parent",
+				"-web-scraper-img-on-top",
+				"-web-scraper-selection-active"
 			],
 			query: jQuery
 		});
@@ -91,6 +93,7 @@ ContentSelector.prototype = {
 		this.attachToolbar();
 		this.bindMultipleGroupCheckbox();
 		this.bindMultipleGroupPopupHide();
+		this.bindMoveImagesToTop();
 	},
 
 	bindElementSelection: function () {
@@ -128,6 +131,24 @@ ContentSelector.prototype = {
 			$(element).removeClass("-sitemap-select-item-hover");
 			return false;
 		}.bind(this));
+	},
+
+	bindMoveImagesToTop: function() {
+
+		$("body").addClass("-web-scraper-selection-active");
+
+		// do this only when selecting images
+		if(this.allowedElements === 'img') {
+			$("img").filter(function(i, element) {
+				return $(element).css("position") === 'static';
+			}).addClass("-web-scraper-img-on-top");
+		}
+	},
+
+	unbindMoveImagesToTop: function() {
+
+		$("body.-web-scraper-selection-active").removeClass("-web-scraper-selection-active");
+		$("img.-web-scraper-img-on-top").removeClass("-web-scraper-img-on-top");
 	},
 
 	selectChild: function () {
@@ -310,6 +331,7 @@ ContentSelector.prototype = {
 		this.unbindKeyboardSelectionMaipulatios();
 		this.unbindMultipleGroupPopupHide();
 		this.unbindMultipleGroupCheckbox();
+		this.unbindMoveImagesToTop();
 		this.removeToolbar();
 	},
 

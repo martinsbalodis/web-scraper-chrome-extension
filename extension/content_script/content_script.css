@@ -851,3 +851,11 @@
 #-selector-toolbar div.popover-content {
 	padding: 9px 14px !important;
 }
+
+/**
+ * Move images to top while selecting
+ */
+body.-web-scraper-selection-active img.-web-scraper-img-on-top {
+	z-index:2147483647 !important; /* max z-index */
+	position:relative !important; /* will break images with position:absolute */
+}
