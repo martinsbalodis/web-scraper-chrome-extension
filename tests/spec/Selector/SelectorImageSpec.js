@@ -1,7 +1,15 @@
 describe("Image Selector", function () {
 
+	var $el;
+
 	beforeEach(function () {
 
+		this.addMatchers(selectorMatchers);
+
+		$el = jQuery("#tests").html("");
+		if($el.length === 0) {
+			$el = $("<div id='tests' style='display:none'></div>").appendTo("body");
+		}
 	});
 
 	it("should extract single image", function () {
@@ -88,6 +96,46 @@ describe("Image Selector", function () {
 		runs(function () {
 			dataDeferred.done(function(data) {
 				expect(data).toEqual([]);
+			});
+		});
+	});
+
+	it("should be able to download image as base64", function() {
+
+		var deferredImage = SelectorImage.downloadImageBase64("../docs/images/chrome-store-logo.png");
+
+		waitsFor(function() {
+			return deferredImage.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			deferredImage.done(function(imageResponse) {
+				expect(imageResponse.imageBase64.length > 100).toEqual(true);
+			});
+		});
+	});
+
+	it("should be able to get data with image data attached", function() {
+
+		$el.append('<img src="../docs/images/chrome-store-logo.png">');
+
+		var selector = new Selector({
+			id: 'img',
+			type: 'SelectorImage',
+			multiple: true,
+			selector: "img",
+			downloadImage: true
+		});
+		var deferredData = selector.getData($el[0]);
+
+		waitsFor(function() {
+			return deferredData.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			deferredData.done(function(data) {
+				expect(!!data[0]['_imageBase64-img']).toEqual(true);
+				expect(!!data[0]['_imageMimeType-img']).toEqual(true);
 			});
 		});
 	});
