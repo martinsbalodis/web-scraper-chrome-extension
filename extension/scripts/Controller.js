@@ -688,7 +688,11 @@ SitemapController.prototype = {
 				},
 				{
 					type: 'SelectorLink',
-					title: 'Url'
+					title: 'URL'
+				},
+				{
+					type: 'SelectorPopupLink',
+					title: 'Popup URL'
 				},
 				{
 					type: 'SelectorElement',
