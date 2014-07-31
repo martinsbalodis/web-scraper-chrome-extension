@@ -964,9 +964,16 @@ SitemapController.prototype = {
 			requestInterval: requestInterval,
 			pageLoadDelay: pageLoadDelay
 		};
+
+		// show sitemap scraping panel
+		this.getFormValidator().destroy();
+		$(".scraping-in-progress").removeClass("hide");
+		$("#submit-scrape-sitemap").closest(".form-group").hide();
+		$("#scrape-sitemap-config input").prop('disabled', true);
+
 		chrome.runtime.sendMessage(request, function (response) {
-			// sitemap scraped
-		});
+			this.browseSitemapData();
+		}.bind(this));
 		return false;
 	},
 	sitemapListBrowseSitemapData: function (button) {
