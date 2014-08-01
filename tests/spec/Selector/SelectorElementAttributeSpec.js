@@ -1,7 +1,15 @@
 describe("Element Attribute Selector", function () {
 
+	var $el;
+
 	beforeEach(function () {
 
+		this.addMatchers(selectorMatchers);
+
+		$el = jQuery("#tests").html("");
+		if($el.length === 0) {
+			$el = $("<div id='tests' style='display:none'></div>").appendTo("body");
+		}
 	});
 
 	it("should extract image src tag", function () {
@@ -93,5 +101,25 @@ describe("Element Attribute Selector", function () {
 				expect(data).toEqual([]);
 			});
 		});
+	});
+
+	it("should be able to select data- attributes", function () {
+
+		var html = '<ul><li data-type="dog"></li></ul>';
+		$el.append(html);
+
+		var selector = new Selector({
+			id: 'type',
+			type: 'SelectorElementAttribute',
+			multiple: true,
+			selector: "li",
+			extractAttribute: "data-type"
+		});
+
+		var dataDeferred = selector.getData($el);
+
+		expect(dataDeferred).deferredToEqual([{
+			'type': 'dog'
+		}]);
 	});
 });
