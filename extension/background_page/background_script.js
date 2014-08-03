@@ -82,11 +82,14 @@ chrome.runtime.onMessage.addListener(
 						);
 						notification.show();
 					}
+					sendResponse();
 				});
 			}
 			catch (e) {
 				console.log("Scraper execution cancelled".e);
 			}
+
+			return true;
 		}
 		else if(request.previewSelectorData) {
 			chrome.tabs.query({

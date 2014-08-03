@@ -1,4 +1,4 @@
-<div id="edit-sitemap">
+<div id="scrape-sitemap-config">
 	<form class="form-horizontal" role="form" id="submit-scrape-sitemap-form">
 		<div class="form-group">
 			<label for="requestInterval" class="col-lg-1 control-label">Request interval (ms)</label>
@@ -12,6 +12,11 @@
 				<input type="text" class="form-control" name="pageLoadDelay" id="pageLoadDelay" placeholder="Page load delay" value="500">
 			</div>
 		</div>
+		<div class="alert alert-success col-lg-10 col-lg-offset-1 hide scraping-in-progress" role="alert">
+			Scraping in progress. Close the popup to stop scraping.<br>
+			When scraping is finished you can browse the data or export it as CSV.
+		</div>
+
 		<div class="form-group">
 			<div class="col-lg-offset-1 col-lg-10">
 				<button type="submit" class="btn btn-primary" id="submit-scrape-sitemap">Start scraping</button>
