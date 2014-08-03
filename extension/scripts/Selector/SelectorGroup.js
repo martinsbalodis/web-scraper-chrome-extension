@@ -33,8 +33,12 @@ var SelectorGroup = {
 				data[this.id + '-src'] = element.src;
 			}
 			else {
-				data[this.id] = $(element).text();
-
+				if(this.extractAttribute) {
+					data[this.id] = element[this.extractAttribute];
+				}
+				else {
+					data[this.id] = $(element).text();
+				}
 				if (element.href) {
 					data[this.id + '-href'] = element.href;
 				}
@@ -54,6 +58,6 @@ var SelectorGroup = {
 	},
 
 	getFeatures: function () {
-		return ['delay']
+		return ['delay','selectAttribute']
 	}
 };
