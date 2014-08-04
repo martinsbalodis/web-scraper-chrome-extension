@@ -34,7 +34,7 @@ var SelectorGroup = {
 			}
 			else {
 				if(this.extractAttribute) {
-					data[this.id] = element[this.extractAttribute];
+					data[this.id] = $(element).attr(this.extractAttribute);
 				}
 				else {
 					data[this.id] = $(element).text();
