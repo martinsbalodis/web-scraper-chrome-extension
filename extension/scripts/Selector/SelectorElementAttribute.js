@@ -27,7 +27,7 @@ var SelectorElementAttribute = {
 		$(elements).each(function (k, element) {
 			var data = {};
 
-			data[this.id] = element[this.extractAttribute];
+			data[this.id] = $(element).attr(this.extractAttribute);
 			result.push(data);
 		}.bind(this));
 
