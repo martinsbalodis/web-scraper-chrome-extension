@@ -515,4 +515,86 @@ describe("SelectorList", function () {
 		var CSSSelector = selectorList.getCSSSelectorWithinOnePage("div", ["_root", "parent2", "parent1"]);
 		expect(CSSSelector).toEqual("div.parent div");
 	});
+
+	it("should return false when no recursion found", function(){
+
+		var selectorList = new SelectorList([
+			{
+				id:'parent1',
+				type: 'SelectorElement',
+				selector: "div.parent",
+				parentSelectors: ['_root']
+			},
+			{
+				id:'parent2',
+				type: 'SelectorElement',
+				selector: "div.parent2",
+				parentSelectors: ['parent1']
+			},
+			{
+				id:'div',
+				type: 'SelectorElement',
+				selector: "div",
+				parentSelectors: ['parent2']
+			}
+		]);
+
+		var recursionFound = selectorList.hasRecursiveElementSelectors();
+		expect(recursionFound).toEqual(false);
+	});
+
+
+	it("should return true when recursion found", function() {
+
+		var selectorList = new SelectorList([
+			{
+				id:'parent1',
+				type: 'SelectorElement',
+				selector: "div.parent",
+				parentSelectors: ['div']
+			},
+			{
+				id:'parent2',
+				type: 'SelectorElement',
+				selector: "div.parent2",
+				parentSelectors: ['parent1']
+			},
+			{
+				id:'div',
+				type: 'SelectorElement',
+				selector: "div",
+				parentSelectors: ['parent2']
+			}
+		]);
+
+		var recursionFound = selectorList.hasRecursiveElementSelectors();
+		expect(recursionFound).toEqual(true);
+	});
+
+	it("should return false when recursion only made of link selectors", function() {
+
+		var selectorList = new SelectorList([
+			{
+				id:'link',
+				type: 'SelectorLink',
+				selector: "div.parent",
+				parentSelectors: ['link', '_root']
+			},
+			{
+				id:'parent',
+				type: 'SelectorElement',
+				selector: "div.parent2",
+				parentSelectors: ['link']
+			},
+			{
+				id:'div',
+				type: 'SelectorElement',
+				selector: "div",
+				parentSelectors: ['parent', 'link']
+			}
+		]);
+
+		var recursionFound = selectorList.hasRecursiveElementSelectors();
+		expect(recursionFound).toEqual(false);
+	});
 });
