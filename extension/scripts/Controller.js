@@ -673,6 +673,15 @@ SitemapController.prototype = {
 					validators: {
 						notEmpty: {
 							message: 'You must choose at least one parent selector'
+						},
+						callback: {
+							message: 'Cannot handle recursive element selectors',
+							callback: function(value, validator, $field) {
+
+								var sitemap = this.getCurrentlyEditedSelectorSitemap();
+								return !sitemap.selectors.hasRecursiveElementSelectors();
+
+							}.bind(this)
 						}
 					}
 				}
