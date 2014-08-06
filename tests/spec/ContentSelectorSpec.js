@@ -77,7 +77,8 @@ describe("ContentSelector", function () {
 
 		var contentSelector = new ContentSelector({
 			parentCSSSelector: "div#content-script-css-selector-test",
-			allowedElements: "a"
+			allowedElements: "a",
+			alert: function(){}
 		});
 
 		var deferredCSSSelector = contentSelector.getCSSSelector();
@@ -108,7 +109,8 @@ describe("ContentSelector", function () {
 	it("should reject selector preview request when parent element not found", function() {
 
 		var contentSelector = new ContentSelector({
-			parentCSSSelector: "div#content-script-css-selector-test"
+			parentCSSSelector: "div#content-script-css-selector-test",
+			alert: function(){}
 		});
 
 		var deferredSelectorPreview = contentSelector.previewSelector("a");
