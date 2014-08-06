@@ -50,6 +50,9 @@ describe("ContentSelector", function () {
 			allowedElements: "a"
 		});
 
+		var currentCSSSelector = contentSelector.getCurrentCSSSelector();
+		expect(currentCSSSelector).toEqual("");
+
 		var deferredCSSSelector = contentSelector.getCSSSelector();
 
 		// finish selection
