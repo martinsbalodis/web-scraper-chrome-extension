@@ -249,3 +249,33 @@ SelectorList.prototype.getParentCSSSelectorWithinOnePage = function (parentSelec
 	return CSSSelector;
 };
 
+SelectorList.prototype.hasRecursiveElementSelectors = function() {
+
+	var RecursionFound = false;
+
+	this.forEach(function(topSelector) {
+		var visitedSelectors = [];
+
+		var checkRecursion = function(parentSelector) {
+
+			// already visited
+			if(visitedSelectors.indexOf(parentSelector) !== -1) {
+				RecursionFound = true;
+				return;
+			}
+
+			if(parentSelector.willReturnElements()) {
+				visitedSelectors.push(parentSelector);
+				var childSelectors = this.getDirectChildSelectors(parentSelector.id);
+				childSelectors.forEach(checkRecursion);
+				visitedSelectors.pop();
+			}
+		}.bind(this);
+
+		checkRecursion(topSelector);
+
+	}.bind(this));
+
+	return RecursionFound;
+};
+

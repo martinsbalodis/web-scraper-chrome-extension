@@ -74,14 +74,14 @@ chrome.runtime.onMessage.addListener(
 			try {
 				scraper.run(function () {
 					browser.close();
-					if (window.webkitNotifications.checkPermission() == 0) {
-						var notification = webkitNotifications.createNotification(
-							'assets/images/icon38.png',
-							'Scraping finished!',
-							'Finished scraping ' + sitemap._id
-						);
-						notification.show();
-					}
+					var notification = chrome.notifications.create("scraping-finished", {
+						type: 'basic',
+						iconUrl: 'assets/images/icon128.png',
+						title: 'Scraping finished!',
+						message: 'Finished scraping ' + sitemap._id
+					}, function(id) {
+						// notification showed
+					});
 					sendResponse();
 				});
 			}

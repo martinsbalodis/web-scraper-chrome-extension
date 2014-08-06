@@ -2,15 +2,6 @@ var ChromePopupBrowser = function (options) {
 
 	this.pageLoadDelay = options.pageLoadDelay;
 
-	// @TODO this limits to a single scraping window
-	chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-		if (changeInfo.status === 'complete') {
-			setTimeout(function () {
-				this.cbTabUpdated.call(window, tabId, changeInfo, tab);
-			}.bind(this), this.pageLoadDelay);
-		}
-	}.bind(this));
-
 	// @TODO somehow handle the closed window
 };
 
@@ -46,17 +37,23 @@ ChromePopupBrowser.prototype = {
 
 		var tab = this.tab;
 
-		chrome.tabs.update(tab.id, {url: url});
+		var tabLoadListener = function (tabId, changeInfo, tab) {
+			if(tabId === this.tab.id) {
+				if (changeInfo.status === 'complete') {
 
-		this.cbTabUpdated = function (tabId, changeInfo, tabUpdated) {
+					// @TODO check url ? maybe it would be bad because some sites might use redirects
 
-			if (tabId === tab.id) {
+					// remove event listener
+					chrome.tabs.onUpdated.removeListener(tabLoadListener);
 
-				// @TODO check url
-				callback.call();
+					// callback tab is loaded after page load delay
+					setTimeout(callback, this.pageLoadDelay);
+				}
 			}
-		};
+		}.bind(this);
+		chrome.tabs.onUpdated.addListener(tabLoadListener);
 
+		chrome.tabs.update(tab.id, {url: url});
 	},
 
 	close: function () {
