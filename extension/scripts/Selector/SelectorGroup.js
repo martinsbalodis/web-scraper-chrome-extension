@@ -58,6 +58,6 @@ var SelectorGroup = {
 	},
 
 	getFeatures: function () {
-		return ['delay','selectAttribute']
+		return ['delay','selectAttribute','extractAttribute']
 	}
 };

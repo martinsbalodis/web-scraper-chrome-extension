@@ -771,6 +771,12 @@ SitemapController.prototype = {
 		features.forEach(function (feature) {
 			$("#edit-selector .feature-" + feature).show();
 		});
+		if(!$("#edit-selector input[name=extractAttribute]").val()) {
+			$("#edit-selector .feature-extractAttribute").hide();
+		}
+		else {
+			$("#edit-selector input[name=selectAttribute]").prop('checked', true);
+		}
 
 		// add this selector to possible parent selector
 		var selector = this.getCurrentlyEditedSelector();
