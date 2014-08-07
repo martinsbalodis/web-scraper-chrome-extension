@@ -71,6 +71,7 @@
 				"scripts/DataExtractor.js",
 				"scripts/ContentSelector.js",
 				"scripts/Selector.js",
+				"scripts/ElementQuery.js",
 				"scripts/Selector/SelectorElement.js",
 				"scripts/Selector/SelectorGroup.js",
 				"scripts/Selector/SelectorLink.js",

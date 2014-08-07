@@ -109,7 +109,7 @@ ContentSelector.prototype = {
 		if(this.deferredCSSSelectorResponse.state() !== "rejected") {
 
 			this.highlightParent();
-			$(this.parent).find(elementCSSSelector).addClass('-sitemap-select-item-selected');
+			$(ElementQuery(elementCSSSelector, this.parent)).addClass('-sitemap-select-item-selected');
 			this.deferredCSSSelectorResponse.resolve();
 		}
 
@@ -261,13 +261,7 @@ ContentSelector.prototype = {
 			$("body #-selector-toolbar .selector").text(resultCssSelector);
 			// highlight selected elements
 			$(".-sitemap-select-item-selected").removeClass('-sitemap-select-item-selected');
-
-			// special case if parent is selected
-			if(this.isParentSelected()) {
-				$(this.parent).addClass('-sitemap-select-item-selected');
-			}
-
-			$(resultCssSelector, this.parent).addClass('-sitemap-select-item-selected');
+			$(ElementQuery(resultCssSelector, this.parent)).addClass('-sitemap-select-item-selected');
 		}
 		catch(err) {
 			if(err === "found multiple element groups, but allowMultipleSelectors disabled") {

@@ -5,8 +5,6 @@ var Selector = function (selector) {
 
 Selector.prototype = {
 
-	parentSelectionSelector: '_parent_',
-
 	/**
 	 * Is this selector configured to return multiple items?
 	 * @returns {boolean}
@@ -86,12 +84,7 @@ Selector.prototype = {
 
 	getDataElements: function (parentElement) {
 
-		// special case when you need to select parent selector.
-		if(this.selector === this.parentSelectionSelector) {
-			return $(parentElement);
-		}
-
-		var elements = $(this.selector, parentElement);
+		var elements = ElementQuery(this.selector, parentElement);
 		if (this.multiple) {
 			return elements;
 		}

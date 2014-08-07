@@ -17,7 +17,7 @@ describe("Selector", function () {
 			selector: "a",
 			type: 'SelectorLink'
 		});
-		var elements = selector.getDataElements($el.get());
+		var elements = selector.getDataElements($el);
 
 		expect(elements).toEqual($el.find("a").get());
 	});
@@ -30,9 +30,9 @@ describe("Selector", function () {
 			selector: "_parent_",
 			type: 'SelectorLink'
 		});
-		var elements = selector.getDataElements($el.get());
+		var elements = selector.getDataElements($el);
 
-		expect(elements.get()).toEqual($el.get());
+		expect(elements).toEqual($el.get());
 	});
 
 	it("should be able to select elements with delay", function() {
@@ -43,7 +43,7 @@ describe("Selector", function () {
 			type: 'SelectorText',
 			delay:100
 		});
-		var dataDeferred = selector.getData($el.get());
+		var dataDeferred = selector.getData($el);
 
 		// add data after data extraction called
 		$el.html("<a>a</a>");
