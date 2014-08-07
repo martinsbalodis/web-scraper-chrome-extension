@@ -107,9 +107,6 @@ SitemapController.prototype = {
 				'#sitemap-selector-list-nav-button': {
 					click: this.showSitemapSelectorList
 				},
-				'.feature input[name=selectAttribute]': {
-					change: this.toggleExtractAttribute
-				},
 				'#sitemap-selector-graph-nav-button': {
 					click: this.showSitemapSelectorGraph
 				},
@@ -780,12 +777,6 @@ SitemapController.prototype = {
 		features.forEach(function (feature) {
 			$("#edit-selector .feature-" + feature).show();
 		});
-		if(!$("#edit-selector input[name=extractAttribute]").val()) {
-			$("#edit-selector .feature-extractAttribute").hide();
-		}
-		else {
-			$("#edit-selector input[name=selectAttribute]").prop('checked', true);
-		}
 
 		// add this selector to possible parent selector
 		var selector = this.getCurrentlyEditedSelector();
@@ -800,10 +791,6 @@ SitemapController.prototype = {
 		else {
 			$("#edit-selector #parentSelectors .currently-edited").remove();
 		}
-	},
-	toggleExtractAttribute: function() {
-		$("#edit-selector input[name=extractAttribute]").val("");
-		$("#edit-selector .feature-extractAttribute").toggle();
 	},
 	saveSelector: function (button) {
 
@@ -841,7 +828,6 @@ SitemapController.prototype = {
 		var regex = $("#edit-selector [name=regex]").val();
 		var delay = $("#edit-selector [name=delay]").val();
 		var parentSelectors = $("#edit-selector [name=parentSelectors]").val();
-		var extractAttribute = $("#edit-selector [name=extractAttribute]").val();
 		var columns = [];
 		var $columnHeaders = $("#edit-selector .column-header");
 		var $columnNames = $("#edit-selector .column-name");
@@ -869,7 +855,6 @@ SitemapController.prototype = {
 			downloadImage: downloadImage,
 			clickPopup: clickPopup,
 			regex: regex,
-			extractAttribute:extractAttribute,
 			parentSelectors: parentSelectors,
 			columns:columns,
 			delay:delay

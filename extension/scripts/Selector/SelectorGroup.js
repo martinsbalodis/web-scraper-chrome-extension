@@ -29,20 +29,12 @@ var SelectorGroup = {
 		$(elements).each(function (k, element) {
 			var data = {};
 
-			if (element.src) {
-				data[this.id + '-src'] = element.src;
+			data[this.id] = $(element).text();
+
+			if(this.extractAttribute) {
+				data[this.id+'-'+this.extractAttribute] = $(element).attr(this.extractAttribute);
 			}
-			else {
-				if(this.extractAttribute) {
-					data[this.id] = $(element).attr(this.extractAttribute);
-				}
-				else {
-					data[this.id] = $(element).text();
-				}
-				if (element.href) {
-					data[this.id + '-href'] = element.href;
-				}
-			}
+
 			records.push(data);
 		}.bind(this));
 
@@ -58,6 +50,6 @@ var SelectorGroup = {
 	},
 
 	getFeatures: function () {
-		return ['delay','selectAttribute','extractAttribute']
+		return ['delay','extractAttribute']
 	}
 };
