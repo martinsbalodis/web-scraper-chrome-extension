@@ -100,12 +100,22 @@ Selector.prototype = {
 
 		var d = $.Deferred();
 		var timeout = this.delay || 0;
-		setTimeout(function() {
+
+		// this works much faster because $.whenCallSequentially isn't running next data extraction immediately
+		if(timeout === 0) {
 			var deferredData = this._getData(parentElement);
 			deferredData.done(function(data){
-				d.resolve(data);	
+				d.resolve(data);
 			});
-		}.bind(this), timeout);
+		}
+		else {
+			setTimeout(function() {
+				var deferredData = this._getData(parentElement);
+				deferredData.done(function(data){
+					d.resolve(data);
+				});
+			}.bind(this), timeout);
+		}
 
 		return d.promise();
 	}
