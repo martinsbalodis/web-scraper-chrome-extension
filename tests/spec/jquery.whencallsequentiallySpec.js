@@ -104,4 +104,54 @@ describe("jQuery When call sequentially", function () {
 			expect(data).toEqual(['sync', 'sync', 'async', 'async', 'sync', 'async']);
 		});
 	});
+
+	it("should allow adding jobs to job array from an async job", function() {
+
+		var jobs = [];
+		var asyncMoreCall = function() {
+			var d = $.Deferred();
+			setTimeout(function () {
+				d.resolve("asyncmore");
+				jobs.push(asyncCall)
+			}, 0);
+			return d.promise();
+		};
+		jobs.push(asyncMoreCall);
+
+		var deferred = $.whenCallSequentially(jobs);
+		expect(deferred.state()).toEqual('pending');
+
+		waitsFor(function () {
+			return deferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+
+			var data;
+			deferred.done(function (res) {
+				data = res;
+			});
+			expect(data).toEqual(['asyncmore', 'async']);
+		});
+
+	});
+
+	it("should allow adding jobs to job array from a sync job", function() {
+
+		var jobs = [];
+		var syncMoreCall = function() {
+			var d = $.Deferred();
+			jobs.push(syncCall);
+			d.resolve("syncmore");
+			return d.promise();
+		};
+		jobs.push(syncMoreCall);
+
+		var deferred = $.whenCallSequentially(jobs);
+		expect(deferred.state()).toEqual('resolved');
+
+		deferred.done(function (res) {
+			expect(res).toEqual(['syncmore', 'sync']);
+		});
+	});
 });

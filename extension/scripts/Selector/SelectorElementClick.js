@@ -43,6 +43,44 @@ var SelectorElementClick = {
 		}
 	},
 
+	extractElementsAfterClick: function(clickElement, parentElement) {
+
+		var delay = parseInt(this.delay) || 0;
+
+		var deferredResponse = $.Deferred();
+
+		// check whether this element is still available in dom. If its not then there is no data to extract.
+		if($(clickElement).closest("html").length === 0) {
+			deferredResponse.resolve([]);
+			return deferredResponse.promise();
+		}
+
+		// click clickElement. executed in browsers scope
+		var cs = new CssSelector({
+			enableSmartTableSelector: false,
+			parent: $("body")[0],
+			enableResultStripping:false
+		});
+		var cssSelector = cs.getCssSelector([clickElement]);
+
+		// this function will catch window.open call and place the requested url as the elements data attribute
+		var script   = document.createElement("script");
+		script.type  = "text/javascript";
+		script.text  = "" +
+			"(function(){ " +
+			"var el = document.querySelectorAll('"+cssSelector+"')[0]; " +
+			"el.click(); " +
+			"})();";
+		document.body.appendChild(script);
+
+		// sleep for `delay` and the extract elements
+		setTimeout(function() {
+			var elements = this.getDataElements(parentElement);
+			deferredResponse.resolve(elements);
+		}.bind(this), delay);
+		return deferredResponse.promise();
+	},
+
 	_getData: function (parentElement) {
 
 		var delay = parseInt(this.delay) || 0;
@@ -50,48 +88,36 @@ var SelectorElementClick = {
 		// elements that are available before clicking
 		var startElements = this.getDataElements(parentElement);
 
-		var clickElements = this.getClickElements(parentElement);
-
 		var deferredResultCalls = [];
-		$(clickElements).each(function(i, clickElement) {
 
-			deferredResultCalls.push(function() {
+		// will be clicking all click buttons with unique texts
+		var clickedButtons = {};
+		var extractElementsAfterUniqueButtonClick = function(button) {
 
-				var deferredResponse = $.Deferred();
+			var buttonText = $(button).text().trim();
+			if(!(buttonText in clickedButtons)) {
+				clickedButtons[buttonText] = true;
 
-				// check whether this element is still available in dom. If its not then there is no data to extract.
-				if($(clickElement).closest("html").length === 0) {
-					deferredResponse.resolve([]);
-					return deferredResponse.promise();
-				}
+				deferredResultCalls.push(function() {
 
-				// click clickElement. executed in browsers scope
-				var cs = new CssSelector({
-					enableSmartTableSelector: false,
-					parent: $("body")[0],
-					enableResultStripping:false
-				});
-				var cssSelector = cs.getCssSelector([clickElement]);
+					// extracts elements
+					var deferredElements = this.extractElementsAfterClick(button, parentElement);
 
-				// this function will catch window.open call and place the requested url as the elements data attribute
-				var script   = document.createElement("script");
-				script.type  = "text/javascript";
-				script.text  = "" +
-					"(function(){ " +
-						"var el = document.querySelectorAll('"+cssSelector+"')[0]; " +
-						"el.click(); " +
-					"})();";
-				document.body.appendChild(script);
+					// adds additional buttons to click on
+					deferredElements.done(function(elements) {
+						// @FIXME limited to recursion stack size
+						var clickElements = this.getClickElements(parentElement);
+						clickElements.forEach(extractElementsAfterUniqueButtonClick);
+					}.bind(this));
 
-				// sleep for `delay` and the extract elements
-				setTimeout(function() {
-					var elements = this.getDataElements(parentElement);
-					deferredResponse.resolve(elements);
-				}.bind(this), delay);
-				return deferredResponse.promise();
-			}.bind(this));
-		}.bind(this));
+					return deferredElements;
 
+				}.bind(this));
+			}
+		}.bind(this);
+
+		var clickElements = this.getClickElements(parentElement);
+		clickElements.forEach(extractElementsAfterUniqueButtonClick);
 
 		var deferredResponse = $.Deferred();
 		$.whenCallSequentially(deferredResultCalls).done(function(results) {

@@ -173,7 +173,6 @@ describe("Click Element Selector", function () {
 
 	it("should return multiple elements if only contents is changed", function() {
 
-		var expectedElements = [];
 		$el.append($("<a>a</a><div>a</div>"));
 		$el.find("a").click(function() {
 			setTimeout(function() {
@@ -206,6 +205,53 @@ describe("Click Element Selector", function () {
 			expect(data.length).toEqual(2);
 			expect($(data[0]).text()).toEqual("b");
 			expect($(data[1]).text()).toEqual("a");
+		});
+	});
+
+	it("should click buttons that are not yet added", function() {
+
+		$el.append($("<a>1</a><div>a</div>"));
+		$el.find("a").click(function() {
+			setTimeout(function() {
+				$el.find("div").text("b");
+				$el.find("a").remove();
+				$el.append("<a>2</a>");
+				$el.find("a").click(function() {
+					setTimeout(function() {
+						$el.find("div").text("c");
+					}, 50);
+				});
+
+			}, 50);
+		});
+
+		var selector = new Selector({
+			id: 'div',
+			type: 'SelectorElementClick',
+			multiple: true,
+			clickElementSelector: "a",
+			selector: "div",
+			delay: 100
+		});
+
+		var dataDeferred = selector.getData($el);
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+
+			dataDeferred.done(function(resultData) {
+				expect(resultData.length).toEqual(3);
+				var resultText = [
+					$(resultData[0]).text(),
+					$(resultData[1]).text(),
+					$(resultData[2]).text()
+				];
+
+				expect(resultText.sort()).toEqual(["a", "b", "c"]);
+			});
 		});
 	});
 });
