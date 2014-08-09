@@ -49,7 +49,7 @@ chrome.runtime.onMessage.addListener(
 			return true;
 		}
 		else if (request.sitemapExists) {
-			store.sitemapExists(request.sitemap, sendResponse);
+			store.sitemapExists(request.sitemapId, sendResponse);
 			return true;
 		}
 		else if (request.getSitemapData) {
