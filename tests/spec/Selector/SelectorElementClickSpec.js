@@ -262,6 +262,54 @@ describe("Click Element Selector", function () {
 		});
 	});
 
+	it("should discard initial elements for ClickOnce selector type", function() {
+
+		$el.append($("<a>1</a><div>a</div>"));
+		$el.find("a").click(function() {
+			setTimeout(function() {
+				$el.find("div").text("b");
+				$el.find("a").remove();
+				$el.append("<a>2</a>");
+				$el.find("a").click(function() {
+					setTimeout(function() {
+						$el.find("div").text("c");
+					}, 50);
+				});
+
+			}, 50);
+		});
+
+		var selector = new Selector({
+			id: 'div',
+			type: 'SelectorElementClick',
+			multiple: true,
+			clickElementSelector: "a",
+			selector: "div",
+			delay: 100,
+			clickType: 'clickOnce',
+			discardInitialElements: true
+		});
+
+		var dataDeferred = selector.getData($el);
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+
+			dataDeferred.done(function(resultData) {
+				expect(resultData.length).toEqual(2);
+				var resultText = [
+					$(resultData[0]).text(),
+					$(resultData[1]).text(),
+				];
+
+				expect(resultText.sort()).toEqual(["b", "c"]);
+			});
+		});
+	});
+
 	it("should extract elements with clickMore type", function(){
 
 		$el.append($("<a>1</a><div>a</div>"));
@@ -302,6 +350,50 @@ describe("Click Element Selector", function () {
 				];
 
 				expect(resultText.sort()).toEqual(["a", "b", "c"]);
+			});
+		});
+	});
+
+	it("should discard initial elements for ClickMore selector type", function(){
+
+		$el.append($("<a>1</a><div>a</div>"));
+		var moreElements = ['b','c'];
+		$el.find("a").click(function() {
+			setTimeout(function() {
+				var next = moreElements.shift();
+				if(next) {
+					$el.append("<div>"+next+"</div>");
+				}
+			}, 50);
+		});
+
+		var selector = new Selector({
+			id: 'div',
+			type: 'SelectorElementClick',
+			multiple: true,
+			clickElementSelector: "a",
+			selector: "div",
+			delay: 100,
+			clickType: 'clickMore',
+			discardInitialElements: true
+		});
+
+		var dataDeferred = selector.getData($el);
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+
+			dataDeferred.done(function(resultData) {
+				expect(resultData.length).toEqual(2);
+				var resultText = [
+					$(resultData[0]).text(),
+					$(resultData[1]).text()
+				];
+
+				expect(resultText.sort()).toEqual(["b", "c"]);
 			});
 		});
 	});

@@ -828,6 +828,7 @@ SitemapController.prototype = {
 		var clickElementSelector = $("#edit-selector [name=clickElementSelector]").val();
 		var type = $("#edit-selector [name=type]").val();
 		var clickType = $("#edit-selector [name=clickType]").val();
+		var discardInitialElements = $("#edit-selector [name=discardInitialElements]").is(":checked");
 		var multiple = $("#edit-selector [name=multiple]").is(":checked");
 		var downloadImage = $("#edit-selector [name=downloadImage]").is(":checked");
 		var clickPopup = $("#edit-selector [name=clickPopup]").is(":checked");
@@ -858,6 +859,7 @@ SitemapController.prototype = {
 			tableDataRowSelector: tableDataRowSelector,
 			clickElementSelector: clickElementSelector,
 			clickType: clickType,
+			discardInitialElements: discardInitialElements,
 			type: type,
 			multiple: multiple,
 			downloadImage: downloadImage,

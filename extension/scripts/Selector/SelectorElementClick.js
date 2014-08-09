@@ -146,12 +146,14 @@ var SelectorElementClick = {
 			});
 
 			// add StartElements
-			$(startElements).each(function(i, element){
-				dataElements.push(element);
-			});
+			if(!this.discardInitialElements) {
+				$(startElements).each(function(i, element) {
+					dataElements.push(element);
+				});
+			}
 
 			deferredResponse.resolve(dataElements);
-		});
+		}.bind(this));
 		return deferredResponse.promise();
 	},
 
@@ -180,6 +182,11 @@ var SelectorElementClick = {
 		// add elements that are available before clicking
 		var elements = this.getDataElements(parentElement);
 		elements.forEach(addElement);
+
+		// discard initial elements
+		if(this.discardInitialElements) {
+			foundElements = [];
+		}
 
 		// initial click and wait
 		if(clickElements.length) {
@@ -231,6 +238,6 @@ var SelectorElementClick = {
 	},
 
 	getFeatures: function () {
-		return ['multiple', 'delay', 'clickElementSelector', 'clickType']
+		return ['multiple', 'delay', 'clickElementSelector', 'clickType', 'discardInitialElements']
 	}
 };
