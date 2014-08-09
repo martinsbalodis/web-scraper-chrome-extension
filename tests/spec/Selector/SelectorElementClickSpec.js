@@ -262,7 +262,7 @@ describe("Click Element Selector", function () {
 		});
 	});
 
-	it("should extract elements with click more type", function(){
+	it("should extract elements with clickMore type", function(){
 
 		$el.append($("<a>1</a><div>a</div>"));
 		var moreElements = ['b','c'];
@@ -304,5 +304,54 @@ describe("Click Element Selector", function () {
 				expect(resultText.sort()).toEqual(["a", "b", "c"]);
 			});
 		});
+	});
+
+	it("should scrape elements with clickMore type when previous elements are removed after click", function() {
+
+		$el.append($("<a>1</a><div>a</div>"));
+		var moreElements = ['b','c'];
+		$el.find("a").click(function() {
+			setTimeout(function() {
+				var next = moreElements.shift();
+
+				if(next) {
+					$el.find("div").text(next);
+				}
+				else {
+					$el
+				}
+			}, 50);
+		});
+
+		var selector = new Selector({
+			id: 'div',
+			type: 'SelectorElementClick',
+			multiple: true,
+			clickElementSelector: "a",
+			selector: "div",
+			delay: 100,
+			clickType: 'clickMore'
+		});
+
+		var dataDeferred = selector.getData($el);
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+
+			dataDeferred.done(function(resultData) {
+				expect(resultData.length).toEqual(3);
+				var resultText = [
+					$(resultData[0]).text(),
+					$(resultData[1]).text(),
+					$(resultData[2]).text()
+				];
+
+				expect(resultText.sort()).toEqual(["a", "b", "c"]);
+			});
+		});
+
 	});
 });

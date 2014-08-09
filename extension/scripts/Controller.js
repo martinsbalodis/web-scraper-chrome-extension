@@ -760,6 +760,11 @@ SitemapController.prototype = {
 			}
 		});
 
+		// set clickType
+		if(selector.clickType) {
+			$editSelectorForm.find("[name=clickType]").val(selector.clickType);
+		}
+
 		// handle selects seperately
 		$editSelectorForm.find("[name=type]").val(selector.type);
 		selector.parentSelectors.forEach(function (parentSelectorId) {

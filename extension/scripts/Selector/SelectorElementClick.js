@@ -162,17 +162,38 @@ var SelectorElementClick = {
 		var foundElements = [];
 		var clickElements = this.getClickElements(parentElement);
 
-		var nextElementSelection = (new Date()).getTime();
+		// @TODO refactor. create unique element list class
+		var addedElements = {};
+		var addElement = function(element) {
+
+			var elementTxt = $(element).text().trim();
+			if(elementTxt in addedElements) {
+				return false;
+			}
+			else {
+				addedElements[elementTxt] = true;
+				foundElements.push($(element).clone(true)[0]);
+				return true;
+			}
+		};
+
+		// add elements that are available before clicking
+		var elements = this.getDataElements(parentElement);
+		elements.forEach(addElement);
+
+		// initial click and wait
+		if(clickElements.length) {
+			this.triggerButtonClick(clickElements[0]);
+		}
+		var nextElementSelection = (new Date()).getTime()+delay;
 
 		// infinitely scroll down and find all items
 		var interval = setInterval(function() {
 
-			var elements = this.getDataElements(parentElement);
-
 			// no elements to click
 			if(clickElements.length === 0) {
 				clearInterval(interval);
-				deferredResponse.resolve(jQuery.makeArray(elements));
+				deferredResponse.resolve(foundElements);
 			}
 
 			var now = (new Date()).getTime();
@@ -181,19 +202,25 @@ var SelectorElementClick = {
 				return;
 			}
 
+			// add newly found elements to element foundElements array.
+			var elements = this.getDataElements(parentElement);
+			var addedAnElement = false;
+			elements.forEach(function(element) {
+				var added = addElement(element);
+				if(added) {
+					addedAnElement = true;
+				}
+			});
 
 			// no new elements found
-			if(elements.length === foundElements.length) {
+			if(!addedAnElement) {
 				clickElements.shift();
 			}
 			else {
 				// continue scrolling and add delay
-				foundElements = elements;
 				this.triggerButtonClick(clickElements[0]);
-
 				nextElementSelection = now+delay;
 			}
-
 		}.bind(this), 50);
 
 		return deferredResponse.promise();
