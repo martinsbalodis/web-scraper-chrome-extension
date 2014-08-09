@@ -24,38 +24,16 @@ var SelectorElementClick = {
 		return clickElements;
 	},
 
-	getDataElements: function (parentElement) {
-
-		// special case when you need to select parent selector.
-		if(this.selector === this.parentSelectionSelector) {
-			return $(parentElement).clone(true);
-		}
-
-		var elements = $(this.selector, parentElement).clone(true);
-		if (this.multiple) {
-			return elements;
-		}
-		else if (elements.length > 0) {
-			return [elements[0]];
-		}
-		else {
-			return [];
-		}
+	/**
+	 * Check whether element is still reachable from html. Useful to check whether the element is removed from DOM.
+	 * @param element
+	 */
+	isElementInHTML: function(element) {
+		return $(element).closest("html").length !== 0;
 	},
 
-	extractElementsAfterClick: function(clickElement, parentElement) {
+	triggerButtonClick: function(clickElement) {
 
-		var delay = parseInt(this.delay) || 0;
-
-		var deferredResponse = $.Deferred();
-
-		// check whether this element is still available in dom. If its not then there is no data to extract.
-		if($(clickElement).closest("html").length === 0) {
-			deferredResponse.resolve([]);
-			return deferredResponse.promise();
-		}
-
-		// click clickElement. executed in browsers scope
 		var cs = new CssSelector({
 			enableSmartTableSelector: false,
 			parent: $("body")[0],
@@ -72,10 +50,33 @@ var SelectorElementClick = {
 			"el.click(); " +
 			"})();";
 		document.body.appendChild(script);
+	},
+
+	extractElementsAfterClick: function(clickElement, parentElement, cloneElements) {
+
+		var deferredResponse = $.Deferred();
+
+		// check whether this element is still available in dom. If its not then there is no data to extract.
+		if(!this.isElementInHTML(clickElement)) {
+			deferredResponse.resolve([]);
+			return deferredResponse.promise();
+		}
+
+		// click clickElement. executed in browsers scope
+		this.triggerButtonClick(clickElement);
+
+		var delay = parseInt(this.delay) || 0;
 
 		// sleep for `delay` and the extract elements
 		setTimeout(function() {
-			var elements = this.getDataElements(parentElement);
+			var elements
+			if(cloneElements) {
+				elements = $(this.getDataElements(parentElement)).clone().get();
+			}
+			else {
+				elements = this.getDataElements(parentElement);
+			}
+
 			deferredResponse.resolve(elements);
 		}.bind(this), delay);
 		return deferredResponse.promise();
@@ -83,10 +84,23 @@ var SelectorElementClick = {
 
 	_getData: function (parentElement) {
 
+		if(this.clickType === 'clickOnce') {
+			return this.getDataClickOnce(parentElement);
+		}
+		else if(this.clickType === 'clickMore') {
+			return this.getDataClickMore(parentElement);
+		}
+		else {
+			return $.Deferred().reject("invalid type").promise();
+		}
+	},
+
+	getDataClickOnce: function(parentElement) {
+
 		var delay = parseInt(this.delay) || 0;
 
 		// elements that are available before clicking
-		var startElements = this.getDataElements(parentElement);
+		var startElements = $(this.getDataElements(parentElement)).clone().get();
 
 		var deferredResultCalls = [];
 
@@ -101,7 +115,7 @@ var SelectorElementClick = {
 				deferredResultCalls.push(function() {
 
 					// extracts elements
-					var deferredElements = this.extractElementsAfterClick(button, parentElement);
+					var deferredElements = this.extractElementsAfterClick(button, parentElement, true);
 
 					// adds additional buttons to click on
 					deferredElements.done(function(elements) {
@@ -141,11 +155,55 @@ var SelectorElementClick = {
 		return deferredResponse.promise();
 	},
 
+	getDataClickMore: function(parentElement) {
+
+		var delay = parseInt(this.delay) || 0;
+		var deferredResponse = $.Deferred();
+		var foundElements = [];
+		var clickElements = this.getClickElements(parentElement);
+
+		var nextElementSelection = (new Date()).getTime();
+
+		// infinitely scroll down and find all items
+		var interval = setInterval(function() {
+
+			var elements = this.getDataElements(parentElement);
+
+			// no elements to click
+			if(clickElements.length === 0) {
+				clearInterval(interval);
+				deferredResponse.resolve(jQuery.makeArray(elements));
+			}
+
+			var now = (new Date()).getTime();
+			// sleep. wait when to extract next elements
+			if(now < nextElementSelection) {
+				return;
+			}
+
+
+			// no new elements found
+			if(elements.length === foundElements.length) {
+				clickElements.shift();
+			}
+			else {
+				// continue scrolling and add delay
+				foundElements = elements;
+				this.triggerButtonClick(clickElements[0]);
+
+				nextElementSelection = now+delay;
+			}
+
+		}.bind(this), 50);
+
+		return deferredResponse.promise();
+	},
+
 	getDataColumns: function () {
 		return [];
 	},
 
 	getFeatures: function () {
-		return ['multiple', 'delay', 'clickElementSelector']
+		return ['multiple', 'delay', 'clickElementSelector', 'clickType']
 	}
 };

@@ -19,7 +19,8 @@ describe("Click Element Selector", function () {
 			id: 'a',
 			type: 'SelectorElementClick',
 			multiple: false,
-			selector: "div"
+			selector: "div",
+			clickType: 'clickOnce'
 		});
 
 		var dataDeferred = selector.getData($el[0]);
@@ -42,7 +43,8 @@ describe("Click Element Selector", function () {
 			id: 'a',
 			type: 'SelectorElementClick',
 			multiple: true,
-			selector: "div"
+			selector: "div",
+			clickType: 'clickOnce'
 		});
 
 		var dataDeferred = selector.getData($el[0]);
@@ -70,7 +72,8 @@ describe("Click Element Selector", function () {
 			type: 'SelectorElementClick',
 			multiple: true,
 			clickElementSelector: "a",
-			selector: "div"
+			selector: "div",
+			clickType: 'clickOnce'
 		});
 
 		var dataDeferred = selector.getData($el[0]);
@@ -104,7 +107,8 @@ describe("Click Element Selector", function () {
 			multiple: true,
 			clickElementSelector: "a",
 			selector: "div",
-			delay: 100
+			delay: 100,
+			clickType: 'clickOnce'
 		});
 
 		var dataDeferred = selector.getData($el[0]);
@@ -139,7 +143,8 @@ describe("Click Element Selector", function () {
 			multiple: true,
 			clickElementSelector: "a",
 			selector: "div",
-			delay: 100
+			delay: 100,
+			clickType: 'clickOnce'
 		});
 
 		var dataDeferred = selector.getData($el[0]);
@@ -186,7 +191,8 @@ describe("Click Element Selector", function () {
 			multiple: true,
 			clickElementSelector: "a",
 			selector: "div",
-			delay: 100
+			delay: 100,
+			clickType: 'clickOnce'
 		});
 
 		var dataDeferred = selector.getData($el);
@@ -231,7 +237,52 @@ describe("Click Element Selector", function () {
 			multiple: true,
 			clickElementSelector: "a",
 			selector: "div",
-			delay: 100
+			delay: 100,
+			clickType: 'clickOnce'
+		});
+
+		var dataDeferred = selector.getData($el);
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+
+			dataDeferred.done(function(resultData) {
+				expect(resultData.length).toEqual(3);
+				var resultText = [
+					$(resultData[0]).text(),
+					$(resultData[1]).text(),
+					$(resultData[2]).text()
+				];
+
+				expect(resultText.sort()).toEqual(["a", "b", "c"]);
+			});
+		});
+	});
+
+	it("should extract elements with click more type", function(){
+
+		$el.append($("<a>1</a><div>a</div>"));
+		var moreElements = ['b','c'];
+		$el.find("a").click(function() {
+			setTimeout(function() {
+				var next = moreElements.shift();
+				if(next) {
+					$el.append("<div>"+next+"</div>");
+				}
+			}, 50);
+		});
+
+		var selector = new Selector({
+			id: 'div',
+			type: 'SelectorElementClick',
+			multiple: true,
+			clickElementSelector: "a",
+			selector: "div",
+			delay: 100,
+			clickType: 'clickMore'
 		});
 
 		var dataDeferred = selector.getData($el);
