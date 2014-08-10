@@ -739,7 +739,7 @@ SitemapController.prototype = {
 					title: 'Element'
 				},
 				{
-					type: 'SelectorScrollElement',
+					type: 'SelectorElementScroll',
 					title: 'Element scroll down'
 				},
 				{

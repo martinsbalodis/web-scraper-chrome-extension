@@ -1,4 +1,4 @@
-var SelectorScrollElement = {
+var SelectorElementScroll = {
 
 	canReturnMultipleRecords: function () {
 		return true;
