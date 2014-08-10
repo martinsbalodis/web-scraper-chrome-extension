@@ -719,36 +719,36 @@ SitemapController.prototype = {
 					title: 'Popup URL'
 				},
 				{
-					type: 'SelectorElement',
-					title: 'Element'
-				},
-				{
 					type: 'SelectorImage',
 					title: 'Image'
-				},
-				{
-					type: 'SelectorGroup',
-					title: 'Grouped'
-				},
-				{
-					type: 'SelectorHTML',
-					title: 'HTML'
-				},
-				{
-					type: 'SelectorElementAttribute',
-					title: 'Element attribute'
 				},
 				{
 					type: 'SelectorTable',
 					title: 'Table'
 				},
 				{
+					type: 'SelectorElementAttribute',
+					title: 'Element attribute'
+				},
+				{
+					type: 'SelectorHTML',
+					title: 'HTML'
+				},
+				{
+					type: 'SelectorElement',
+					title: 'Element'
+				},
+				{
 					type: 'SelectorScrollElement',
-					title: 'ScrollDown'
+					title: 'Element scroll down'
 				},
 				{
 					type: 'SelectorElementClick',
 					title: 'Element click'
+				},
+				{
+					type: 'SelectorGroup',
+					title: 'Grouped'
 				}
 			]
 		});
