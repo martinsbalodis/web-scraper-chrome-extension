@@ -835,7 +835,6 @@ SitemapController.prototype = {
 		var regex = $("#edit-selector [name=regex]").val();
 		var delay = $("#edit-selector [name=delay]").val();
 		var parentSelectors = $("#edit-selector [name=parentSelectors]").val();
-		var extractAttribute = $("#edit-selector [name=extractAttribute]").val();
 		var columns = [];
 		var $columnHeaders = $("#edit-selector .column-header");
 		var $columnNames = $("#edit-selector .column-name");
@@ -865,7 +864,6 @@ SitemapController.prototype = {
 			downloadImage: downloadImage,
 			clickPopup: clickPopup,
 			regex: regex,
-			extractAttribute:extractAttribute,
 			parentSelectors: parentSelectors,
 			columns:columns,
 			delay:delay
