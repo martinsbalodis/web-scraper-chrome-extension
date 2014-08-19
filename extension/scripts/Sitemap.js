@@ -179,7 +179,7 @@ Sitemap.prototype = {
 		var columns = this.getDataColumns(),
 			delimiter = ',',
 			newline = "\n",
-			csvData = [];
+			csvData = ['\ufeff']; // utf-8 bom char
 
 		// header
 		csvData.push(columns.join(delimiter) + newline)
