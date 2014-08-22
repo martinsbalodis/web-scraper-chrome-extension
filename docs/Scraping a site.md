@@ -63,6 +63,13 @@ should be built for the news site.
 Note that when creating selectors use Element preview and Data preview features
 to ensure that you have selected the correct elements with the correct data.
 
+More information about selector tree building is available in selector
+documentation. You should atleast read about these core selectors:
+
+ * [Text selector][text-selector]
+ * [Link selector][link-selector]
+ * [Element selector][element-selector]
+
 ### Inspect selector tree
 
 After you have created selectors for the *sitemap* you can inspect the tree
@@ -84,3 +91,6 @@ the scraped data by opening *Browse* panel and export it by opening the
 [image-news-site]: images/scraping-a-site/news-site.png?raw=true
 [image-news-site-sitemap]: images/scraping-a-site/news-site-sitemap.png?raw=true
 [image-news-site-selector-graph]: images/scraping-a-site/news-site-selector-graph.png?raw=true
+[text-selector]: selectors/text-selector.md
+[link-selector]: selectors/link-selector.md
+[element-selector]: selectors/element-selector.md
