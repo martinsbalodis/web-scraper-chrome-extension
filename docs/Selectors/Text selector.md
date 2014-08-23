@@ -7,27 +7,6 @@ stripped and only text will be returned. Selector will ignore text within
 newline characters. You can additionally apply a regular expression to
 resulting data.
 
-## Use cases
-**Extract one record per page**
-
-For example you are scraping news site that has one article per page. The page
-might contain the article, its title, date published and the author. A
-*Link selector* can navigate the scraper to each of these article pages.
-Multiple text selectors can extract the title, date, author and article.
-*Multiple* option should be left unchecked for text selectors because each page
-is extracting only one record.
-
-![Fig. 1: asd][text-selector-multiple-single-text-selectors-in-one-page]
-
-**Extract multiple items from a single page**
-
-E-commerce sites usually have multiple items per page. If you want to scrape
-these items you will need an *Element selector* that selects item wrapper
-elements and multiple text selectors that select data within each item wrapper
-element.
-
-
-
 ## Regex
 
 The regular expression attribute can be used to extract a substring of the text
@@ -43,6 +22,39 @@ Here are some examples that you might find useful:
 | id: H83JKDX4     	| `[A-Z0-9]{8}`                  	| H83JKDX4   	|
 | date: 2014-08-20 	| `[0-9]{4}\-[0-9]{2}\-[0-9]{2}` 	| 2014-08-20 	|
 
+## Use cases
+**Extract one record per page with multiple text selectors**
+
+For example you are scraping news site that has one article per page. The page
+might contain the article, its title, date published and the author. A
+*Link selector* can navigate the scraper to each of these article pages.
+Multiple text selectors can extract the title, date, author and article.
+*Multiple* option should be left unchecked for text selectors because each page
+is extracting only one record.
+
+![Fig. 1: Multiple text selectors per page][text-selector-multiple-single-text-selectors-in-one-page]
+
+**Extract multiple items with multiple text selectors per page**
+
+E-commerce sites usually have multiple items per page. If you want to scrape
+these items you will need an *Element selector* that selects item wrapper
+elements and multiple text selectors that select data within each item wrapper
+element.
+
+![Fig. 2: Multiple elements with text selectors. Some arrows are skipped.][text-selector-multiple-elements-with-text-selectors]
+
+**Extract multiple text records per page**
+
+For example you want to extract comments for an article. There are multiple
+comments in a single page and you only need the comment text (If you would need
+other comment attributes then see the example above). You can use
+*Text selector* to extract these comments. The *Text selectors* multiple
+attribute should be checked because you will be extracting multiple records.
+
+![Fig. 3: Text selector selects multiple comments][text-selector-multiple-per-page]
+
 
 [regex-site]: http://www.regexr.com/
 [text-selector-multiple-single-text-selectors-in-one-page]: images/selectors/text/text-selector-multiple-single-text-selectors-in-one-page.png?raw=true
+[text-selector-multiple-elements-with-text-selectors]: images/selectors/text/text-selector-multiple-elements-with-text-selectors.png?raw=true
+[text-selector-multiple-per-page]: images/selectors/text/text-selector-multiple-per-page.png?raw=true
