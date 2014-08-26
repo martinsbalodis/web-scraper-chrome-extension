@@ -77,4 +77,55 @@ describe("Chrome popup browser", function () {
 		});
 
 	});
+
+	it("should reopen popup window if data cannot get loaded", function() {
+
+		var sitemap = new Sitemap({
+			selectors: [
+				{
+					id: 'a',
+					selector: '#browserTest',
+					type: 'SelectorText',
+					multiple: false,
+					parentSelectors: ['_root']
+				}
+			]
+		});
+
+		// replace sendMessage with a fake one for one time
+		var originalSendMessage = chrome.tabs.sendMessage;
+		var messageReceived = false;
+		chrome.tabs.sendMessage = function() {
+			messageReceived = true;
+			chrome.tabs.sendMessage = originalSendMessage;
+		};
+
+		var browser = new ChromePopupBrowser({
+			pageLoadDelay: 500,
+			dataExtractionTimeout: 2000
+		});
+
+		var fetched = false;
+		var dataFetched = {};
+		browser.fetchData("http://example,com/", sitemap, '_root', function (data) {
+			fetched = true;
+			dataFetched = data;
+		});
+
+		waitsFor(function (data) {
+			return fetched;
+		}, 5000);
+
+		runs(function () {
+			expect(messageReceived).toEqual(true);
+			expect(fetched).toEqual(true);
+			expect(dataFetched).toEqual([
+				{
+					'a': 'a'
+				}
+			]);
+		});
+
+
+	});
 });

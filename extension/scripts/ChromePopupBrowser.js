@@ -1,6 +1,7 @@
 var ChromePopupBrowser = function (options) {
 
 	this.pageLoadDelay = options.pageLoadDelay;
+	this.dataExtractionTimeout = options.dataExtractionTimeout || 60000;
 	this.resetPopupWindowTab();
 };
 
@@ -10,14 +11,16 @@ ChromePopupBrowser.prototype = {
 
 	resetPopupWindowTab: function() {
 
-		// @TODO remove previous window
+		// remove previous window
+		// @TODO maybe there are some tab event listeners left behind?
+		this.close();
 
 		var popupWindowTabDeferred = $.Deferred();
 		this.popupWindowTabDeferred = popupWindowTabDeferred;
 
 		chrome.windows.create({'type': 'popup', width: 1042, height: 768, focused: true, url: 'chrome://newtab'}, function (window) {
 			var tab = window.tabs[0];
-			popupWindowTabDeferred.resolve(tab.id);
+			popupWindowTabDeferred.resolve(tab.id, window.id);
 		});
 	},
 
@@ -43,16 +46,37 @@ ChromePopupBrowser.prototype = {
 		chrome.tabs.onUpdated.addListener(tabLoadListener);
 
 		// load url
+		// @TODO check tab exists
 		chrome.tabs.update(tabId, {url: url});
 
 		return deferredURLLoaded.promise();
 	},
 
 	close: function () {
-		chrome.windows.remove(this.window.id);
+		if(this.popupWindowTabDeferred !== null) {
+			// @TODO check window still exists
+			this.popupWindowTabDeferred.done(function(tabId, windowId) {
+				chrome.windows.remove(windowId);
+			});
+		}
 	},
 
 	fetchData: function (url, sitemap, parentSelectorId, callback, scope) {
+
+		var deferredDataExtracted = $.Deferred();
+		deferredDataExtracted.done(function(data) {
+			console.log("extracted data from web page", data);
+			callback.call(scope, data);
+		});
+
+		if(this.dataExtractionTimeout) {
+			var dataExtractionTimeoutCall = setTimeout(function() {
+				deferredDataExtracted.reject();
+				this.resetPopupWindowTab();
+				this.fetchData(url, sitemap, parentSelectorId, callback, scope);
+
+			}.bind(this), this.dataExtractionTimeout);
+		}
 
 		this.popupWindowTabDeferred.done(function(tabId) {
 
@@ -66,10 +90,33 @@ ChromePopupBrowser.prototype = {
 				};
 
 				chrome.tabs.sendMessage(tabId, message, function (data) {
-					console.log("extracted data from web page", data);
-					callback.call(scope, data);
+
+					// undefined is returned if window is closed
+					if(!data) {
+						return;
+					}
+
+					if(dataExtractionTimeoutCall) {
+						clearTimeout(dataExtractionTimeoutCall);
+					}
+					deferredDataExtracted.resolve(data);
 				});
 
+			}.bind(this));
+
+			// probably failed because the window is closed
+			// @TODO this wont be executed because deferred is not being rejected when tab goes missing
+			deferredURLLoaded.fail(function() {
+				console.log("failed opening url. will retry");
+
+				if(dataExtractionTimeoutCall) {
+					clearTimeout(dataExtractionTimeoutCall);
+				}
+
+				// retry data extraction
+				deferredDataExtracted.reject();
+				this.resetPopupWindowTab();
+				this.fetchData(url, sitemap, parentSelectorId, callback, scope);
 			}.bind(this));
 		}.bind(this));
 	}
