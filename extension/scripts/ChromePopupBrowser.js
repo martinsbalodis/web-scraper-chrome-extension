@@ -1,44 +1,33 @@
 var ChromePopupBrowser = function (options) {
 
 	this.pageLoadDelay = options.pageLoadDelay;
-
-	// @TODO somehow handle the closed window
+	this.resetPopupWindowTab();
 };
 
 ChromePopupBrowser.prototype = {
 
-	_initPopupWindow: function (callback, scope) {
+	popupWindowTabDeferred: null,
 
-		var browser = this;
-		if (this.window !== undefined) {
-			console.log(JSON.stringify(this.window));
-			// check if tab exists
-			chrome.tabs.get(this.tab.id, function (tab) {
-				if (!tab) {
-					throw "Scraping window closed";
-				}
-			});
+	resetPopupWindowTab: function() {
 
+		// @TODO remove previous window
 
-			callback.call(scope);
-			return;
-		}
+		var popupWindowTabDeferred = $.Deferred();
+		this.popupWindowTabDeferred = popupWindowTabDeferred;
 
 		chrome.windows.create({'type': 'popup', width: 1042, height: 768, focused: true, url: 'chrome://newtab'}, function (window) {
-			browser.window = window;
-			browser.tab = window.tabs[0];
-
-
-			callback.call(scope);
+			var tab = window.tabs[0];
+			popupWindowTabDeferred.resolve(tab.id);
 		});
 	},
 
-	loadUrl: function (url, callback) {
+	loadUrl: function (tabId, url) {
 
-		var tab = this.tab;
+		var deferredURLLoaded = $.Deferred();
 
-		var tabLoadListener = function (tabId, changeInfo, tab) {
-			if(tabId === this.tab.id) {
+		// callback when url is loaded
+		var tabLoadListener = function (tabIdLoaded, changeInfo, tab) {
+			if(tabIdLoaded === tabId) {
 				if (changeInfo.status === 'complete') {
 
 					// @TODO check url ? maybe it would be bad because some sites might use redirects
@@ -47,13 +36,16 @@ ChromePopupBrowser.prototype = {
 					chrome.tabs.onUpdated.removeListener(tabLoadListener);
 
 					// callback tab is loaded after page load delay
-					setTimeout(callback, this.pageLoadDelay);
+					setTimeout(deferredURLLoaded.resolve, this.pageLoadDelay);
 				}
 			}
 		}.bind(this);
 		chrome.tabs.onUpdated.addListener(tabLoadListener);
 
-		chrome.tabs.update(tab.id, {url: url});
+		// load url
+		chrome.tabs.update(tabId, {url: url});
+
+		return deferredURLLoaded.promise();
 	},
 
 	close: function () {
@@ -62,12 +54,10 @@ ChromePopupBrowser.prototype = {
 
 	fetchData: function (url, sitemap, parentSelectorId, callback, scope) {
 
-		var browser = this;
+		this.popupWindowTabDeferred.done(function(tabId) {
 
-		this._initPopupWindow(function () {
-			var tab = browser.tab;
-
-			browser.loadUrl(url, function () {
+			var deferredURLLoaded = this.loadUrl(tabId, url);
+			deferredURLLoaded.done(function() {
 
 				var message = {
 					extractData: true,
@@ -75,11 +65,12 @@ ChromePopupBrowser.prototype = {
 					parentSelectorId: parentSelectorId
 				};
 
-				chrome.tabs.sendMessage(tab.id, message, function (data) {
+				chrome.tabs.sendMessage(tabId, message, function (data) {
 					console.log("extracted data from web page", data);
 					callback.call(scope, data);
 				});
+
 			}.bind(this));
-		}, this);
+		}.bind(this));
 	}
 };

@@ -1,6 +1,8 @@
 describe("Chrome popup browser", function () {
 
 	beforeEach(function () {
+
+		this.addMatchers(selectorMatchers);
 		window.chromeAPI.reset();
 	});
 
@@ -9,10 +11,7 @@ describe("Chrome popup browser", function () {
 		var browser = new ChromePopupBrowser({
 			pageLoadDelay: 500
 		});
-		browser._initPopupWindow(function () {
-		});
-		expect(browser.tab).toEqual({id: 0});
-
+		expect(browser.popupWindowTabDeferred).deferredToEqual(0);
 	});
 
 	it("should load a page", function () {
@@ -20,12 +19,16 @@ describe("Chrome popup browser", function () {
 		var browser = new ChromePopupBrowser({
 			pageLoadDelay: 500
 		});
-		browser._initPopupWindow(function () {
-		});
+
 		var tabLoadSuccess = false;
-		browser.loadUrl("http://example,com/", function () {
-			tabLoadSuccess = true;
+
+		browser.popupWindowTabDeferred.done(function(tabId){
+			var deferredUrlLoaded = browser.loadUrl(tabId, "http://example,com/");
+			deferredUrlLoaded.done(function(){
+				tabLoadSuccess = true;
+			});
 		});
+
 		waitsFor(function () {
 			return tabLoadSuccess;
 		}, 1000);
@@ -52,8 +55,7 @@ describe("Chrome popup browser", function () {
 		var browser = new ChromePopupBrowser({
 			pageLoadDelay: 500
 		});
-		browser._initPopupWindow(function () {
-		});
+
 		var fetched = false;
 		var dataFetched = {};
 		browser.fetchData("http://example,com/", sitemap, '_root', function (data) {
