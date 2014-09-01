@@ -712,11 +712,11 @@ SitemapController.prototype = {
 				},
 				{
 					type: 'SelectorLink',
-					title: 'URL'
+					title: 'Link'
 				},
 				{
 					type: 'SelectorPopupLink',
-					title: 'Popup URL'
+					title: 'Popup Link'
 				},
 				{
 					type: 'SelectorImage',
