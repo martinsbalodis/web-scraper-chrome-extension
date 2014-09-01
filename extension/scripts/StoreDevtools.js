@@ -17,7 +17,7 @@ StoreDevtools.prototype = {
 
 		chrome.runtime.sendMessage(request, function (callbackFn, originalSitemap, newSitemap) {
 			originalSitemap._rev = newSitemap._rev;
-			callbackFn();
+			callbackFn(originalSitemap);
 		}.bind(this, callback, sitemap));
 	},
 	saveSitemap: function (sitemap, callback) {
