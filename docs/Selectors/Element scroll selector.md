@@ -6,3 +6,11 @@ which are added when page is scrolled down to the bottom. Use the delay
 attribute to configure waiting interval between scrolling and element search.
 Scrolling is stopped after no new elements are found. If the page can scroll
 infinitely then this selector will be stuck in an infinite loop.
+
+## Configuration options
+
+ * Selector -
+ * Header row selector -
+ * Data rows selector -
+ * Table columns - rename columns and select those which should be extracted.
+
