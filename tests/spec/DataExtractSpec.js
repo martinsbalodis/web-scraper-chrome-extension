@@ -518,6 +518,43 @@ describe("DataExtractor", function () {
 		});
 	});
 
+	it("should be able to extract text data from head title", function () {
+
+		var sitemap = new Sitemap({
+			selectors: [
+				{
+					id: "title",
+					selector: "head title",
+					type: 'SelectorText',
+					multiple: false,
+					parentSelectors: ['_root']
+				}
+			]
+		});
+
+		var extractor = new DataExtractor({
+			parentSelectorId: '_root',
+			sitemap: sitemap
+		});
+
+		var deferred = extractor.getData();
+
+		waitsFor(function() {
+			return deferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+			deferred.done(function(data) {
+				var expected = [
+					{
+						'title': 'Jasmine Spec Runner'
+					}
+				];
+				expect(data).toEqual(expected);
+			});
+		});
+	});
+
 	it("should be able to extract text data within an element", function () {
 
 		var parentElement = $("#dataextract-get-element-text");

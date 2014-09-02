@@ -8,7 +8,7 @@ DataExtractor = function (options) {
 	}
 
 	this.parentSelectorId = options.parentSelectorId;
-	this.parentElement = options.parentElement || $("body")[0];
+	this.parentElement = options.parentElement || $("html")[0];
 };
 
 DataExtractor.prototype = {
