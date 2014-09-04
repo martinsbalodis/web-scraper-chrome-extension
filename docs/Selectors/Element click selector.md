@@ -25,10 +25,25 @@ JavaScript and AJAX for pagination or item loading.
  duplicate removal.
 
 ### Click type
-#### Click once
+#### Click Once
+
+Click Once type will click on the buttons only once. If a new button appears
+that can be selected it will be also clicked. For example pagination links
+might show pages 1 to 5 but pages 6 to 10 would appear some time later. The
+selector will also click on those buttons.
 
 #### Click More
 
+Click More type makes the selector to click on given buttons multiple times
+until there are no new elements appearing. A new element is considered an
+element that has unique text content.
 
+## Use cases
+
+#### Navigate pagination using click Once selector type
+
+
+#### Load more items in an e-commerce site by clicking "More" button
 
  [element-selector]: element-selector.md
+ [css-selector]: css-selector.md
