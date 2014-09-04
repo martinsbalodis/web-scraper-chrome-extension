@@ -10,13 +10,14 @@ site are moved to the top. If this feature somehow breaks sites layout please
 report it as a bug.
 
 ## Configuration options
- * selector - [CSS selector] [css-selector] for the image.
- * multiple - multiple records are being extracted.
+ * selector - [CSS selector] [css-selector] for the image element.
+ * multiple - multiple records are being extracted. Usually should no be
+ checked for Image selector.
  * download image - downloads and store images on local drive. When CouchDB
  storage back end is used the image is also stored locally.
- * delay - delay before element selection.
 
 ## Use cases
 See [Text selector] [text-selector] use cases.
 
  [text-selector]: text-selector.md
+ [css-selector]: css-selector.md

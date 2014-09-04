@@ -7,7 +7,17 @@ stripped and only text will be returned. Selector will ignore text within
 newline characters. You can additionally apply a regular expression to
 resulting data.
 
-## Regex
+## Configuration options
+
+ * selector - [CSS selector] [css-selector] for the element from which data
+ will be extracted.
+ * multiple - multiple records are being extracted. Usually should not be
+ checked. If you want to use multiple text selectors within one page with
+ multiple checked then you might actually need
+ [Element selector] [element-selector].
+ * regex - regular expression to extract a substring from the result.
+
+### Regex
 
 The regular expression attribute can be used to extract a substring of the text
 that the selector extracts. When a regular expression is used the whole match
@@ -54,7 +64,9 @@ attribute should be checked because you will be extracting multiple records.
 ![Fig. 3: Text selector selects multiple comments][text-selector-multiple-per-page]
 
 
-[regex-site]: http://www.regexr.com/
-[text-selector-multiple-single-text-selectors-in-one-page]: ../images/selectors/text/text-selector-multiple-single-text-selectors-in-one-page.png?raw=true
-[text-selector-multiple-elements-with-text-selectors]: ../images/selectors/text/text-selector-multiple-elements-with-text-selectors.png?raw=true
-[text-selector-multiple-per-page]: ../images/selectors/text/text-selector-multiple-per-page.png?raw=true
+ [regex-site]: http://www.regexr.com/
+ [text-selector-multiple-single-text-selectors-in-one-page]: ../images/selectors/text/text-selector-multiple-single-text-selectors-in-one-page.png?raw=true
+ [text-selector-multiple-elements-with-text-selectors]: ../images/selectors/text/text-selector-multiple-elements-with-text-selectors.png?raw=true
+ [text-selector-multiple-per-page]: ../images/selectors/text/text-selector-multiple-per-page.png?raw=true
+ [element-selector]: Element%20selector.md
+ [css-selector]: css-selector.md

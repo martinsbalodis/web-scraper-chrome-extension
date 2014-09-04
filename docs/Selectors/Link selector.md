@@ -18,6 +18,12 @@ link selector is not working for you then you can try these workarounds:
  3. The site might be using JavaScript `window.location` to change the URL. Web
  Scraper cannot handle this kind of navigation right now.
 
+## Configuration options
+
+ * selector - [CSS selector] [css-selector] for the link element from which the
+ link for navigation will be extracted.
+ * multiple - multiple records are being extracted. Usually should be checked.
+
 ## Use cases
 
 **Navigate through multiple levels of navigation**
@@ -58,3 +64,4 @@ see how pagination links discover more pagination links and more data.
  [pagination-selector-graph]: ../images/selectors/link/pagination-selector-graph.png?raw=true
  [element-click]: selectors/element-click-selector.md
  [link-popup]: selectors/link-popup-selector.md
+ [css-selector]: css-selector.md
