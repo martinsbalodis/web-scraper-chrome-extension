@@ -11,7 +11,7 @@ report it as a bug.
 
 ## Configuration options
  * selector - [CSS selector] [css-selector] for the image element.
- * multiple - multiple records are being extracted. Usually should no be
+ * multiple - multiple records are being extracted. Usually should not be
  checked for Image selector.
  * download image - downloads and store images on local drive. When CouchDB
  storage back end is used the image is also stored locally.
