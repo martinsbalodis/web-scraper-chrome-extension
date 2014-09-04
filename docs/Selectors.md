@@ -18,10 +18,10 @@ elected element. These selectors can be used as text selectors:
  * [Link selector] [link-selector]
  * [Link popup selector] [link-popup-selector]
  * [Image selector] [image-selector]
- * [Element attribute selector] [element-attribute-selector]
  * [Table selector] [table-selector]
- * [Grouped selector] [grouped-selector]
+ * [Element attribute selector] [element-attribute-selector]
  * [HTML selector] [html-selector]
+ * [Grouped selector] [grouped-selector]
 
 ### Link selectors
 
@@ -46,12 +46,14 @@ extracting data only within the element that the element selector gave them.
 These are currently available Element selectors:
 
  * [Element selector] [element-selector]
- * [Element click selector] [element-click-selector]
  * [Element scroll selector] [element-scroll-selector]
+ * [Element click selector] [element-click-selector]
 
 ## Selector configuration options
 
-These are
+Each selector has configuration options. Here you can see the most common ones.
+Configuration options that are specific to a selector are described in
+selectors documentation.
 
  * selector - CSS selector that selects an element the selector will be working
  on.
@@ -79,4 +81,3 @@ as child selectors to the element selector with multiple option not checked.
  [element-selector]: Selectors/Element%20selector.md
  [element-click-selector]: Selectors/Element%20click%20selector.md
  [element-scroll-selector]: Selectors/Element%20scroll%20selector.md
-
