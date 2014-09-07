@@ -21,4 +21,4 @@ infinitely then this selector will be stuck in an infinite loop.
 See [Element selector] [element-selector] use cases.
 
  [element-selector]: Element%20selector.md
- [css-selector]: css-selector.md
+ [css-selector]: ../CSS%20selector.md

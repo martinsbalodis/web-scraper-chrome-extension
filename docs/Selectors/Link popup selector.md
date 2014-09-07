@@ -10,5 +10,5 @@ If the site creates a visual popup but not a real window then you should try
 
 Read more about use cases in [Link selector] [link-selector] description.
 
- [link-selector]: link-selector.md
- [element-click-selector]: element-click-selector.md
+ [link-selector]: Link%20selector.md
+ [element-click-selector]: Element%20click%20selector.md

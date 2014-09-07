@@ -1,4 +1,4 @@
-# CSS selectors
+# CSS selector
 
 Web Scraper uses css selectors to find HTML elements in web pages and extract
 data from them. When selecting an element the Web Scraper will try to make its

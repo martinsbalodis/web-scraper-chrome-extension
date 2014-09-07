@@ -9,8 +9,8 @@ extracting data only within the element that the element selector gave them.
 Note! If the page dynamically loads new items after scrolling down or clicking
 on a button then you should try these selectors:
 
- * [Element Scroll selector] [element-scroll-selector]
- * [Element Click selector] [element-click-selector]
+ * [Element scroll down selector] [element-scroll-selector]
+ * [Element click selector] [element-click-selector]
 
 ## Configuration options
  * selector - [CSS selector] [css-selector] for the wrapper elements that will
@@ -37,8 +37,8 @@ Similarly to e-commerce item selection you can also select table rows and add
 child selectors for data extraction from table cells.
 Though [Table selector] [table-selector] might be much better at this.
 
- [css-selector]: ../css-selector.md
- [element-scroll-selector]: element-scroll-selector.md
- [element-click-selector]: element-click-selector.md
- [table-selector]: table-selector.md
+ [css-selector]: ../CSS%20selector.md
+ [element-scroll-selector]: Element%20scroll%20down%20selector.md
+ [element-click-selector]: Element%20click%20selector.md
+ [table-selector]: Table%20selector.md
  [multiple-elements-with-text-selectors]: ../images/selectors/text/text-selector-multiple-elements-with-text-selectors.png?raw=true

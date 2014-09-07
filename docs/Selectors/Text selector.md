@@ -69,4 +69,4 @@ attribute should be checked because you will be extracting multiple records.
  [text-selector-multiple-elements-with-text-selectors]: ../images/selectors/text/text-selector-multiple-elements-with-text-selectors.png?raw=true
  [text-selector-multiple-per-page]: ../images/selectors/text/text-selector-multiple-per-page.png?raw=true
  [element-selector]: Element%20selector.md
- [css-selector]: css-selector.md
+ [css-selector]: ../CSS%20selector.md

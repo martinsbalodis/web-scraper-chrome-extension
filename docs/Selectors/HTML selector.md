@@ -10,5 +10,5 @@ inner HTML of the element will be extracted.
 ## Use cases
 See [Text selector] [text-selector] use cases.
 
- [text-selector]: text-selector.md
- [css-selector]: css-selector.md
+ [text-selector]: Text%20selector.md
+ [css-selector]: ../CSS%20selector.md

@@ -19,4 +19,4 @@ shows what you should select when extracting data from a table.
  checked for Table selector because you are extracting multiple rows.
 
  [table-selector-selectors]: ../images/selectors/table/selectors.png?raw=true
- [css-selector]: css-selector.md
+ [css-selector]: ../CSS%20selector.md

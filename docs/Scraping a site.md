@@ -91,6 +91,6 @@ the scraped data by opening *Browse* panel and export it by opening the
 [image-news-site]: images/scraping-a-site/news-site.png?raw=true
 [image-news-site-sitemap]: images/scraping-a-site/news-site-sitemap.png?raw=true
 [image-news-site-selector-graph]: images/scraping-a-site/news-site-selector-graph.png?raw=true
-[text-selector]: selectors/text-selector.md
-[link-selector]: selectors/link-selector.md
-[element-selector]: selectors/element-selector.md
+[text-selector]: Selectors/Text%20selector.md
+[link-selector]: Selectors/Link%20selector.md
+[element-selector]: Selectors/Element%20selector.md

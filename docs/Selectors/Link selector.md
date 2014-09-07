@@ -62,6 +62,6 @@ see how pagination links discover more pagination links and more data.
  [multiple-level-link-selectors]: ../images/selectors/link/multiple-level-link-selectors.png?raw=true
  [pagination-link-selectors]: ../images/selectors/link/pagination-link-selectors.png?raw=true
  [pagination-selector-graph]: ../images/selectors/link/pagination-selector-graph.png?raw=true
- [element-click]: selectors/element-click-selector.md
- [link-popup]: selectors/link-popup-selector.md
- [css-selector]: css-selector.md
+ [element-click]: Element%20click%20selector.md
+ [link-popup]: Link%20popup%20selector.md
+ [css-selector]: ../CSS%20selector.md

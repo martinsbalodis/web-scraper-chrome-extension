@@ -69,6 +69,5 @@ to extract data from this site.
 
  [image-click-more]: ../images/selectors/element-click/click-more.png?raw=true
  [image-click-once]: ../images/selectors/element-click/click-once.png?raw=true
-
- [element-selector]: element-selector.md
- [css-selector]: css-selector.md
+ [element-selector]: Element%20selector.md
+ [css-selector]: ../CSS%20selector.md
