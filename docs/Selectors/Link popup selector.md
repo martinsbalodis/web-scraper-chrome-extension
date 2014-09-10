@@ -8,7 +8,8 @@ new tab. This selector will catch the popup creation event and extract the URL.
 If the site creates a visual popup but not a real window then you should try
 [Element click selector] [element-click-selector]
 
-Read more about use cases in [Link selector] [link-selector] description.
+## Use cases
+See [Link selector] [link-selector] use cases.
 
  [link-selector]: Link%20selector.md
  [element-click-selector]: Element%20click%20selector.md

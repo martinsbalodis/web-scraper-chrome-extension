@@ -18,5 +18,9 @@ shows what you should select when extracting data from a table.
  * multiple - multiple records are being extracted. Usually should be
  checked for Table selector because you are extracting multiple rows.
 
+## Use cases
+See [Text selector] [text-selector] use cases.
+
  [table-selector-selectors]: ../images/selectors/table/selectors.png?raw=true
+ [text-selector]: Text%20selector.md
  [css-selector]: ../CSS%20selector.md
