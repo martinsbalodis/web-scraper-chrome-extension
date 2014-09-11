@@ -116,6 +116,9 @@ SitemapController.prototype = {
 				'button#submit-edit-sitemap': {
 					click: this.editSitemapMetadataSave
 				},
+				'#edit-sitemap-metadata-form': {
+					submit: function(){return false;}
+				},
 				'#sitemaps tr': {
 					click: this.editSitemap
 				},
