@@ -37,6 +37,24 @@ ElementQuery = function(CSSSelector, parentElement) {
 
 ElementQuery.getSelectorParts = function(CSSSelector) {
 
-	var selectors = CSSSelector.split(",").map(Function.prototype.call, String.prototype.trim);
-	return selectors;
+	var selectors = CSSSelector.split(/(,|".*?"|'.*?'|\(.*?\))/);
+
+	var resultSelectors = [];
+	var currentSelector = "";
+	selectors.forEach(function(selector) {
+		if(selector === ',') {
+			if(currentSelector.length) {
+				resultSelectors.push(currentSelector);
+			}
+			currentSelector = "";
+		}
+		else {
+			currentSelector += selector.trim();
+		}
+	});
+	if(currentSelector.length) {
+		resultSelectors.push(currentSelector);
+	}
+	
+	return resultSelectors;
 };

@@ -53,4 +53,15 @@ describe("ElementQuery", function () {
 		expect(selectedElements.length).toEqual(2);
 		expect(selectedElements.sort()).toEqual(expectedElements.get().sort());
 	});
+
+	it("should be able to select element with a comma ,", function(){
+
+		$el.append('<span>,</span>');
+
+		var selectedElements = ElementQuery(":contains(',')", $el);
+		var expectedElements = $("span", $el);
+
+		expect(selectedElements.length).toEqual(1);
+		expect(selectedElements.sort()).toEqual(expectedElements.get().sort());
+	});
 });
