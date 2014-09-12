@@ -1,6 +1,6 @@
 # Storage backends
 
-Web scraper can be configured to use wither local storage or CouchDB. By
+Web scraper can be configured to use either local storage or CouchDB. By
 default all data is stored in the local storage.
 
 ## Local storage

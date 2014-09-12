@@ -1,8 +1,8 @@
 # Table selector
 
 Table selector can extract data from tables. *Table selector* has 3
-configurable CSS selectors. The selector is for table selection. When you
-select the table for selector the *Table selector* will try to guess selectors
+configurable CSS selectors. The selector is for table selection. After you have 
+selected the selector the *Table selector* will try to guess selectors
 for header row and data rows. You can click Element preview on those selectors
 to see whether the *Table selector* found table header and data rows correctly.
 The header row selector is used to identify table columns when data is

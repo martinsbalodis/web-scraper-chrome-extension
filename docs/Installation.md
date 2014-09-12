@@ -2,7 +2,7 @@
 
 You can install the extension from [Chrome store] [1]. After installing it you
 should restart chrome to make sure the extension is fully loaded. If you don't
-want to restart Chrome then the extension then use it only in tabs that are
+want to restart Chrome then use the extension only in tabs that are
 created after installing it.
 
 ## Requirements

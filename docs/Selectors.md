@@ -10,9 +10,9 @@ be divided in three groups:
 
 ### Data extraction selectors
 
-Data extraction selectors simply return data from the element that it is
-selected. For example [Text selector] [text-selector] extracts text from
-elected element. These selectors can be used as text selectors:
+Data extraction selectors simply return data from the selected element. 
+For example [Text selector] [text-selector] extracts text from
+selected element. These selectors can be used as data extraction selectors:
 
  * [Text selector] [text-selector]
  * [Link selector] [link-selector]
@@ -26,12 +26,12 @@ elected element. These selectors can be used as text selectors:
 ### Link selectors
 
 Link selectors extract URLs from links that can be later opened for data
-extraction. For example if in a sitemap tree there is a link selector that has
-3 child text selectors then the Web Scraper extract all urls with the link
-selector and then open each link and use those child data extraction selectors
-to extract data. Of course a link selector might have link selectors as child
-selectors then these child link selectors would be used for further page
-navigation. These are currently available link selectors:
+extraction. For example if in a sitemap tree there is a *Link selector* that has
+3 child text selectors then the Web Scraper extract all urls with the *Link
+selector* and then open each link and use those child data extraction selectors
+to extract data. Of course a link selector might have *Link selectors* as child
+selectors then these child *Link selectors* would be used for further page
+navigation. These are currently available *Link selectors*:
 
  * [Link selector] [link-selector]
  * [Link popup selector] [link-popup-selector]
@@ -39,10 +39,10 @@ navigation. These are currently available link selectors:
 ### Element selectors
 
 Element selectors are for element selection that contain multiple data elements.
-For example element selector might be used to select a list of items in an
+For example an element selector might be used to select a list of items in an
 e-commerce site. The selector will return each selected element as a parent
-element to its child selectors. Element selectors child selectors will
-extracting data only within the element that the element selector gave them.
+element to its child selectors. Element selectors child selectors will 
+extract data only within the element that the element selector gave them.
 These are currently available Element selectors:
 
  * [Element selector] [element-selector]
@@ -58,9 +58,10 @@ selectors documentation.
  * selector - CSS selector that selects an element the selector will be working
  on.
  * multiple - should be checked when multiple records (data rows) are going to
- be extracted with this selector. Two mu
+ be extracted with this selector. Data extracted from two or more selectors with 
+ multiple checked wont be merged in a single record.
  * delay - delay before selector is being used.
- * parent selectors - configure parent selectors for this selector to make up the
+ * parent selectors - configure parent selectors for this selector to make the
 selector tree.
 
 Note! A common mistake when using multiple configuration option is to create

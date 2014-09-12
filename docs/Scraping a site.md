@@ -83,9 +83,9 @@ example selector graph.
 After you have created selectors for the *sitemap* you can start scraping. Open
 *Scrape* panel and start scraping. A new popup window will open in which the
 scraper will load pages and extract data from them. After the scraping is done
-the popup window will close and you will receive a popup message. You can view
+the popup window will close and you will be notified with a popup message. You can view
 the scraped data by opening *Browse* panel and export it by opening the
-*Export data as CSV panel*.
+*Export data as CSV* panel.
 
 
 [image-news-site]: images/scraping-a-site/news-site.png?raw=true

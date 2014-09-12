@@ -43,13 +43,13 @@ selector.
 
 For example an e-commerce site has multiple categories. Each category has a
 list of items and pagination links. Also some pages are not directly available
-from the category but are available from from pagination pages (you can see
+from the category but are available from pagination pages (you can see
 pagination links 1-5, but not 6-8). You can start by building a sitemap that
 visits each category and extract items from category page. This sitemap will
 extract items only from the first pagination page. To extract items from all of
 the pagination links including the ones that are not visible at the beginning
 you need to create another *Link selector* that selects the pagination links.
-Figure 2 shows how the link selector should bepagination-selector-graph created in the sitemap. When
+Figure 2 shows how the link selector should be created in the sitemap. When
 the scraper opens a category link it will extract items that are available in
 the page. After that it will find the pagination links and also visit those. If
 the pagination link selector is made a child to itself it will recursively

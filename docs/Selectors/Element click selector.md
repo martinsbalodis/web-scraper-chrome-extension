@@ -1,9 +1,9 @@
 # Element click selector
 
-Click element selector works similarly to
-[Element selector] [element-selector]. It's main purpose is also for element
-selector that could be given as parent elements to its child selectors. Only
-difference is that *Click element selector* can interact with the web page by
+Element click selector works similarly to
+[Element selector] [element-selector]. It's main purpose also is element 
+selection that could be given as parent elements to its child selectors. The only
+difference is that *Element click selector* can interact with the web page by
 clicking on buttons to load new elements. For example a page might use
 JavaScript and AJAX for pagination or item loading.
 
@@ -38,7 +38,7 @@ selector will also click on those buttons.
 
 #### Click More
 
-Click More type makes the selector to click on given buttons multiple times
+Click More type makes the selector click on given buttons multiple times
 until there are no new elements appearing. A new element is considered an
 element that has unique text content.
 
@@ -50,7 +50,7 @@ For example there is a site that displays a list of items and there are some
 pagination buttons that reload these items dynamically (after clicking a button
 the url doesn't change. changes after hash tag # doesn't count). Using *Element
 click selector* you can select these items and buttons that need to be clicked.
-The scraper turing scraping phase will click these buttons to extract all
+The scraper during scraping phase will click these buttons to extract all
 elements. Also you need to add child selectors for the *Element click selector*
 that select data within each element. In figure 1 you can see how to configure
 the *Element click selector* to extract data from the described site.
@@ -59,7 +59,7 @@ the *Element click selector* to extract data from the described site.
 
 #### Load more items in an e-commerce site by clicking "More" button
 
-This example is similar to the one above. The only difference is that in the
+This example is similar to the one above. The only difference is that in this
 site items are loaded by clicking a single button multiple times. In this case
 the *Element click selector* should be configured to use "Click more" click
 type. In figure 2 you can see how to configure the *Element click selector*

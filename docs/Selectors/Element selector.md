@@ -3,7 +3,7 @@
 Element selector is for element selection that contain multiple data elements.
 For example element selector might be used to select a list of items in an
 e-commerce site. The selector will return each selected element as a parent
-element to its child selectors. Element selectors child selectors will
+element to its child selectors. Element selectors child selectors will be
 extracting data only within the element that the element selector gave them.
 
 Note! If the page dynamically loads new items after scrolling down or clicking
@@ -17,7 +17,6 @@ on a button then you should try these selectors:
  be used as parent elements for child selectors.
  * multiple - multiple records are being extracted (almost always should be
  checked). Multiple option for child selectors usually should not be checked.
- * delay - delay before element selection.
 
 ## Use cases
 
@@ -25,8 +24,8 @@ on a button then you should try these selectors:
 
 For example an e-commerce site has a page with a list of items. With element
 selector you can select the elements that wrap these items and then add
-multiple child selectors to this element selectors that will select items
-attributes. Figure 1 shows how an element selector could be used in this
+multiple child selectors to it to extract data within the items wrapper 
+element. Figure 1 shows how an element selector could be used in this
 situation.
 
 ![Fig. 1: Multiple items selected with element selector] [multiple-elements-with-text-selectors]
@@ -35,7 +34,7 @@ situation.
 
 Similarly to e-commerce item selection you can also select table rows and add
 child selectors for data extraction from table cells.
-Though [Table selector] [table-selector] might be much better at this.
+Though [Table selector] [table-selector] might be much better solution.
 
  [css-selector]: ../CSS%20selector.md
  [element-scroll-selector]: Element%20scroll%20down%20selector.md
