@@ -756,12 +756,12 @@
 }
 
 #-selector-toolbar div.key-events {
-	width: 82px !important;
+	width: 83px !important;
 }
 
 #-selector-toolbar div.key-events div {
 	cursor: pointer !important;
-	width: 82px !important;
+	width: 83px !important;
 	float:right !important;
 	font: 100%/1em Verdana, Helvetica, sans-serif !important;
 	line-height:26px !important;
