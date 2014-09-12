@@ -644,6 +644,27 @@ SitemapController.prototype = {
 						}
 					}
 				},
+				regex: {
+					validators: {
+						callback: {
+							message: 'JavaScript does not support regular expressions that can match 0 characters.',
+							callback: function(value, validator) {
+								// allow no regex
+								if(!value) {
+									return true;
+								}
+
+								var matches = "".match(new RegExp(value));
+								if(matches !== null && matches[0] === "") {
+									return false;
+								}
+								else {
+									return true;
+								}
+							}
+						}
+					}
+				},
 				clickElementSelector: {
 					validators: {
 						notEmpty: {
