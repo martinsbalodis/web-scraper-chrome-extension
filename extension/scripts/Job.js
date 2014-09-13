@@ -16,7 +16,7 @@ Job.prototype = {
 
 	combineUrls: function (parentUrl, childUrl) {
 
-		var urlMatcher = new RegExp("(https?://)?([a-z0-9\\-\\.]+\\.[a-z]+)?(\\/[^\\?]*\\/|\\/)?([^\\?]*)?(\\?.*)?", "i");
+		var urlMatcher = new RegExp("(https?://)?([a-z0-9\\-\\.]+\\.[a-z]+|\\d{1,3}\.\\d{1,3}\.\\d{1,3}\.\\d{1,3})?(\\/[^\\?]*\\/|\\/)?([^\\?]*)?(\\?.*)?", "i");
 
 		var parentMatches = parentUrl.match(urlMatcher);
 		var childMatches = childUrl.match(urlMatcher);
