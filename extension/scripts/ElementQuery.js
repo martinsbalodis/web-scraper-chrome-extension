@@ -43,17 +43,17 @@ ElementQuery.getSelectorParts = function(CSSSelector) {
 	var currentSelector = "";
 	selectors.forEach(function(selector) {
 		if(selector === ',') {
-			if(currentSelector.length) {
-				resultSelectors.push(currentSelector);
+			if(currentSelector.trim().length) {
+				resultSelectors.push(currentSelector.trim());
 			}
 			currentSelector = "";
 		}
 		else {
-			currentSelector += selector.trim();
+			currentSelector += selector;
 		}
 	});
-	if(currentSelector.length) {
-		resultSelectors.push(currentSelector);
+	if(currentSelector.trim().length) {
+		resultSelectors.push(currentSelector.trim());
 	}
 	
 	return resultSelectors;

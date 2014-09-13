@@ -64,4 +64,10 @@ describe("ElementQuery", function () {
 		expect(selectedElements.length).toEqual(1);
 		expect(selectedElements.sort()).toEqual(expectedElements.get().sort());
 	});
+
+	it("should preserve spaces", function(){
+
+		var parts = ElementQuery.getSelectorParts('div.well li:nth-of-type(2) a');
+		expect(parts).toEqual(['div.well li:nth-of-type(2) a']);
+	});
 });
