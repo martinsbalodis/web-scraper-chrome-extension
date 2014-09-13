@@ -33,6 +33,20 @@ When submitting a bug please attach an exported sitemap if possible.
 LGPLv3
 
 ## Changelog
+
+### v0.2
+ * Added Element click selector
+ * Added Element scroll down selector
+ * Added Link popup selector
+ * Improved table selector to work with any html markup
+ * Added Image download
+ * Added keyboard shortcuts when selecting elements
+ * Added configurable delay before using selector
+ * Added configurable delay between page visiting
+ * Added multiple start url configuration
+ * Added form field validation
+ * Fixed a lot of bugs
+
 ### v0.1.3
  * Added Table selector
  * Added HTML selector
