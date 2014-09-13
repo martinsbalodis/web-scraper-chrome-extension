@@ -161,41 +161,41 @@ var SelectorElementClick = {
 
 		var delay = parseInt(this.delay) || 0;
 		var deferredResponse = $.Deferred();
-		var foundElements = [];
+		var foundElements = new UniqueElementList();
 		var clickElements = this.getClickElements(parentElement);
-
-		// @TODO refactor. create unique element list class
-		var addedElements = {};
-		var addElement = function(element) {
-
-			var elementTxt = $(element).text().trim();
-			if(elementTxt in addedElements) {
-				return false;
-			}
-			else {
-				addedElements[elementTxt] = true;
-				foundElements.push($(element).clone(true)[0]);
-				return true;
-			}
-		};
+		var doneClickingElements = new UniqueElementList();
 
 		// add elements that are available before clicking
 		var elements = this.getDataElements(parentElement);
-		elements.forEach(addElement);
+		elements.forEach(foundElements.push.bind(foundElements));
 
 		// discard initial elements
 		if(this.discardInitialElements) {
-			foundElements = [];
+			foundElements = new UniqueElementList();
+		}
+
+		// no elements to click at the beginning
+		if(clickElements.length === 0) {
+			deferredResponse.resolve(foundElements);
+			return;
 		}
 
 		// initial click and wait
-		if(clickElements.length) {
-			this.triggerButtonClick(clickElements[0]);
-		}
+		var currentClickElement = clickElements[0];
+		this.triggerButtonClick(currentClickElement);
 		var nextElementSelection = (new Date()).getTime()+delay;
 
 		// infinitely scroll down and find all items
 		var interval = setInterval(function() {
+
+			// find those click elements that are not in the black list
+			var allClickElements = this.getClickElements(parentElement);
+			clickElements = [];
+			allClickElements.forEach(function(element) {
+				if(!doneClickingElements.isAdded(element)) {
+					clickElements.push(element);
+				}
+			});
 
 			// no elements to click
 			if(clickElements.length === 0) {
@@ -213,19 +213,20 @@ var SelectorElementClick = {
 			var elements = this.getDataElements(parentElement);
 			var addedAnElement = false;
 			elements.forEach(function(element) {
-				var added = addElement(element);
+				var added = foundElements.push(element);
 				if(added) {
 					addedAnElement = true;
 				}
 			});
 
-			// no new elements found
+			// no new elements found. Stop clicking this button
 			if(!addedAnElement) {
-				clickElements.shift();
+				doneClickingElements.push(currentClickElement);
 			}
 			else {
 				// continue scrolling and add delay
-				this.triggerButtonClick(clickElements[0]);
+				currentClickElement = clickElements[0];
+				this.triggerButtonClick(currentClickElement);
 				nextElementSelection = now+delay;
 			}
 		}.bind(this), 50);
