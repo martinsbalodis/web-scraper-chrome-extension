@@ -11,12 +11,17 @@ var StoreScrapeResultWriter = function(db) {
 
 StoreScrapeResultWriter.prototype = {
     writeDocs: function(docs, callback) {
-        this.db.bulkDocs({docs:docs}, function(err, response) {
-            if(err !== null) {
-                console.log("Error while persisting scraped data to db", err);
-            }
-            callback();
-        });
+		if(docs.length === 0) {
+			callback();
+		}
+		else {
+			this.db.bulkDocs({docs:docs}, function(err, response) {
+				if(err !== null) {
+					console.log("Error while persisting scraped data to db", err);
+				}
+				callback();
+			});
+		}
     }
 };
 
