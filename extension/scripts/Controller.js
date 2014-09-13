@@ -1259,7 +1259,7 @@ SitemapController.prototype = {
 
 		if (!$(button).hasClass('preview')) {
 
-			var sitemap = this.state.currentSitemap;
+			var sitemap = this.getCurrentlyEditedSelectorSitemap();
 			var selector = this.getCurrentlyEditedSelector();
 			var currentStateParentSelectorIds = this.getCurrentStateParentSelectorIds();
 			var parentCSSSelector = sitemap.selectors.getCSSSelectorWithinOnePage(selector.id, currentStateParentSelectorIds);
