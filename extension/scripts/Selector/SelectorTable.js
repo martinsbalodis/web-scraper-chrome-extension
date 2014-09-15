@@ -52,7 +52,7 @@ var SelectorTable = {
 							data[column.name] = null;
 						}
 						else {
-							var rowText = $(row).find("td:nth-child(" + columns[column.header].index + ")").text().trim();
+							var rowText = $(row).find(":nth-child(" + columns[column.header].index + ")").text().trim();
 							data[column.name] = rowText;
 						}
 					}

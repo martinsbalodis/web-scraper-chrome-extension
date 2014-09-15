@@ -375,4 +375,46 @@ describe("Table Selector", function () {
 		expect(dataDeferred).deferredToEqual([{c:"g",d:"h"}]);
 	});
 
+	it("should extract data from th data rows", function() {
+
+		var html = "<table>" +
+			"<thead>" +
+			"<tr><td>a</td><td>b</td></tr>" +
+			"<tr><td>c</td><td>d</td></tr>" +
+			"</thead>" +
+			"<tbody>" +
+			"<tr><th>e</th><th>f</th></tr>" +
+			"<tr><th>g</th><th>h</th></tr>" +
+			"</tbody>" +
+			"</table>";
+
+		$el.append(html);
+
+		var selector = new Selector({
+
+			id: 'a',
+			type: 'SelectorTable',
+			multiple: false,
+			selector: "table",
+			tableHeaderRowSelector: "thead tr:nth-of-type(2)",
+			tableDataRowSelector: "tbody tr:nth-of-type(2)",
+			columns: [
+				{
+					header: "c",
+					name: "c",
+					extract: true
+				},
+				{
+					header: "d",
+					name: "d",
+					extract: true
+				}
+			]
+		});
+
+		var dataDeferred = selector.getData($el);
+
+		expect(dataDeferred).deferredToEqual([{c:"g",d:"h"}]);
+	});
+
 });
