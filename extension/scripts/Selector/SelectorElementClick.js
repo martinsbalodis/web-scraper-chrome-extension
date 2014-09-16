@@ -95,6 +95,16 @@ var SelectorElementClick = {
 		}
 	},
 
+	getClickElementUniquenessType: function() {
+
+		if(this.clickElementUniquenessType  === undefined) {
+			return 'uniqueText';
+		}
+		else {
+			return this.clickElementUniquenessType;
+		}
+	},
+
 	getDataClickOnce: function(parentElement) {
 
 		var delay = parseInt(this.delay) || 0;
@@ -105,12 +115,12 @@ var SelectorElementClick = {
 		var deferredResultCalls = [];
 
 		// will be clicking all click buttons with unique texts
-		var clickedButtons = {};
+		var doneClickingElements = new UniqueElementList(this.getClickElementUniquenessType());
+
 		var extractElementsAfterUniqueButtonClick = function(button) {
 
-			var buttonText = $(button).text().trim();
-			if(!(buttonText in clickedButtons)) {
-				clickedButtons[buttonText] = true;
+			if(!doneClickingElements.isAdded(button)) {
+				doneClickingElements.push(button);
 
 				deferredResultCalls.push(function() {
 
@@ -136,7 +146,7 @@ var SelectorElementClick = {
 		var deferredResponse = $.Deferred();
 		$.whenCallSequentially(deferredResultCalls).done(function(results) {
 
-			var dataElements = [];
+			var dataElements = new UniqueElementList("uniqueText");
 
 			// elements that we got after clicking
 			results.forEach(function(elements) {
@@ -161,9 +171,9 @@ var SelectorElementClick = {
 
 		var delay = parseInt(this.delay) || 0;
 		var deferredResponse = $.Deferred();
-		var foundElements = new UniqueElementList();
+		var foundElements = new UniqueElementList('uniqueText');
 		var clickElements = this.getClickElements(parentElement);
-		var doneClickingElements = new UniqueElementList();
+		var doneClickingElements = new UniqueElementList(this.getClickElementUniquenessType());
 
 		// add elements that are available before clicking
 		var elements = this.getDataElements(parentElement);
@@ -171,13 +181,13 @@ var SelectorElementClick = {
 
 		// discard initial elements
 		if(this.discardInitialElements) {
-			foundElements = new UniqueElementList();
+			foundElements = new UniqueElementList('uniqueText');
 		}
 
 		// no elements to click at the beginning
 		if(clickElements.length === 0) {
 			deferredResponse.resolve(foundElements);
-			return;
+			return deferredResponse.promise();
 		}
 
 		// initial click and wait
@@ -239,6 +249,6 @@ var SelectorElementClick = {
 	},
 
 	getFeatures: function () {
-		return ['multiple', 'delay', 'clickElementSelector', 'clickType', 'discardInitialElements']
+		return ['multiple', 'delay', 'clickElementSelector', 'clickType', 'discardInitialElements', 'clickElementUniquenessType']
 	}
 };

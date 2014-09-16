@@ -788,6 +788,10 @@ SitemapController.prototype = {
 		if(selector.clickType) {
 			$editSelectorForm.find("[name=clickType]").val(selector.clickType);
 		}
+		// set clickElementUniquenessType
+		if(selector.clickElementUniquenessType) {
+			$editSelectorForm.find("[name=clickElementUniquenessType]").val(selector.clickElementUniquenessType);
+		}
 
 		// handle selects seperately
 		$editSelectorForm.find("[name=type]").val(selector.type);
@@ -851,6 +855,7 @@ SitemapController.prototype = {
 		var tableHeaderRowSelector = $("#edit-selector [name=tableHeaderRowSelector]").val();
 		var clickElementSelector = $("#edit-selector [name=clickElementSelector]").val();
 		var type = $("#edit-selector [name=type]").val();
+		var clickElementUniquenessType = $("#edit-selector [name=clickElementUniquenessType]").val();
 		var clickType = $("#edit-selector [name=clickType]").val();
 		var discardInitialElements = $("#edit-selector [name=discardInitialElements]").is(":checked");
 		var multiple = $("#edit-selector [name=multiple]").is(":checked");
@@ -882,6 +887,7 @@ SitemapController.prototype = {
 			tableHeaderRowSelector: tableHeaderRowSelector,
 			tableDataRowSelector: tableDataRowSelector,
 			clickElementSelector: clickElementSelector,
+			clickElementUniquenessType: clickElementUniquenessType,
 			clickType: clickType,
 			discardInitialElements: discardInitialElements,
 			type: type,

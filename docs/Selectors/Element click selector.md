@@ -18,6 +18,8 @@ events triggered by the button.
  be clicked to load more elements.
  * click type - type of how the selector knows when there will be no new
  elements and clicking should stop.
+ * click element uniqueness - type of how selector knows which buttons are 
+ already clicked.
  * multiple - multiple records are being extracted (almost always should be
  checked). Multiple option for child selectors usually should not be checked.
  * delay - delay before element selection and delay between clicking. This
@@ -41,6 +43,18 @@ selector will also click on those buttons.
 Click More type makes the selector click on given buttons multiple times
 until there are no new elements appearing. A new element is considered an
 element that has unique text content.
+
+### Click element uniqueness
+
+When using *Click Once* only unique buttons will be clicked. When using 
+*Click More* this helps to ignore buttons that don't generate more elements.
+ 
+ * Unique Text - buttons with identical text content are considered equal
+ * Unique HTML+Text - buttons with identical HTML and text content are 
+ considered equal
+ * Unique HTML - buttons with identical HTML and stripped text content are 
+ considered equal
+ * Unique CSS Selector - buttons with identical CSS Selector are considered equal
 
 ## Use cases
 
