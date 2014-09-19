@@ -26,6 +26,10 @@ describe("Job", function () {
 		var child = new Job("2/", null, null, parent);
 		expect(child.url).toBe("http://127.0.0.1/1/2/");
 
+		var parent = new Job("http://xn--80aaxitdbjk.xn--p1ai/");
+		var child = new Job("2/", null, null, parent);
+
+		expect(child.url).toBe("http://xn--80aaxitdbjk.xn--p1ai/2/");
 	});
 
 	it("should be able to create correct url from parent job with slashes after question mark", function () {
