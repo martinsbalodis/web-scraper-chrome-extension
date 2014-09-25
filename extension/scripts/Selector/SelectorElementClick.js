@@ -207,15 +207,10 @@ var SelectorElementClick = {
 				}
 			});
 
-			// no elements to click
-			if(clickElements.length === 0) {
-				clearInterval(interval);
-				deferredResponse.resolve(foundElements);
-			}
-
 			var now = (new Date()).getTime();
 			// sleep. wait when to extract next elements
 			if(now < nextElementSelection) {
+				//console.log("wait");
 				return;
 			}
 
@@ -228,13 +223,22 @@ var SelectorElementClick = {
 					addedAnElement = true;
 				}
 			});
+			//console.log("added", addedAnElement);
 
 			// no new elements found. Stop clicking this button
 			if(!addedAnElement) {
 				doneClickingElements.push(currentClickElement);
 			}
+
+			// continue clicking and add delay, but if there is nothing
+			// more to click the finish
+			//console.log("total buttons", clickElements.length)
+			if(clickElements.length === 0) {
+				clearInterval(interval);
+				deferredResponse.resolve(foundElements);
+			}
 			else {
-				// continue scrolling and add delay
+				//console.log("click");
 				currentClickElement = clickElements[0];
 				this.triggerButtonClick(currentClickElement);
 				nextElementSelection = now+delay;

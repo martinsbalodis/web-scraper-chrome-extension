@@ -315,12 +315,16 @@ describe("Click Element Selector", function () {
 		$el.append($("<a>1</a><div>a</div>"));
 		var moreElements = ['b','c'];
 		$el.find("a").click(function() {
-			setTimeout(function() {
-				var next = moreElements.shift();
-				if(next) {
+			var next = moreElements.shift();
+			if(next) {
+				setTimeout(function() {
 					$el.append("<div>"+next+"</div>");
-				}
-			}, 50);
+				}, 50);
+			}
+			// remove if there won't be new elements
+			if(moreElements.length === 0) {
+				$el.find("a").remove();
+			}
 		});
 
 		var selector = new Selector({
@@ -329,7 +333,7 @@ describe("Click Element Selector", function () {
 			multiple: true,
 			clickElementSelector: "a",
 			selector: "div",
-			delay: 100,
+			delay: 200,
 			clickType: 'clickMore'
 		});
 
