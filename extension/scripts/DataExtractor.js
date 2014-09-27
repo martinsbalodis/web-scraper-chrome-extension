@@ -38,7 +38,7 @@ DataExtractor.prototype = {
 		// Link selectors which will follow to a new page also cannot be common 
 		// to all selectors
 		if (selector.canCreateNewJobs()
-			&& this.sitemap.getDirectChildSelectors(selector.id) > 0) {
+			&& this.sitemap.getDirectChildSelectors(selector.id).length > 0) {
 			return false;
 		}
 
