@@ -52,13 +52,15 @@ Job.prototype = {
 			for (var i in results) {
 				var result = results[i];
 				for (var key in this.baseData) {
-					result[key] = this.baseData[key];
+					if(!(key in result)) {
+						result[key] = this.baseData[key];
+					}
 				}
 				this.dataItems.push(result);
 			}
 			console.log(job);
 			callback(job);
-		}, this);
+		}.bind(this), this);
 	},
 	getResults: function () {
 		return this.dataItems;

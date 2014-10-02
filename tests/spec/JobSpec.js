@@ -38,4 +38,18 @@ describe("Job", function () {
 		var child = new Job("popup_past_results.asp?drawNo=418/92", null, null, parent);
 		expect(child.url).toBe("http://www.sportstoto.com.my/popup_past_results.asp?drawNo=418/92");
 	});
+
+	it("should not override data with base data if it already exists", function() {
+
+		var browser = {
+			fetchData:function(url, sitemap, parentSelector, callback) {
+				callback([{a:1,b:2}]);
+			}
+		};
+
+		var job = new Job(undefined, undefined, {sitemap:undefined}, undefined, {a:'do not override', c:3});
+		job.execute(browser, function(){});
+		var results = job.getResults();
+		expect(results).toEqual([{a:1,b:2,c:3}]);
+	});
 });
