@@ -51,6 +51,38 @@ describe("DataExtractor", function () {
 
 	});
 
+	it("Link selector with child selectors shouldn't be common to all trees", function(){
+
+		var selectors = new SelectorList([
+			{
+				id: 'a',
+				type: 'SelectorLink',
+				multiple: false,
+				parentSelectors: ['_root']
+			},
+			{
+				id: 'b',
+				type: 'SelectorText',
+				multiple: false,
+				parentSelectors: ['a']
+			}
+		]);
+
+		var sitemap = new Sitemap({
+			selectors: selectors
+		});
+
+		var extractor = new DataExtractor({
+			sitemap: sitemap,
+			parentSelectorId: '_root'
+		});
+
+		var isCommon = extractor.selectorIsCommonToAllTrees(selectors[0]);
+
+		expect(isCommon).toEqual(false);
+
+	});
+
 	it("should be able to tell whether a selector will be common to all selector tree groups (tree of single page selectors)", function () {
 
 		var selectors = new SelectorList([
