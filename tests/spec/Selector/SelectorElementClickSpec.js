@@ -209,8 +209,8 @@ describe("Click Element Selector", function () {
 			});
 
 			expect(data.length).toEqual(2);
-			expect($(data[0]).text()).toEqual("b");
-			expect($(data[1]).text()).toEqual("a");
+			expect($(data[0]).text()).toEqual("a");
+			expect($(data[1]).text()).toEqual("b");
 		});
 	});
 

@@ -52,49 +52,6 @@ var SelectorElementClick = {
 		document.body.appendChild(script);
 	},
 
-	extractElementsAfterClick: function(clickElement, parentElement, cloneElements) {
-
-		var deferredResponse = $.Deferred();
-
-		// check whether this element is still available in dom. If its not then there is no data to extract.
-		if(!this.isElementInHTML(clickElement)) {
-			deferredResponse.resolve([]);
-			return deferredResponse.promise();
-		}
-
-		// click clickElement. executed in browsers scope
-		this.triggerButtonClick(clickElement);
-
-		var delay = parseInt(this.delay) || 0;
-
-		// sleep for `delay` and the extract elements
-		setTimeout(function() {
-			var elements
-			if(cloneElements) {
-				elements = $(this.getDataElements(parentElement)).clone().get();
-			}
-			else {
-				elements = this.getDataElements(parentElement);
-			}
-
-			deferredResponse.resolve(elements);
-		}.bind(this), delay);
-		return deferredResponse.promise();
-	},
-
-	_getData: function (parentElement) {
-
-		if(this.clickType === 'clickOnce') {
-			return this.getDataClickOnce(parentElement);
-		}
-		else if(this.clickType === 'clickMore') {
-			return this.getDataClickMore(parentElement);
-		}
-		else {
-			return $.Deferred().reject("invalid type").promise();
-		}
-	},
-
 	getClickElementUniquenessType: function() {
 
 		if(this.clickElementUniquenessType  === undefined) {
@@ -105,69 +62,7 @@ var SelectorElementClick = {
 		}
 	},
 
-	getDataClickOnce: function(parentElement) {
-
-		var delay = parseInt(this.delay) || 0;
-
-		// elements that are available before clicking
-		var startElements = $(this.getDataElements(parentElement)).clone().get();
-
-		var deferredResultCalls = [];
-
-		// will be clicking all click buttons with unique texts
-		var doneClickingElements = new UniqueElementList(this.getClickElementUniquenessType());
-
-		var extractElementsAfterUniqueButtonClick = function(button) {
-
-			if(!doneClickingElements.isAdded(button)) {
-				doneClickingElements.push(button);
-
-				deferredResultCalls.push(function() {
-
-					// extracts elements
-					var deferredElements = this.extractElementsAfterClick(button, parentElement, true);
-
-					// adds additional buttons to click on
-					deferredElements.done(function(elements) {
-						// @FIXME limited to recursion stack size
-						var clickElements = this.getClickElements(parentElement);
-						clickElements.forEach(extractElementsAfterUniqueButtonClick);
-					}.bind(this));
-
-					return deferredElements;
-
-				}.bind(this));
-			}
-		}.bind(this);
-
-		var clickElements = this.getClickElements(parentElement);
-		clickElements.forEach(extractElementsAfterUniqueButtonClick);
-
-		var deferredResponse = $.Deferred();
-		$.whenCallSequentially(deferredResultCalls).done(function(results) {
-
-			var dataElements = new UniqueElementList("uniqueText");
-
-			// elements that we got after clicking
-			results.forEach(function(elements) {
-				$(elements).each(function(i, element){
-					dataElements.push(element);
-				});
-			});
-
-			// add StartElements
-			if(!this.discardInitialElements) {
-				$(startElements).each(function(i, element) {
-					dataElements.push(element);
-				});
-			}
-
-			deferredResponse.resolve(dataElements);
-		}.bind(this));
-		return deferredResponse.promise();
-	},
-
-	getDataClickMore: function(parentElement) {
+	_getData: function(parentElement) {
 
 		var delay = parseInt(this.delay) || 0;
 		var deferredResponse = $.Deferred();
@@ -240,6 +135,10 @@ var SelectorElementClick = {
 			else {
 				//console.log("click");
 				currentClickElement = clickElements[0];
+				// click on elements only once if the type is clickonce
+				if(this.clickType === 'clickOnce') {
+					doneClickingElements.push(currentClickElement);
+				}
 				this.triggerButtonClick(currentClickElement);
 				nextElementSelection = now+delay;
 			}
