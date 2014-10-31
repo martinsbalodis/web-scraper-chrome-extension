@@ -203,7 +203,18 @@ describe("Scraper", function () {
 	it("should extract filename from image url with query string", function() {
 
 		var image = Scraper.prototype.getFileFilename("http://example.com/image.jpg?a=1&b=2");
-		expect(image).toEqual("image.jpg%3Fa%3D1%26b%3D2");
+		expect(image).toEqual("image.jpga=1&b=2");
+	});
+
+	it("should shorten image file name to 143 symbols", function() {
+
+		// ext4 max is 254
+		// ntfs max is 256
+		// ecryptfs 143
+		// web scraper allows only 130
+
+		var image = Scraper.prototype.getFileFilename("http://example.com/012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
+		expect(image).toEqual("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
 	});
 
 	it("should extract filename from image url without http://", function(){

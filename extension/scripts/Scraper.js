@@ -60,9 +60,10 @@ Scraper.prototype = {
 
 		var parts = url.split("/");
 		var filename = parts[parts.length-1];
-		filename = filename.replace(/\?/g, "%3F");
-		filename = filename.replace(/=/g, "%3D");
-		filename = filename.replace(/&/g, "%26");
+		filename = filename.replace(/\?/g, "");
+		if(filename.length > 130) {
+			filename = filename.substr(0, 130);
+		}
 		return filename;
 	},
 
