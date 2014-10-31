@@ -202,8 +202,8 @@ describe("Scraper", function () {
 
 	it("should extract filename from image url with query string", function() {
 
-		var image = Scraper.prototype.getFileFilename("http://example.com/image.jpg?123");
-		expect(image).toEqual("image.jpg");
+		var image = Scraper.prototype.getFileFilename("http://example.com/image.jpg?a=1&b=2");
+		expect(image).toEqual("image.jpg%3Fa%3D1%26b%3D2");
 	});
 
 	it("should extract filename from image url without http://", function(){
