@@ -164,15 +164,23 @@ ContentSelector.prototype = {
 	bindElementHighlight: function () {
 
 		$(this.$allElements).bind("mouseover.elementSelector", function(e) {
+			// allow event bubbling for other event listeners but not for web scraper.
+			if(e.target !== e.currentTarget) {
+				return;
+			}
+
 			var element = e.currentTarget;
 			this.mouseOverElement = element;
 			$(element).addClass("-sitemap-select-item-hover");
-			return false;
 		}.bind(this)).bind("mouseout.elementSelector", function(e) {
+			// allow event bubbling for other event listeners but not for web scraper.
+			if(e.target !== e.currentTarget) {
+				return;
+			}
+
 			var element = e.currentTarget;
 			this.mouseOverElement = null;
 			$(element).removeClass("-sitemap-select-item-hover");
-			return false;
 		}.bind(this));
 	},
 
