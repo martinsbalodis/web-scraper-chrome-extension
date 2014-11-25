@@ -60,6 +60,39 @@ describe("Click Element Selector", function () {
 		});
 	});
 
+	it("should be able to click on elemenets with numeric id #123", function () {
+
+		$el.append($("<a id='123'>a</a>"));
+		$el.find("a").click(function() {
+			$el.append("<div>test</div>");
+		});
+
+		var selector = new Selector({
+			id: 'div',
+			type: 'SelectorElementClick',
+			multiple: true,
+			clickElementSelector: "a#123",
+			selector: "div",
+			clickType: 'clickOnce'
+		});
+
+		var dataDeferred = selector.getData($el[0]);
+
+		waitsFor(function() {
+			return dataDeferred.state() === 'resolved';
+		}, "wait for data extraction", 5000);
+
+		runs(function () {
+
+			var data;
+			dataDeferred.done(function(resultData) {
+				data = resultData;
+			});
+			expect(data.length).toEqual(1);
+			expect($(data).text()).toEqual("test");
+		});
+	});
+
 	it("should get elements that are available immediately after clicking", function() {
 
 		$el.append($("<a>a</a>"));

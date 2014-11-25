@@ -64,6 +64,28 @@ var SelectorPopupLink = {
 		return dfd.promise();
 	},
 
+	getElementCSSSelector: function(element) {
+
+		var nthChild, prev;
+		for(nthChild = 1, prev = element.previousElementSibling; prev !== null;prev = prev.previousElementSibling, nthChild++);
+		var tagName = element.tagName.toLocaleLowerCase();
+		var cssSelector = tagName+":nth-child("+nthChild+")";
+
+		while(element.parentElement) {
+			element = element.parentElement;
+			var tagName = element.tagName.toLocaleLowerCase();
+			if(tagName === 'body' || tagName === 'html') {
+				cssSelector = tagName+">"+cssSelector;
+			}
+			else {
+				for(nthChild = 1, prev = element.previousElementSibling; prev !== null;prev = prev.previousElementSibling, nthChild++);
+				cssSelector = tagName+":nth-child("+nthChild+")>"+cssSelector;
+			}
+		}
+
+		return cssSelector;
+	},
+
 	/**
 	 * Gets an url from a window.open call by mocking the window.open function
 	 * @param element
@@ -73,12 +95,7 @@ var SelectorPopupLink = {
 
 		// override window.open function. we need to execute this in page scope.
 		// we need to know how to find this element from page scope.
-		var cs = new CssSelector({
-			enableSmartTableSelector: false,
-			parent: $("body")[0],
-			enableResultStripping:false
-		});
-		var cssSelector = cs.getCssSelector([element]);
+		var cssSelector = this.getElementCSSSelector(element);
 
 		// this function will catch window.open call and place the requested url as the elements data attribute
 		var script   = document.createElement("script");

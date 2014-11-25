@@ -62,6 +62,27 @@ describe("Popup link Selector", function () {
 		]);
 	});
 
+	it("should extract click on a button with a numeric id #123", function () {
+
+		$el.append("<a id='123' onclick=\"window.open('http://example.com/a')\">a</a>");
+
+		var selector = new Selector({
+			id: 'a',
+			type: 'SelectorPopupLink',
+			multiple: false,
+			selector: "a#123"
+		});
+
+		var dataDeferred = selector.getData($el);
+
+		expect(dataDeferred).deferredToEqual([{
+			a: "a",
+			'a-href': "http://example.com/a",
+			_follow: "http://example.com/a",
+			_followSelectorId: "a"
+		}]);
+	});
+
 	it("should return data and url columns", function () {
 		var selector = new Selector({
 			id: 'id',

@@ -32,16 +32,33 @@ var SelectorElementClick = {
 		return $(element).closest("html").length !== 0;
 	},
 
+	getElementCSSSelector: function(element) {
+
+		var nthChild, prev;
+		for(nthChild = 1, prev = element.previousElementSibling; prev !== null;prev = prev.previousElementSibling, nthChild++);
+		var tagName = element.tagName.toLocaleLowerCase();
+		var cssSelector = tagName+":nth-child("+nthChild+")";
+
+		while(element.parentElement) {
+			element = element.parentElement;
+			var tagName = element.tagName.toLocaleLowerCase();
+			if(tagName === 'body' || tagName === 'html') {
+				cssSelector = tagName+">"+cssSelector;
+			}
+			else {
+				for(nthChild = 1, prev = element.previousElementSibling; prev !== null;prev = prev.previousElementSibling, nthChild++);
+				cssSelector = tagName+":nth-child("+nthChild+")>"+cssSelector;
+			}
+		}
+
+		return cssSelector;
+	},
+
 	triggerButtonClick: function(clickElement) {
 
-		var cs = new CssSelector({
-			enableSmartTableSelector: false,
-			parent: $("body")[0],
-			enableResultStripping:false
-		});
-		var cssSelector = cs.getCssSelector([clickElement]);
+		var cssSelector = this.getElementCSSSelector(clickElement);
 
-		// this function will catch window.open call and place the requested url as the elements data attribute
+		// this function will trigger the click from browser land
 		var script   = document.createElement("script");
 		script.type  = "text/javascript";
 		script.text  = "" +
