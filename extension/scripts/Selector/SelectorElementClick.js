@@ -83,7 +83,7 @@ var SelectorElementClick = {
 
 		var delay = parseInt(this.delay) || 0;
 		var deferredResponse = $.Deferred();
-		var foundElements = new UniqueElementList('uniqueText');
+		var foundElements = new UniqueElementList('uniqueHTMLText');
 		var clickElements = this.getClickElements(parentElement);
 		var doneClickingElements = new UniqueElementList(this.getClickElementUniquenessType());
 
